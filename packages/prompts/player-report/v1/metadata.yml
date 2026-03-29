@@ -1,0 +1,7 @@
+id: player-report
+version: v1
+status: active
+purpose: Generate a structured League of Legends coaching report from deterministic analytics signals.
+input_contract: player-report-input-v1
+output_contract: player-report-output-v1
+owner: product-and-ml

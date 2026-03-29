@@ -1,0 +1,7 @@
+id: riot-match-report
+version: v1
+status: draft
+purpose: Generate coaching commentary from structured analytics features.
+input_contract: structured-match-report-features
+output_contract: dashboard-commentary-v1
+owner: product-and-ml
