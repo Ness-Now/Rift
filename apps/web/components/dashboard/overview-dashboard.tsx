@@ -13,6 +13,7 @@ import {
 } from "@/lib/api";
 import { asArray, asBoolean, asRecord, asText, formatCompactNumber, formatMetric, formatPercent } from "@/lib/dashboard";
 
+import { AnalysisOrchestrator } from "./analysis-orchestrator";
 import { PillarSections } from "./pillar-sections";
 import {
   DashboardPanel,
@@ -346,28 +347,24 @@ export function OverviewDashboard({ token, userEmail }: OverviewDashboardProps) 
         </div>
       </DashboardPanel>
 
+      <AnalysisOrchestrator
+        onPipelineComplete={loadCollections}
+        onSelectedProfileIdChange={setSelectedProfileId}
+        profiles={profiles}
+        selectedProfileId={selectedProfileId}
+        token={token}
+      />
+
       <WorkflowRail items={workflowItems} title="Coaching flow" />
 
       <div className="grid gap-6 xl:grid-cols-[1.2fr_0.8fr]">
         <DashboardPanel className="p-6 sm:p-7">
           <SectionHeading
             action={
-              <label className="inline-flex items-center gap-3 rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-sm text-frost/72">
-                <span className="dashboard-tactical-label text-frost/34">Profile</span>
-                <select
-                  className="bg-transparent text-sm text-white outline-none"
-                  disabled={profiles.length === 0}
-                  onChange={(event) => setSelectedProfileId(Number(event.target.value))}
-                  value={selectedProfileId ?? ""}
-                >
-                  {profiles.length === 0 ? <option value="">No profiles</option> : null}
-                  {profiles.map((profile) => (
-                    <option key={profile.id} className="bg-midnight text-white" value={profile.id}>
-                      {profile.riot_id_display}
-                    </option>
-                  ))}
-                </select>
-              </label>
+              <StatusChip
+                label={selectedProfile?.riot_id_display ?? "Choose a profile"}
+                tone={selectedProfile ? "neutral" : "warning"}
+              />
             }
             description="Read this handoff in order: evidence first, interpretation second, then the action path that should shape the next block of play."
             title="Coaching handoff"

@@ -63,3 +63,10 @@ Tracks changes made after the baseline described in [Rift_Project_Handoff_Audit_
 - Removed overlapping route/guidance surfaces so the dashboard keeps the coaching flow with less repetition.
 - Reduced repeated station/live labeling and kept only the cues that materially help navigation and comprehension.
 - Kept backend contracts, analytics/report schemas, API routes, shell structure, and isolated deep pillar redesign work unchanged.
+
+## 2026-03-29 - T009 First-User Orchestration Pass
+
+- Narrowed the pass to the current self-use workflow rather than adding a new subsystem.
+- Added one overview-level orchestration surface that lets the user choose a Riot profile, run ingestion -> normalization -> analytics -> report in sequence, and see the latest stage state in one place.
+- Kept the secondary operational workbench available as a fallback instead of making the user operate five separate panels by default.
+- Kept backend contracts, analytics/report schemas, API routes, and the broader shell architecture unchanged.

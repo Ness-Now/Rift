@@ -1,5 +1,24 @@
 # Development Journal
 
+## 2026-03-29 - T009 First-User Orchestration Pass
+
+### What was completed
+- Added a single orchestration surface to the premium overview so the current self-use flow now reads more like one product action.
+- Connected profile selection, full pipeline triggering, latest stage state, and coaching handoff into one overview-level panel.
+- Kept the operational workbench available below for manual control while moving the default user path into the main dashboard surface.
+
+### Decisions made
+- Stay strictly inside T009 by building orchestration on top of the existing ingestion, normalization, analytics, and report run domains.
+- Keep the backend contract layer unchanged and sequence the current workflow through existing frontend API helpers.
+- Make the overview own the default self-use action while preserving the workbench as a secondary fallback.
+
+### Issues found
+- The product already had all the core foundations, but the live experience still required the user to mentally stitch together five separate operational panels.
+- The current self-use path did not yet feel like "choose profile -> run pipeline -> read coaching" even though the underlying domains already supported it.
+
+### Next step
+- Review whether the current orchestration surface is enough for the self-use phase or whether a later T009 pass should tighten status feedback and final handoff language even further without reopening architecture.
+
 ## 2026-03-29 - T009 Simplification And Signal-Density Pass
 
 ### What was completed

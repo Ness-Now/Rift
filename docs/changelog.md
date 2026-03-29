@@ -16,6 +16,7 @@
 ### Changed
 - The web app evolved from a functional shell into a premium dark product surface with an overview desk plus live Champion Form, Macro Lens, and Coaching Board sections.
 - Operational controls were moved behind a secondary workbench so the product-facing experience leads.
+- T009 gained a first-user orchestration pass that adds one overview-level "Run Full Analysis" surface on top of the existing run domains, making the self-use flow feel closer to one coaching action instead of five separate admin panels.
 - Repository-facing documentation now reflects the implemented T001-T009 state instead of the earlier roadmap-only state.
 - T009 second-pass refinement reduced the table-first feel in the pillar surfaces and improved scan order, signal emphasis, and coaching-board decisiveness.
 - T009 Champion Form gained a narrower comparison pass that makes the main pick, overall baseline, and latest recent-form window easier to compare at a glance.
