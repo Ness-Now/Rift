@@ -56,3 +56,10 @@ Tracks changes made after the baseline described in [Rift_Project_Handoff_Audit_
 - Added a clearer evidence -> interpretation -> execution reading path across the overview and the deep pillar area.
 - Updated labels and grouping so the live surface reads more like coaching delivery and less like a polished report stack.
 - Kept backend contracts, analytics/report schemas, API routes, shell structure, and isolated deep pillar redesign work unchanged.
+
+## 2026-03-29 - T009 Simplification And Signal-Density Pass
+
+- Narrowed the pass to simplification rather than another new polish layer.
+- Removed overlapping route/guidance surfaces so the dashboard keeps the coaching flow with less repetition.
+- Reduced repeated station/live labeling and kept only the cues that materially help navigation and comprehension.
+- Kept backend contracts, analytics/report schemas, API routes, shell structure, and isolated deep pillar redesign work unchanged.

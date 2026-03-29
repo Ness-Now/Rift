@@ -1,5 +1,24 @@
 # Development Journal
 
+## 2026-03-29 - T009 Simplification And Signal-Density Pass
+
+### What was completed
+- Refined T009 by reducing redundant route and guidance layers rather than adding anything new.
+- Removed overlapping navigation/explanation surfaces so the page keeps the coaching flow with less tutorial friction.
+- Tightened local labels and header badges so the live dashboard carries more useful signal with fewer repeated cues.
+
+### Decisions made
+- Keep one concise coaching-flow cue and remove the extra route repetition around the live pillars.
+- Preserve the evidence -> interpretation -> execution logic while making it feel more self-evident.
+- Leave backend contracts, analytics/report schemas, shell structure, and isolated pillar redesign work unchanged.
+
+### Issues found
+- The previous T009 passes improved clarity, but they also introduced duplicated route and workflow framing.
+- Repeated station/live cues and overlapping navigation widgets reduced signal density.
+
+### Next step
+- Continue T009 only if another narrow refinement is needed after reviewing whether the current dashboard now feels clearer and more confident without losing coaching comprehension.
+
 ## 2026-03-29 - T009 Workflow Readiness Pass
 
 ### What was completed

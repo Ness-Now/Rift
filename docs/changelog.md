@@ -23,6 +23,7 @@
 - T009 Coaching Board gained a narrower execution pass that makes the lead priority, immediate next move, ordered priorities, and evidence-versus-guardrail separation clearer.
 - T009 gained a narrow cross-pillar coherence pass that strengthens overview-to-pillar continuity, station-map navigation, and shared hierarchy language across the three live pillars.
 - T009 gained a workflow-readiness pass that makes evidence, interpretation, and execution guidance more explicit across the current live dashboard.
+- T009 gained a simplification pass that removes redundant route/guidance layers and improves signal density without changing the coaching logic.
 
 ### Fixed
 - README, roadmap, and dashboard ticket files now match the actual implementation state.

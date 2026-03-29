@@ -22,7 +22,6 @@ import {
   SectionEyebrow,
   SectionHeading,
   StatusChip,
-  SurfaceNavigator,
   WorkflowRail
 } from "./primitives";
 
@@ -225,55 +224,18 @@ export function OverviewDashboard({ token, userEmail }: OverviewDashboardProps) 
     }
   ];
 
-  const surfaceRouteItems = [
-    {
-      label: "Station 00",
-      title: "Overview Desk",
-      href: "#overview",
-      detail: latestReportRun
-        ? "Identity, KPI strip, executive briefing, and artifact-chain orientation."
-        : "Activate analytics and report artifacts to unlock the full overview desk.",
-      tone: "glow" as const
-    },
-    {
-      label: "Station 01",
-      title: "Champion Form",
-      href: "#champion-form",
-      detail: championFocus !== "No champion focus yet"
-        ? `${championFocus} anchors the current form read and champion progression surface.`
-        : "Champion identity, recent form windows, and lane-checkpoint context.",
-      tone: "glow" as const
-    },
-    {
-      label: "Station 02",
-      title: "Macro Lens",
-      href: "#macro-lens",
-      detail: asText(primaryPriority?.title)
-        ?? "Objective conversion, loss shape, and macro contrast from the clean snapshot.",
-      tone: "gold" as const
-    },
-    {
-      label: "Station 03",
-      title: "Coaching Board",
-      href: "#coaching-board",
-      detail: asText(primaryPriority?.title)
-        ?? "Execution priorities, next actions, and confidence guardrails.",
-      tone: "ember" as const
-    }
-  ];
-
   const workflowItems = [
     {
       step: "Step 01",
       title: "Read the evidence",
-      detail: "Start with the current snapshot, KPI strip, and sample context to understand what the clean data actually says.",
+      detail: "Start with the snapshot, KPI strip, and sample context to understand what the clean data actually says.",
       href: "#overview",
       tone: "glow" as const
     },
     {
       step: "Step 02",
       title: "Read the interpretation",
-      detail: "Use the executive read and live pillar overlays to see how deterministic signals turn into coaching meaning.",
+      detail: "Use the executive read and pillar overlays to see how deterministic signals turn into coaching meaning.",
       href: "#pillars",
       tone: "gold" as const
     },
@@ -384,7 +346,7 @@ export function OverviewDashboard({ token, userEmail }: OverviewDashboardProps) 
         </div>
       </DashboardPanel>
 
-      <WorkflowRail items={workflowItems} title="How to use this coaching surface" />
+      <WorkflowRail items={workflowItems} title="Coaching flow" />
 
       <div className="grid gap-6 xl:grid-cols-[1.2fr_0.8fr]">
         <DashboardPanel className="p-6 sm:p-7">
@@ -519,12 +481,9 @@ export function OverviewDashboard({ token, userEmail }: OverviewDashboardProps) 
 
       <DashboardPanel className="p-6 sm:p-7" id="pillars">
         <SectionHeading
-          description="Move through the deep stations in the same coaching order: evidence first, interpretation second, and execution last."
+          description="Open the deep stations in coaching order: evidence first, interpretation second, execution last."
           title="Station Map"
         />
-        <div className="mt-6">
-          <SurfaceNavigator items={surfaceRouteItems} title="Overview to deep-dive route" />
-        </div>
         <div className="mt-6 grid gap-4 lg:grid-cols-4">
           <PillarTile
             badge="Station 00"

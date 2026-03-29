@@ -28,7 +28,6 @@ import {
   SectionHeading,
   SignalSpotlight,
   StatusChip,
-  SurfaceNavigator,
   WorkflowRail
 } from "./primitives";
 
@@ -257,35 +256,6 @@ export function PillarSections({ analyticsSummary, reportArtifact, selectedProfi
     "Strength"
   ).slice(0, 3);
 
-  const deepDiveRouteItems = [
-    {
-      label: "Station 01",
-      title: "Champion Form",
-      href: "#champion-form",
-      detail: championFocus !== "Champion focus pending"
-        ? `${championFocus} anchors the form read, progression, and lane-checkpoint context.`
-        : "Champion identity, form windows, and lane-shape evidence.",
-      tone: "glow" as const
-    },
-    {
-      label: "Station 02",
-      title: "Macro Lens",
-      href: "#macro-lens",
-      detail: strongestMacro
-        ? `${strongestMacro.label} is the clearest macro swing in the current snapshot.`
-        : "Objective conversion, loss shape, and team-context contrast.",
-      tone: "gold" as const
-    },
-    {
-      label: "Station 03",
-      title: "Coaching Board",
-      href: "#coaching-board",
-      detail: asText(primaryPriority?.title)
-        ?? "Execution priorities, next moves, and evidence guardrails.",
-      tone: "ember" as const
-    }
-  ];
-
   const deepDiveWorkflowItems = [
     {
       step: "Step 01",
@@ -312,16 +282,12 @@ export function PillarSections({ analyticsSummary, reportArtifact, selectedProfi
 
   return (
     <div className="space-y-8">
-      <SurfaceNavigator items={deepDiveRouteItems} title="Deep-dive stations" />
-      <WorkflowRail items={deepDiveWorkflowItems} title="How to move through the deep read" />
+      <WorkflowRail items={deepDiveWorkflowItems} title="Deep-read flow" />
 
       <DashboardPanel className="p-6 sm:p-7" id="champion-form">
         <SectionHeading
           action={
-            <div className="flex flex-wrap items-center gap-3">
-              <StatusChip label="Station 01" tone="neutral" />
-              <StatusChip label="T009 live" tone="positive" />
-            </div>
+            <StatusChip label="Station 01" tone="neutral" />
           }
           description="Evidence station. Champion Form is where the player identity, recent form pattern, and lane-shape reads become concrete before wider interpretation."
           title="Champion Form"
@@ -511,10 +477,7 @@ export function PillarSections({ analyticsSummary, reportArtifact, selectedProfi
       <DashboardPanel className="p-6 sm:p-7" id="macro-lens">
         <SectionHeading
           action={
-            <div className="flex flex-wrap items-center gap-3">
-              <StatusChip label="Station 02" tone="neutral" />
-              <StatusChip label="T009 live" tone="positive" />
-            </div>
+            <StatusChip label="Station 02" tone="neutral" />
           }
           description="Interpretation station. Macro Lens turns deterministic match outcomes into a clearer read of how wins, losses, and objective patterns actually take shape."
           title="Macro Lens"
@@ -681,10 +644,7 @@ export function PillarSections({ analyticsSummary, reportArtifact, selectedProfi
       <DashboardPanel className="p-6 sm:p-7" id="coaching-board">
         <SectionHeading
           action={
-            <div className="flex flex-wrap items-center gap-3">
-              <StatusChip label="Station 03" tone="neutral" />
-              <StatusChip label="T009 live" tone="positive" />
-            </div>
+            <StatusChip label="Station 03" tone="neutral" />
           }
           description="Execution station. Coaching Board closes the loop by separating the next move, ordered priority, and the confidence limits that should shape how hard to push the advice."
           title="Coaching Board"
