@@ -292,31 +292,53 @@ export function OrderedBoard({
   title,
   items,
   tone = "glow",
-  emptyLabel = "No items available yet."
+  emptyLabel = "No items available yet.",
+  leadEmphasis = false,
+  badgeLabel = "Execution order"
 }: {
   title: string;
   items: Array<{ title: string; body: string; meta?: string }>;
   tone?: "glow" | "gold" | "ember";
   emptyLabel?: string;
+  leadEmphasis?: boolean;
+  badgeLabel?: string;
 }) {
   const toneClass = tone === "gold" ? "text-gold" : tone === "ember" ? "text-ember" : "text-glow";
   const toneBorder = tone === "gold" ? "border-gold/12" : tone === "ember" ? "border-ember/12" : "border-glow/12";
+  const toneGlow = tone === "gold" ? "bg-gold/14" : tone === "ember" ? "bg-ember/14" : "bg-glow/14";
+  const leadItem = leadEmphasis ? items[0] : null;
+  const trailingItems = leadEmphasis ? items.slice(1) : items;
 
   return (
     <DashboardPanel className="p-5">
       <div className="flex items-center justify-between gap-3">
         <h3 className="font-display text-xl font-semibold tracking-tight text-frost">{title}</h3>
-        <span className="text-[0.62rem] font-semibold uppercase tracking-[0.22em] text-frost/34">Execution order</span>
+        <span className="text-[0.62rem] font-semibold uppercase tracking-[0.22em] text-frost/34">{badgeLabel}</span>
       </div>
       {items.length === 0 ? (
         <p className="mt-5 text-sm leading-7 text-frost/54">{emptyLabel}</p>
       ) : (
         <div className="mt-5 space-y-3">
-          {items.map((item, index) => (
+          {leadItem ? (
+            <article className={`relative overflow-hidden rounded-[1.5rem] border ${toneBorder} bg-white/[0.04] p-5`}>
+              <div className={`absolute -right-8 top-0 h-24 w-24 rounded-full blur-3xl ${toneGlow}`} />
+              <div className="relative">
+                <div className="flex items-start justify-between gap-4">
+                  <span className={`inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-white/8 bg-white/[0.04] font-display text-xl font-semibold ${toneClass}`}>
+                    1
+                  </span>
+                  {leadItem.meta ? <span className={`dashboard-tactical-label ${toneClass}`}>{leadItem.meta}</span> : null}
+                </div>
+                <p className="mt-4 font-display text-2xl font-semibold tracking-tight text-white">{leadItem.title}</p>
+                <p className="mt-3 text-sm leading-7 text-frost/62">{leadItem.body}</p>
+              </div>
+            </article>
+          ) : null}
+          {trailingItems.map((item, index) => (
             <article key={`${title}-${item.title}`} className={`rounded-[1.35rem] border ${toneBorder} bg-white/[0.028] p-4`}>
               <div className="flex items-start gap-4">
                 <span className={`mt-0.5 inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/8 bg-white/[0.03] font-display text-lg font-semibold ${toneClass}`}>
-                  {index + 1}
+                  {leadEmphasis ? index + 2 : index + 1}
                 </span>
                 <div className="min-w-0">
                   <div className="flex flex-wrap items-center gap-3">

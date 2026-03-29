@@ -225,6 +225,10 @@ export function PillarSections({ analyticsSummary, reportArtifact, selectedProfi
     ),
     "Focus"
   );
+  const coachingFocusRows = coachingFocusItems.map((item) => ({
+    title: item.title,
+    body: item.body
+  }));
 
   const nextActionItems = toOrderedItems(
     insightRowsFromStructured(
@@ -235,6 +239,7 @@ export function PillarSections({ analyticsSummary, reportArtifact, selectedProfi
     ),
     "Action"
   );
+  const immediateAction = nextActionItems[0] ?? null;
 
   const riskItems = insightRowsFromStructured(
     riskFlags.map((entry) => asRecord(entry)).filter(Boolean),
@@ -608,7 +613,7 @@ export function PillarSections({ analyticsSummary, reportArtifact, selectedProfi
       <DashboardPanel className="p-6 sm:p-7" id="coaching-board">
         <SectionHeading
           action={<StatusChip label="T009 live" tone="positive" />}
-          description="Coaching Board now reads more like an execution surface: decisive lead lever first, then ordered priorities, focus areas, actions, and confidence guardrails."
+          description="Coaching Board now separates directive, execution order, and evidence guardrails so the user can see what matters most, what to do next, and how hard to trust the read."
           title="Coaching Board"
         />
 
@@ -632,11 +637,11 @@ export function PillarSections({ analyticsSummary, reportArtifact, selectedProfi
                     value={formatMetric(dataQuality?.matches_analyzed, 0)}
                   />
                   <SignalSpotlight
-                    detail={primaryRisk ? asText(primaryRisk.summary) ?? "Risk framing from the report artifact." : "Risk flags will populate once the report artifact includes them."}
-                    eyebrow="Constraint"
-                    title={primaryRisk?.title ? asText(primaryRisk.title) ?? "Primary risk" : "Primary risk"}
+                    detail={immediateAction?.body ?? "The top next action will appear once report generation completes for the selected profile."}
+                    eyebrow="Immediate move"
+                    title={immediateAction?.title ?? "Awaiting action"}
                     tone="gold"
-                    value={asBoolean(dataQuality?.timeline_metrics_available) ? "Timeline ready" : "Timeline limited"}
+                    value={immediateAction ? "Do now" : "Pending"}
                   />
                 </div>
               </div>
@@ -672,37 +677,42 @@ export function PillarSections({ analyticsSummary, reportArtifact, selectedProfi
             </div>
           </DashboardPanel>
 
-          <div className="grid gap-6 xl:grid-cols-3">
+          <div className="grid gap-6 xl:grid-cols-[1.1fr_0.9fr]">
             <OrderedBoard
               emptyLabel="Priority levers will appear here once report generation completes."
               items={coachingPriorityItems}
               title="Priority stack"
               tone="gold"
-            />
-            <OrderedBoard
-              emptyLabel="Coaching focus areas will appear here once report generation completes."
-              items={coachingFocusItems}
-              title="Coaching focus"
-              tone="glow"
+              leadEmphasis
+              badgeLabel="Priority order"
             />
             <OrderedBoard
               emptyLabel="Next actions will appear here once report generation completes."
               items={nextActionItems}
               title="Next actions"
               tone="ember"
+              leadEmphasis
+              badgeLabel="Action order"
             />
           </div>
 
-          <div className="grid gap-6 xl:grid-cols-[0.9fr_1.1fr]">
-            <InsightList
-              accent="ember"
-              emptyLabel="Risk flags will appear here once the report artifact includes them."
-              items={riskItems}
-              title="Risk flags"
-            />
-
+          <div className="grid gap-6 xl:grid-cols-[0.92fr_1.08fr]">
+            <div className="space-y-6">
+              <InsightList
+                accent="glow"
+                emptyLabel="Coaching focus areas will appear here once report generation completes."
+                items={coachingFocusRows}
+                title="Interpretation overlay"
+              />
+              <InsightList
+                accent="ember"
+                emptyLabel="Risk flags will appear here once the report artifact includes them."
+                items={riskItems}
+                title="Risk flags"
+              />
+            </div>
             <DashboardPanel className="p-6">
-              <SectionEyebrow tone="steel">Evidence guardrails</SectionEyebrow>
+              <SectionEyebrow tone="steel">Evidence and limits</SectionEyebrow>
               <div className="mt-5 flex flex-wrap gap-3">
                 <StatusChip
                   label={asBoolean(dataQuality?.timeline_metrics_available) ? "Timeline evidence" : "Timeline limited"}
@@ -717,6 +727,33 @@ export function PillarSections({ analyticsSummary, reportArtifact, selectedProfi
                   tone={asBoolean(dataQuality?.tracked_duo_available) ? "positive" : "warning"}
                 />
               </div>
+              <div className="dashboard-line my-5" />
+              <MetricRail
+                accent="ember"
+                columns={2}
+                items={[
+                  {
+                    label: "Confidence",
+                    value: asText(confidence?.confidence_level) ?? "Pending",
+                    detail: asText(confidence?.explanation) ?? "Confidence explanation will populate from the report artifact."
+                  },
+                  {
+                    label: "Primary risk",
+                    value: primaryRisk?.title ? asText(primaryRisk.title) ?? "Primary risk" : "Pending",
+                    detail: primaryRisk ? asText(primaryRisk.summary) ?? "Risk framing from the report artifact." : "Risk flags will populate once the report artifact includes them."
+                  },
+                  {
+                    label: "Matches analyzed",
+                    value: formatMetric(dataQuality?.matches_analyzed, 0),
+                    detail: selectedProfile?.riot_id_display ?? "No profile selected"
+                  },
+                  {
+                    label: "Recent form",
+                    value: formatPercent(latestWindow?.win_rate),
+                    detail: secondWindow ? `Last ${formatMetric(secondWindow.window_size, 0)} ${formatPercent(secondWindow.win_rate)}` : "Additional window pending"
+                  }
+                ]}
+              />
               <div className="dashboard-line my-5" />
               <div className="grid gap-4 md:grid-cols-2">
                 <SignalSpotlight

@@ -1,5 +1,24 @@
 # Development Journal
 
+## 2026-03-29 - T009 Coaching Board Execution Pass
+
+### What was completed
+- Refined only the Coaching Board pillar in T009.
+- Reworked the execution surface so the lead directive, immediate next move, priority order, and next-action order are easier to scan.
+- Separated interpretation overlay from evidence-and-limits framing so coaching directives and guardrails no longer read like one blended stack.
+
+### Decisions made
+- Keep the pass narrow to Coaching Board only.
+- Extend the shared ordered-board primitive to emphasize the first item instead of inventing a Coaching Board-only layout pattern.
+- Keep Champion Form, Macro Lens, overview, shell, and backend contracts stable.
+
+### Issues found
+- Coaching Board still felt too much like evenly weighted stacked report cards.
+- The single highest-priority lever and the first real next action were present, but not visually decisive enough.
+
+### Next step
+- Continue T009 only with another narrow presentation pass if a remaining pillar-specific weakness is identified after review.
+
 ## 2026-03-29 - T009 Macro Lens Command Table Pass
 
 ### What was completed

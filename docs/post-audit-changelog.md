@@ -35,3 +35,10 @@ Tracks changes made after the baseline described in [Rift_Project_Handoff_Audit_
 - Reworked the top of Macro Lens into a stronger win-vs-loss objective board with a clearer primary macro contrast.
 - Added a command-table layer that ties the strongest objective swing to duration and session reinforcement before the supporting split lists.
 - Kept overview, shell, backend contracts, Champion Form, and Coaching Board stable.
+
+## 2026-03-29 - T009 Coaching Board Execution Pass
+
+- Narrowed the pass to Coaching Board only.
+- Reworked the pillar so the lead directive, immediate next move, and top execution order read more clearly at a glance.
+- Separated interpretation overlay from evidence-and-limits framing so coaching directives and guardrails feel less like a stacked report dump.
+- Extended the shared ordered-board primitive to emphasize the first item without reopening overview, shell, backend contracts, Champion Form, or Macro Lens.
