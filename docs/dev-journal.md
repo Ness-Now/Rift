@@ -1,5 +1,24 @@
 # Development Journal
 
+## 2026-03-29 - T009 Macro Lens Command Table Pass
+
+### What was completed
+- Refined only the Macro Lens pillar in T009.
+- Reworked the top of Macro Lens into a clearer win-vs-loss objective board with a stronger primary contrast read.
+- Added a command-table layer that ties deterministic macro contrast to duration and session reinforcement before the supporting lists.
+
+### Decisions made
+- Keep the pass narrow to Macro Lens only.
+- Reuse the existing dashboard primitive system instead of reopening overview or shell structure.
+- Keep duration and session lists as secondary support rather than the lead read.
+
+### Issues found
+- Macro Lens still read too much like a supporting section, even after the earlier T009 refinement.
+- The strongest macro contrast was present in the data but not yet obvious enough at a glance.
+
+### Next step
+- Continue T009 in another narrow pass only after this Macro Lens command-table surface is stable and reviewed.
+
 ## 2026-03-29 - T009 Champion Form Comparison Pass
 
 ### What was completed

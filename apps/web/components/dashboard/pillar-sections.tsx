@@ -88,6 +88,10 @@ export function PillarSections({ analyticsSummary, reportArtifact, selectedProfi
   const bestHour = bestMetricRow(byHour);
   const bestWeekday = bestMetricRow(byWeekday);
   const longestSession = longestSessionRow(bySession);
+  const bestDuration = bestMetricRow(byDuration);
+  const weakestDuration = worstMetricRow(byDuration);
+  const bestSession = bestSessionByWinRate(bySession);
+  const strongestMacro = strongestMacroContrast(winsMacro, lossesMacro);
   const mainChampion = asRecord(championDistribution[0]);
   const latestWindow = asRecord(recentWindows[0]);
   const secondWindow = asRecord(recentWindows[1]);
@@ -177,6 +181,30 @@ export function PillarSections({ analyticsSummary, reportArtifact, selectedProfi
     ["summary", "reason", "description", "why"],
     "Macro signal"
   ).slice(0, 3);
+
+  const macroCommandItems = [
+    {
+      title: strongestMacro ? `${strongestMacro.label} sets the clearest macro swing` : "Primary macro swing pending",
+      body: strongestMacro
+        ? `Wins average ${formatMetric(strongestMacro.winValue)} while losses allow ${formatMetric(strongestMacro.lossValue)}. This is the clearest deterministic split in the current macro snapshot.`
+        : "The command table will sharpen once both win and loss macro buckets are populated.",
+      meta: strongestMacro ? formatSignedMetric(strongestMacro.delta) : "N/A"
+    },
+    {
+      title: bestDuration ? `${bestDuration.label} reinforces the winning shape` : "Winning duration pending",
+      body: bestDuration
+        ? `${bestDuration.winRate} across ${bestDuration.games}. ${weakestDuration ? `The weakest duration window is ${weakestDuration.label} at ${weakestDuration.winRate}.` : "A weaker duration window will appear once enough matches accumulate."}`
+        : "Duration reinforcement will appear once enough clean matches are available.",
+      meta: bestDuration?.winRate ?? "N/A"
+    },
+    {
+      title: bestSession ? `${bestSession.label} supports the macro read` : "Session reinforcement pending",
+      body: bestSession
+        ? `${bestSession.winRate} across ${bestSession.games}. ${bestSession.champions || "Champion mix pending."}`
+        : "Session reinforcement appears once timestamped session data is available in the current clean snapshot.",
+      meta: bestSession?.winRate ?? "N/A"
+    }
+  ];
 
   const coachingPriorityItems = toOrderedItems(
     insightRowsFromStructured(
@@ -415,106 +443,163 @@ export function PillarSections({ analyticsSummary, reportArtifact, selectedProfi
       <DashboardPanel className="p-6 sm:p-7" id="macro-lens">
         <SectionHeading
           action={<StatusChip label="T009 live" tone="positive" />}
-          description="Macro Lens now foregrounds outcome shape and objective conversion before falling back to supporting splits. The goal is to make macro differences obvious without scanning dense diagnostics."
+          description="Macro Lens now opens like a command table: what wins look like, what losses look like, where the clearest macro swing lives, and how the report overlay interprets that deterministic evidence."
           title="Macro Lens"
         />
 
-        <div className="mt-6 grid gap-6 xl:grid-cols-[1.15fr_0.85fr]">
-          <div className="space-y-6">
-            <DashboardPanel className="border-gold/14 bg-gradient-to-br from-gold/10 via-transparent to-transparent p-6">
-              <div className="grid gap-6 xl:grid-cols-[1fr_1fr]">
-                <div className="space-y-4">
-                  <SectionEyebrow tone="gold">Win / loss shape</SectionEyebrow>
-                  <h3 className="font-display text-3xl font-semibold tracking-tight text-white">
-                    {asText(primaryPriority?.title) ?? "Objective conversion read pending"}
-                  </h3>
-                  <p className="max-w-2xl text-sm leading-7 text-frost/64">
-                    {macroNarrative[0]?.body ?? asText(primaryPriority?.summary) ?? "Macro Lens interprets what winning and losing games look like by pairing objective data with report priorities and weakness signals."}
-                  </p>
-                  <div className="grid gap-4 md:grid-cols-2">
-                    <SignalSpotlight
-                      detail={`Enemy dragons in wins ${formatMetric(winsMacro?.avg_enemy_dragons)} | Enemy towers ${formatMetric(winsMacro?.avg_enemy_towers)}`}
-                      eyebrow="Wins"
-                      title="Team dragons"
-                      tone="gold"
-                      value={formatMetric(winsMacro?.avg_team_dragons)}
-                    />
-                    <SignalSpotlight
-                      detail={`Team dragons in losses ${formatMetric(lossesMacro?.avg_team_dragons)} | Team towers ${formatMetric(lossesMacro?.avg_team_towers)}`}
-                      eyebrow="Losses"
-                      title="Enemy dragons"
-                      tone="ember"
-                      value={formatMetric(lossesMacro?.avg_enemy_dragons)}
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-4">
-                  <MetricRail
-                    accent="gold"
-                    columns={2}
-                    items={[
-                      {
-                        label: "Win towers",
-                        value: formatMetric(winsMacro?.avg_team_towers),
-                        detail: `Loss enemy towers ${formatMetric(lossesMacro?.avg_enemy_towers)}`
-                      },
-                      {
-                        label: "Win barons",
-                        value: formatMetric(winsMacro?.avg_team_barons),
-                        detail: `Loss enemy barons ${formatMetric(lossesMacro?.avg_enemy_barons)}`
-                      },
-                      {
-                        label: "Damage share",
-                        value: formatPercent(carryContext?.avg_damage_share),
-                        detail: `Kill share ${formatPercent(carryContext?.avg_kill_share)}`
-                      },
-                      {
-                        label: "Gold share",
-                        value: formatPercent(carryContext?.avg_gold_share),
-                        detail: `Enemy KDA ${formatMetric(carryContext?.avg_enemy_kda)}`
-                      }
-                    ]}
-                  />
-                  <SignalSpotlight
-                    detail={macroNarrative[1]?.body ?? "Report-backed macro interpretation appears here when the report artifact highlights a second-order macro read."}
-                    eyebrow="Supporting read"
-                    title={macroNarrative[1]?.title ?? "Secondary macro pressure"}
-                    tone="gold"
-                    value={formatDurationBucket(asRecord(byDuration[0])?.label)}
-                  />
-                </div>
+        <div className="mt-6 space-y-6">
+          <DashboardPanel className="border-gold/14 bg-gradient-to-br from-gold/10 via-transparent to-transparent p-6">
+            <div className="grid gap-6 xl:grid-cols-[1.08fr_0.92fr]">
+              <div className="space-y-4">
+                <SectionEyebrow tone="gold">Outcome shape</SectionEyebrow>
+                <h3 className="font-display text-3xl font-semibold tracking-tight text-white">
+                  {macroNarrative[0]?.title ?? asText(primaryPriority?.title) ?? "Objective conversion read pending"}
+                </h3>
+                <p className="max-w-2xl text-sm leading-7 text-frost/64">
+                  {macroNarrative[0]?.body ?? asText(primaryPriority?.summary) ?? "Macro Lens interprets what winning and losing games look like by pairing objective data with report priorities and weakness signals."}
+                </p>
+                <ComparisonDeck
+                  cards={[
+                    {
+                      label: "Wins",
+                      headline: `Team ${strongestMacro?.label.toLowerCase() ?? "objective control"}`,
+                      value: formatMetric(strongestMacro?.winValue ?? winsMacro?.avg_team_dragons),
+                      metrics: [
+                        { label: "Dragons", value: formatMetric(winsMacro?.avg_team_dragons) },
+                        { label: "Heralds", value: formatMetric(winsMacro?.avg_team_heralds) },
+                        { label: "Barons", value: formatMetric(winsMacro?.avg_team_barons) },
+                        { label: "Towers", value: formatMetric(winsMacro?.avg_team_towers) }
+                      ]
+                    },
+                    {
+                      label: "Losses",
+                      headline: `Enemy ${strongestMacro?.label.toLowerCase() ?? "objective pressure"}`,
+                      value: formatMetric(strongestMacro?.lossValue ?? lossesMacro?.avg_enemy_dragons),
+                      metrics: [
+                        { label: "Enemy dragons", value: formatMetric(lossesMacro?.avg_enemy_dragons) },
+                        { label: "Enemy heralds", value: formatMetric(lossesMacro?.avg_enemy_heralds) },
+                        { label: "Enemy barons", value: formatMetric(lossesMacro?.avg_enemy_barons) },
+                        { label: "Enemy towers", value: formatMetric(lossesMacro?.avg_enemy_towers) }
+                      ]
+                    },
+                    {
+                      label: "Strongest swing",
+                      headline: strongestMacro?.label ?? "Objective delta",
+                      value: strongestMacro ? formatSignedMetric(strongestMacro.delta) : "N/A",
+                      metrics: [
+                        { label: "Win-side", value: formatMetric(strongestMacro?.winValue) },
+                        { label: "Loss-side", value: formatMetric(strongestMacro?.lossValue) },
+                        { label: "Best duration", value: bestDuration ? `${bestDuration.label} ${bestDuration.winRate}` : "Pending" },
+                        { label: "Best session", value: bestSession?.winRate ?? "Pending" }
+                      ]
+                    }
+                  ]}
+                  title="Win vs loss objective board"
+                  tone="gold"
+                />
               </div>
+
+              <div className="space-y-4">
+                <SignalSpotlight
+                  detail={strongestMacro ? `Wins average ${formatMetric(strongestMacro.winValue)} while losses allow ${formatMetric(strongestMacro.lossValue)}.` : "Objective swing will appear once both win and loss macro buckets are populated."}
+                  eyebrow="Primary contrast"
+                  title={strongestMacro?.label ?? "Objective contrast pending"}
+                  tone="gold"
+                  value={strongestMacro ? formatSignedMetric(strongestMacro.delta) : "N/A"}
+                />
+                <OrderedBoard
+                  emptyLabel="Command-table reads will appear once enough macro evidence is available."
+                  items={macroCommandItems}
+                  title="Command table"
+                  tone="gold"
+                />
+              </div>
+            </div>
+          </DashboardPanel>
+
+          <div className="grid gap-6 xl:grid-cols-[1.08fr_0.92fr]">
+            <DashboardPanel className="p-6">
+              <SectionEyebrow tone="steel">Pattern reinforcement</SectionEyebrow>
+              <div className="mt-5 grid gap-4 md:grid-cols-3">
+                <SignalSpotlight
+                  detail={bestDuration ? `${bestDuration.games} games tracked` : "Duration reinforcement will appear once enough matches are present."}
+                  eyebrow="Best duration"
+                  title={bestDuration?.label ?? "Pending"}
+                  tone="glow"
+                  value={bestDuration?.winRate ?? "N/A"}
+                />
+                <SignalSpotlight
+                  detail={weakestDuration ? `${weakestDuration.games} games tracked` : "Weakest duration will appear once enough matches are present."}
+                  eyebrow="Weakest duration"
+                  title={weakestDuration?.label ?? "Pending"}
+                  tone="ember"
+                  value={weakestDuration?.winRate ?? "N/A"}
+                />
+                <SignalSpotlight
+                  detail={bestSession ? `${bestSession.games} games | ${bestSession.champions}` : "Session reinforcement appears once timestamped session data is available."}
+                  eyebrow="Session reinforcement"
+                  title={bestSession?.label ?? "Pending"}
+                  tone="gold"
+                  value={bestSession?.winRate ?? "N/A"}
+                />
+              </div>
+              <div className="dashboard-line my-5" />
+              <MetricRail
+                accent="gold"
+                columns={2}
+                items={[
+                  {
+                    label: "Damage share",
+                    value: formatPercent(carryContext?.avg_damage_share),
+                    detail: `Kill share ${formatPercent(carryContext?.avg_kill_share)}`
+                  },
+                  {
+                    label: "Gold share",
+                    value: formatPercent(carryContext?.avg_gold_share),
+                    detail: `Enemy KDA ${formatMetric(carryContext?.avg_enemy_kda)}`
+                  },
+                  {
+                    label: "Win towers",
+                    value: formatMetric(winsMacro?.avg_team_towers),
+                    detail: `Loss enemy towers ${formatMetric(lossesMacro?.avg_enemy_towers)}`
+                  },
+                  {
+                    label: "Win barons",
+                    value: formatMetric(winsMacro?.avg_team_barons),
+                    detail: `Loss enemy barons ${formatMetric(lossesMacro?.avg_enemy_barons)}`
+                  }
+                ]}
+              />
             </DashboardPanel>
 
-            <div className="grid gap-6 xl:grid-cols-[1fr_1fr]">
-              <RankedSignalList
-                emptyLabel="Game-shape splits will appear once enough matches are present in the clean snapshot."
-                items={durationRanked}
-                title="Game-shape pressure"
-                tone="gold"
+            <div className="space-y-6">
+              <InsightList
+                accent="gold"
+                emptyLabel="Macro-oriented report interpretation will appear once report priorities are available."
+                items={macroNarrative}
+                title="Report overlay"
               />
-              <RankedSignalList
-                emptyLabel="Session signals will appear once match timestamps are available."
-                items={sessionRanked}
-                title="Session patterning"
-                tone="glow"
+              <InsightList
+                accent="glow"
+                emptyLabel="No clear strength signals yet."
+                items={strengthItems}
+                title="What holds up"
               />
             </div>
           </div>
 
-          <div className="space-y-6">
-            <InsightList
-              accent="gold"
-              emptyLabel="Macro-oriented report interpretation will appear once report priorities are available."
-              items={macroNarrative}
-              title="Macro readings"
+          <div className="grid gap-6 xl:grid-cols-[1fr_1fr]">
+            <RankedSignalList
+              emptyLabel="Game-shape splits will appear once enough matches are present in the clean snapshot."
+              items={durationRanked}
+              title="Game-shape pressure"
+              tone="gold"
             />
-            <InsightList
-              accent="glow"
-              emptyLabel="No clear strength signals yet."
-              items={strengthItems}
-              title="What holds up"
+            <RankedSignalList
+              emptyLabel="Session signals will appear once match timestamps are available."
+              items={sessionRanked}
+              title="Session patterning"
+              tone="glow"
             />
           </div>
         </div>
@@ -691,6 +776,32 @@ function bestMetricRow(entries: unknown[]): { label: string; winRate: string; ga
   };
 }
 
+function worstMetricRow(entries: unknown[]): { label: string; winRate: string; games: string } | null {
+  let worst: Record<string, unknown> | null = null;
+  let worstValue = Number.POSITIVE_INFINITY;
+
+  for (const entry of entries) {
+    const row = asRecord(entry);
+    if (!row || typeof row.win_rate !== "number") {
+      continue;
+    }
+    if (row.win_rate < worstValue) {
+      worstValue = row.win_rate;
+      worst = row;
+    }
+  }
+
+  if (!worst) {
+    return null;
+  }
+
+  return {
+    label: asText(worst.label) ?? "N/A",
+    winRate: formatPercent(worst.win_rate),
+    games: formatMetric(worst.games, 0)
+  };
+}
+
 function longestSessionRow(entries: unknown[]): MetricRow | null {
   let best: Record<string, unknown> | null = null;
   let bestGames = -1;
@@ -717,6 +828,80 @@ function longestSessionRow(entries: unknown[]): MetricRow | null {
     games: formatMetric(best.games, 0),
     champions: joinTextArray(best.champions)
   };
+}
+
+function bestSessionByWinRate(entries: unknown[]): MetricRow | null {
+  let best: Record<string, unknown> | null = null;
+  let bestWinRate = -1;
+
+  for (const entry of entries) {
+    const row = asRecord(entry);
+    if (!row || typeof row.win_rate !== "number") {
+      continue;
+    }
+    if (row.win_rate > bestWinRate) {
+      bestWinRate = row.win_rate;
+      best = row;
+    }
+  }
+
+  if (!best) {
+    return null;
+  }
+
+  return {
+    label: `Session ${formatMetric(best.session_id, 0)}`,
+    winRate: formatPercent(best.win_rate),
+    games: formatMetric(best.games, 0),
+    champions: joinTextArray(best.champions)
+  };
+}
+
+function strongestMacroContrast(
+  winsMacro: Record<string, unknown> | null,
+  lossesMacro: Record<string, unknown> | null
+): { label: string; winValue: number; lossValue: number; delta: number } | null {
+  const candidates = [
+    {
+      label: "Dragons",
+      winValue: asNumberOrNull(winsMacro?.avg_team_dragons),
+      lossValue: asNumberOrNull(lossesMacro?.avg_enemy_dragons)
+    },
+    {
+      label: "Heralds",
+      winValue: asNumberOrNull(winsMacro?.avg_team_heralds),
+      lossValue: asNumberOrNull(lossesMacro?.avg_enemy_heralds)
+    },
+    {
+      label: "Barons",
+      winValue: asNumberOrNull(winsMacro?.avg_team_barons),
+      lossValue: asNumberOrNull(lossesMacro?.avg_enemy_barons)
+    },
+    {
+      label: "Towers",
+      winValue: asNumberOrNull(winsMacro?.avg_team_towers),
+      lossValue: asNumberOrNull(lossesMacro?.avg_enemy_towers)
+    }
+  ];
+
+  let strongest: { label: string; winValue: number; lossValue: number; delta: number } | null = null;
+
+  for (const candidate of candidates) {
+    if (candidate.winValue === null || candidate.lossValue === null) {
+      continue;
+    }
+    const delta = candidate.winValue - candidate.lossValue;
+    if (!strongest || Math.abs(delta) > Math.abs(strongest.delta)) {
+      strongest = {
+        label: candidate.label,
+        winValue: candidate.winValue,
+        lossValue: candidate.lossValue,
+        delta
+      };
+    }
+  }
+
+  return strongest;
 }
 
 function joinTextArray(value: unknown): string {

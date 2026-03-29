@@ -19,6 +19,7 @@
 - Repository-facing documentation now reflects the implemented T001-T009 state instead of the earlier roadmap-only state.
 - T009 second-pass refinement reduced the table-first feel in the pillar surfaces and improved scan order, signal emphasis, and coaching-board decisiveness.
 - T009 Champion Form gained a narrower comparison pass that makes the main pick, overall baseline, and latest recent-form window easier to compare at a glance.
+- T009 Macro Lens gained a narrower command-table pass that makes the win/loss macro contrast, strongest objective swing, and duration/session reinforcement easier to read before supporting splits.
 
 ### Fixed
 - README, roadmap, and dashboard ticket files now match the actual implementation state.

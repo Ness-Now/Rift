@@ -1,6 +1,6 @@
 # Post-Audit Changelog
 
-Tracks changes made after the baseline described in [Rift_Project_Handoff_Audit_290326-1333.md](/d:/Users/nessi/Documents/Projets/Rift/docs/Rift_Project_Handoff_Audit_290326-1333.md).
+Tracks changes made after the baseline described in [Rift_Project_Handoff_Audit_290326-1333.md](./Rift_Project_Handoff_Audit_290326-1333.md).
 
 ## 2026-03-29 - Stabilization Pass
 
@@ -28,3 +28,10 @@ Tracks changes made after the baseline described in [Rift_Project_Handoff_Audit_
   - latest recent-form window
 - Added a dedicated main-pick edge read so champion performance versus overall baseline is clearer at a glance.
 - Left Macro Lens, Coaching Board, backend contracts, and overview composition unchanged.
+
+## 2026-03-29 - T009 Macro Lens Command Table Pass
+
+- Narrowed the pass to Macro Lens only.
+- Reworked the top of Macro Lens into a stronger win-vs-loss objective board with a clearer primary macro contrast.
+- Added a command-table layer that ties the strongest objective swing to duration and session reinforcement before the supporting split lists.
+- Kept overview, shell, backend contracts, Champion Form, and Coaching Board stable.
