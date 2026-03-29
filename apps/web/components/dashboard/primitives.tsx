@@ -199,6 +199,141 @@ export function MetricRail({
   );
 }
 
+export function SignalSpotlight({
+  eyebrow,
+  title,
+  value,
+  detail,
+  tone = "glow"
+}: {
+  eyebrow?: string;
+  title: string;
+  value: string;
+  detail?: string;
+  tone?: "glow" | "gold" | "ember";
+}) {
+  const toneText = tone === "gold" ? "text-gold" : tone === "ember" ? "text-ember" : "text-glow";
+  const toneBorder = tone === "gold" ? "border-gold/14" : tone === "ember" ? "border-ember/14" : "border-glow/14";
+  const toneGlow = tone === "gold" ? "bg-gold/16" : tone === "ember" ? "bg-ember/16" : "bg-glow/16";
+
+  return (
+    <div className={`relative overflow-hidden rounded-[1.6rem] border ${toneBorder} bg-white/[0.03] p-5`}>
+      <div className={`absolute -right-8 top-0 h-20 w-20 rounded-full blur-3xl ${toneGlow}`} />
+      <div className="relative">
+        {eyebrow ? <p className={`dashboard-tactical-label ${toneText}`}>{eyebrow}</p> : null}
+        <p className="mt-3 text-sm font-semibold text-frost/82">{title}</p>
+        <p className="mt-4 font-display text-3xl font-semibold tracking-tight text-white">{value}</p>
+        {detail ? <p className="mt-3 text-sm leading-6 text-frost/58">{detail}</p> : null}
+      </div>
+    </div>
+  );
+}
+
+export function RankedSignalList({
+  title,
+  items,
+  tone = "glow",
+  emptyLabel = "No signals available yet."
+}: {
+  title: string;
+  items: Array<{ label: string; value: string; detail?: string; emphasis?: number | null }>;
+  tone?: "glow" | "gold" | "ember";
+  emptyLabel?: string;
+}) {
+  const toneText = tone === "gold" ? "text-gold" : tone === "ember" ? "text-ember" : "text-glow";
+  const toneBg = tone === "gold" ? "bg-gold/18" : tone === "ember" ? "bg-ember/18" : "bg-glow/18";
+
+  return (
+    <DashboardPanel className="p-5">
+      <div className="flex items-center justify-between gap-3">
+        <h3 className="font-display text-xl font-semibold tracking-tight text-frost">{title}</h3>
+        <span className="text-[0.62rem] font-semibold uppercase tracking-[0.22em] text-frost/34">Ranked view</span>
+      </div>
+      {items.length === 0 ? (
+        <p className="mt-5 text-sm leading-7 text-frost/54">{emptyLabel}</p>
+      ) : (
+        <div className="mt-5 space-y-3">
+          {items.map((item, index) => {
+            const width = item.emphasis === null || item.emphasis === undefined
+              ? 0
+              : Math.max(8, Math.min(100, item.emphasis));
+
+            return (
+              <article key={`${title}-${item.label}`} className="rounded-[1.3rem] border border-white/7 bg-white/[0.028] px-4 py-4">
+                <div className="flex items-start justify-between gap-4">
+                  <div className="min-w-0">
+                    <div className="flex items-center gap-3">
+                      <span className={`font-display text-2xl font-semibold tracking-tight ${toneText}`}>
+                        {String(index + 1).padStart(2, "0")}
+                      </span>
+                      <div>
+                        <p className="text-sm font-semibold text-frost">{item.label}</p>
+                        {item.detail ? <p className="mt-1 text-sm leading-6 text-frost/56">{item.detail}</p> : null}
+                      </div>
+                    </div>
+                  </div>
+                  <p className={`shrink-0 font-display text-2xl font-semibold tracking-tight ${toneText}`}>{item.value}</p>
+                </div>
+                {item.emphasis !== null && item.emphasis !== undefined ? (
+                  <div className="mt-4 h-1.5 rounded-full bg-white/[0.06]">
+                    <div className={`h-full rounded-full ${toneBg}`} style={{ width: `${width}%` }} />
+                  </div>
+                ) : null}
+              </article>
+            );
+          })}
+        </div>
+      )}
+    </DashboardPanel>
+  );
+}
+
+export function OrderedBoard({
+  title,
+  items,
+  tone = "glow",
+  emptyLabel = "No items available yet."
+}: {
+  title: string;
+  items: Array<{ title: string; body: string; meta?: string }>;
+  tone?: "glow" | "gold" | "ember";
+  emptyLabel?: string;
+}) {
+  const toneClass = tone === "gold" ? "text-gold" : tone === "ember" ? "text-ember" : "text-glow";
+  const toneBorder = tone === "gold" ? "border-gold/12" : tone === "ember" ? "border-ember/12" : "border-glow/12";
+
+  return (
+    <DashboardPanel className="p-5">
+      <div className="flex items-center justify-between gap-3">
+        <h3 className="font-display text-xl font-semibold tracking-tight text-frost">{title}</h3>
+        <span className="text-[0.62rem] font-semibold uppercase tracking-[0.22em] text-frost/34">Execution order</span>
+      </div>
+      {items.length === 0 ? (
+        <p className="mt-5 text-sm leading-7 text-frost/54">{emptyLabel}</p>
+      ) : (
+        <div className="mt-5 space-y-3">
+          {items.map((item, index) => (
+            <article key={`${title}-${item.title}`} className={`rounded-[1.35rem] border ${toneBorder} bg-white/[0.028] p-4`}>
+              <div className="flex items-start gap-4">
+                <span className={`mt-0.5 inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/8 bg-white/[0.03] font-display text-lg font-semibold ${toneClass}`}>
+                  {index + 1}
+                </span>
+                <div className="min-w-0">
+                  <div className="flex flex-wrap items-center gap-3">
+                    <p className="text-sm font-semibold text-frost">{item.title}</p>
+                    {item.meta ? <span className={`dashboard-tactical-label ${toneClass}`}>{item.meta}</span> : null}
+                  </div>
+                  <p className="mt-2 text-sm leading-6 text-frost/60">{item.body}</p>
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+      )}
+    </DashboardPanel>
+  );
+}
+
 export function DataTable({
   title,
   columns,

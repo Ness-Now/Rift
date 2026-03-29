@@ -1,5 +1,24 @@
 # Development Journal
 
+## 2026-03-29 - T009 Second Refinement Pass
+
+### What was completed
+- Refined the live T009 pillar surfaces without changing backend contracts or reopening T008 overview scope.
+- Reworked Champion Form to emphasize main-pick identity, recent form windows, progression, and lane/checkpoint reads before secondary tabular support.
+- Reworked Macro Lens to foreground win/loss objective shape and macro interpretation ahead of supporting split details.
+- Reworked Coaching Board to feel more like an execution board with a lead directive, ordered priorities, focus blocks, next actions, and clearer guardrails.
+
+### Decisions made
+- Keep overview stable and use T009 to deepen pillar-specific product presentation.
+- Prefer reusable shared visual blocks over one-off markup inside each pillar.
+- Keep tables as supporting tools only where they still add value.
+
+### Issues found
+- The first T009 pass still leaned too heavily on table/card repetition and did not always make primary signals obvious enough at a glance.
+
+### Next step
+- Continue T009 polish with richer chart language, tighter motion/interaction polish, and cleaner pillar-specific visual identity where it materially improves comprehension.
+
 ## 2026-03-29 - Stabilization Baseline After T009 First Pass
 
 ### What was completed
