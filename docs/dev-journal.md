@@ -1,5 +1,23 @@
 # Development Journal
 
+## 2026-03-29 - T009 Champion Form Comparison Pass
+
+### What was completed
+- Refined only the Champion Form pillar in T009.
+- Added a stronger main-pick comparison surface so the pillar now contrasts the main champion, overall baseline, and latest recent-form window directly.
+- Added a dedicated main-pick edge read to make the champion-vs-profile performance gap easier to scan.
+
+### Decisions made
+- Keep the pass narrow to Champion Form only.
+- Reuse a shared comparison primitive instead of adding more one-off Champion Form markup.
+- Leave Macro Lens, Coaching Board, backend contracts, and overview composition unchanged.
+
+### Issues found
+- Champion Form still had one of the more table-like supporting reads despite the prior refinement pass.
+
+### Next step
+- Continue T009 in another narrow pass, likely on either Macro Lens primary comparison storytelling or Coaching Board execution polish.
+
 ## 2026-03-29 - T009 Second Refinement Pass
 
 ### What was completed

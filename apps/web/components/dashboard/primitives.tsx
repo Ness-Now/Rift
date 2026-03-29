@@ -334,6 +334,56 @@ export function OrderedBoard({
   );
 }
 
+export function ComparisonDeck({
+  title,
+  cards,
+  tone = "glow",
+  emptyLabel = "No comparison data available yet."
+}: {
+  title: string;
+  cards: Array<{
+    label: string;
+    headline: string;
+    value: string;
+    metrics: Array<{ label: string; value: string }>;
+  }>;
+  tone?: "glow" | "gold" | "ember";
+  emptyLabel?: string;
+}) {
+  const toneText = tone === "gold" ? "text-gold" : tone === "ember" ? "text-ember" : "text-glow";
+  const toneBorder = tone === "gold" ? "border-gold/12" : tone === "ember" ? "border-ember/12" : "border-glow/12";
+
+  return (
+    <DashboardPanel className="p-5">
+      <div className="flex items-center justify-between gap-3">
+        <h3 className="font-display text-xl font-semibold tracking-tight text-frost">{title}</h3>
+        <span className="text-[0.62rem] font-semibold uppercase tracking-[0.22em] text-frost/34">Comparison deck</span>
+      </div>
+      {cards.length === 0 ? (
+        <p className="mt-5 text-sm leading-7 text-frost/54">{emptyLabel}</p>
+      ) : (
+        <div className="mt-5 grid gap-4 xl:grid-cols-3">
+          {cards.map((card) => (
+            <article key={`${title}-${card.label}`} className={`rounded-[1.35rem] border ${toneBorder} bg-white/[0.028] p-4`}>
+              <p className={`dashboard-tactical-label ${toneText}`}>{card.label}</p>
+              <p className="mt-3 text-sm font-semibold text-frost/82">{card.headline}</p>
+              <p className="mt-4 font-display text-3xl font-semibold tracking-tight text-white">{card.value}</p>
+              <div className="mt-4 space-y-2 text-sm text-frost/58">
+                {card.metrics.map((metric) => (
+                  <div key={`${card.label}-${metric.label}`} className="flex items-center justify-between gap-4">
+                    <span>{metric.label}</span>
+                    <span className="text-frost/82">{metric.value}</span>
+                  </div>
+                ))}
+              </div>
+            </article>
+          ))}
+        </div>
+      )}
+    </DashboardPanel>
+  );
+}
+
 export function DataTable({
   title,
   columns,

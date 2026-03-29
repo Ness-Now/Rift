@@ -18,6 +18,7 @@
 - Operational controls were moved behind a secondary workbench so the product-facing experience leads.
 - Repository-facing documentation now reflects the implemented T001-T009 state instead of the earlier roadmap-only state.
 - T009 second-pass refinement reduced the table-first feel in the pillar surfaces and improved scan order, signal emphasis, and coaching-board decisiveness.
+- T009 Champion Form gained a narrower comparison pass that makes the main pick, overall baseline, and latest recent-form window easier to compare at a glance.
 
 ### Fixed
 - README, roadmap, and dashboard ticket files now match the actual implementation state.

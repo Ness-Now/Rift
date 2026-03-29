@@ -17,6 +17,7 @@ import {
 } from "@/lib/dashboard";
 
 import {
+  ComparisonDeck,
   DashboardPanel,
   DataTable,
   InsightList,
@@ -93,6 +94,14 @@ export function PillarSections({ analyticsSummary, reportArtifact, selectedProfi
   const primaryPriority = asRecord(priorityLevers[0]);
   const primaryRisk = asRecord(riskFlags[0]);
   const primaryStrength = asRecord(strengths[0]);
+  const mainChampionSplit = asRecord(
+    byChampion.find((entry) => asText(asRecord(entry)?.label) === asText(mainChampion?.champion_name))
+  );
+  const mainChampionWinRate = asNumberOrNull(mainChampion?.win_rate);
+  const overallWinRate = asNumberOrNull(overview?.win_rate);
+  const mainPickEdge = mainChampionWinRate !== null && overallWinRate !== null
+    ? mainChampionWinRate - overallWinRate
+    : null;
 
   const championSplitRows = byChampion.slice(0, 5).map((entry) => {
     const row = asRecord(entry);
@@ -261,6 +270,13 @@ export function PillarSections({ analyticsSummary, reportArtifact, selectedProfi
                     tone="glow"
                     value={bestHour ? formatHourLabel(bestHour.label) : "No hour split"}
                   />
+                  <SignalSpotlight
+                    detail={mainPickEdge !== null ? `${formatSignedPercent(mainPickEdge)} vs overall win rate` : "Main-pick edge appears once both champion and overall win-rate baselines are available."}
+                    eyebrow="Main-pick edge"
+                    title={asText(mainChampion?.champion_name) ?? championFocus}
+                    tone="gold"
+                    value={mainPickEdge !== null ? formatSignedPercent(mainPickEdge) : "N/A"}
+                  />
                   <MetricRail
                     accent="glow"
                     columns={2}
@@ -290,6 +306,46 @@ export function PillarSections({ analyticsSummary, reportArtifact, selectedProfi
                 </div>
               </div>
             </DashboardPanel>
+
+            <ComparisonDeck
+              cards={[
+                {
+                  label: "Main pick",
+                  headline: asText(mainChampion?.champion_name) ?? championFocus,
+                  value: formatPercent(mainChampion?.win_rate),
+                  metrics: [
+                    { label: "Games", value: formatMetric(mainChampion?.games, 0) },
+                    { label: "Share", value: formatPercent(mainChampion?.share) },
+                    { label: "KDA", value: formatMetric(mainChampionSplit?.avg_kda) },
+                    { label: "DPM", value: formatMetric(mainChampionSplit?.avg_dpm) }
+                  ]
+                },
+                {
+                  label: "Overall baseline",
+                  headline: selectedProfile?.riot_id_display ?? "Profile baseline",
+                  value: formatPercent(overview?.win_rate),
+                  metrics: [
+                    { label: "Games", value: formatMetric(overview?.total_games, 0) },
+                    { label: "Avg KDA", value: formatMetric(overview?.avg_kda) },
+                    { label: "Avg DPM", value: formatMetric(overview?.avg_dpm) },
+                    { label: "Avg CS/min", value: formatMetric(overview?.avg_cs_per_min) }
+                  ]
+                },
+                {
+                  label: "Latest window",
+                  headline: `Last ${formatMetric(latestWindow?.window_size, 0)}`,
+                  value: formatPercent(latestWindow?.win_rate),
+                  metrics: [
+                    { label: "Record", value: `${formatMetric(latestWindow?.wins, 0)}W / ${formatMetric(latestWindow?.losses, 0)}L` },
+                    { label: "KDA", value: formatMetric(latestWindow?.avg_kda) },
+                    { label: "DPM", value: formatMetric(latestWindow?.avg_dpm) },
+                    { label: "CS/min", value: formatMetric(latestWindow?.avg_cs_per_min) }
+                  ]
+                }
+              ]}
+              title="Main-pick comparison"
+              tone="glow"
+            />
 
             <div className="grid gap-6 xl:grid-cols-[0.95fr_1.05fr]">
               <RankedSignalList
@@ -700,6 +756,16 @@ function percentageFromRatio(value: unknown): number | null {
     return null;
   }
   return value * 100;
+}
+
+function asNumberOrNull(value: unknown): number | null {
+  return typeof value === "number" ? value : null;
+}
+
+function formatSignedPercent(value: number): string {
+  const percentage = value * 100;
+  const formatted = `${percentage.toFixed(1)}%`;
+  return percentage > 0 ? `+${formatted}` : formatted;
 }
 
 function toRankedRow(
