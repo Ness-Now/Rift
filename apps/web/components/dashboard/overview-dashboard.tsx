@@ -21,7 +21,8 @@ import {
   PillarTile,
   SectionEyebrow,
   SectionHeading,
-  StatusChip
+  StatusChip,
+  SurfaceNavigator
 } from "./primitives";
 
 type OverviewDashboardProps = {
@@ -220,6 +221,43 @@ export function OverviewDashboard({ token, userEmail }: OverviewDashboardProps) 
         : latestAnalyticsRun
           ? `Analytics #${latestAnalyticsRun.id}`
           : "No completed artifact chain"
+    }
+  ];
+
+  const surfaceRouteItems = [
+    {
+      label: "Station 00",
+      title: "Overview Desk",
+      href: "#overview",
+      detail: latestReportRun
+        ? "Identity, KPI strip, executive briefing, and artifact-chain orientation."
+        : "Activate analytics and report artifacts to unlock the full overview desk.",
+      tone: "glow" as const
+    },
+    {
+      label: "Station 01",
+      title: "Champion Form",
+      href: "#champion-form",
+      detail: championFocus !== "No champion focus yet"
+        ? `${championFocus} anchors the current form read and champion progression surface.`
+        : "Champion identity, recent form windows, and lane-checkpoint context.",
+      tone: "glow" as const
+    },
+    {
+      label: "Station 02",
+      title: "Macro Lens",
+      href: "#macro-lens",
+      detail: asText(primaryPriority?.title)
+        ?? "Objective conversion, loss shape, and macro contrast from the clean snapshot.",
+      tone: "gold" as const
+    },
+    {
+      label: "Station 03",
+      title: "Coaching Board",
+      href: "#coaching-board",
+      detail: asText(primaryPriority?.title)
+        ?? "Execution priorities, next actions, and confidence guardrails.",
+      tone: "ember" as const
     }
   ];
 
@@ -454,30 +492,33 @@ export function OverviewDashboard({ token, userEmail }: OverviewDashboardProps) 
 
       <DashboardPanel className="p-6 sm:p-7" id="pillars">
         <SectionHeading
-          description="The overview desk stays responsible for orientation. These deeper pillar surfaces now carry the champion, macro, and coaching-specific reads."
-          title="Pillars"
+          description="The overview desk stays responsible for orientation. These deeper stations carry the champion, macro, and coaching-specific reads in a consistent route."
+          title="Station Map"
         />
+        <div className="mt-6">
+          <SurfaceNavigator items={surfaceRouteItems} title="Overview to deep-dive route" />
+        </div>
         <div className="mt-6 grid gap-4 lg:grid-cols-4">
           <PillarTile
-            badge="Live"
+            badge="Station 00"
             description="Snapshot identity, current form, and the top coaching read for the selected profile."
             href="#overview"
             title="Overview Desk"
           />
           <PillarTile
-            badge="Live"
+            badge="Station 01"
             description="Champion-specific form, role-opponent context, and progression shaping for focused improvement."
             href="#champion-form"
             title="Champion Form"
           />
           <PillarTile
-            badge="Live"
+            badge="Station 02"
             description="Objective conversion, team context, and loss-shape analysis framed like a scouting tool."
             href="#macro-lens"
             title="Macro Lens"
           />
           <PillarTile
-            badge="Live"
+            badge="Station 03"
             description="Persisted coaching priorities, execution steps, and confidence guardrails rendered as a deeper coaching surface."
             href="#coaching-board"
             title="Coaching Board"

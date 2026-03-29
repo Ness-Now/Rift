@@ -42,3 +42,10 @@ Tracks changes made after the baseline described in [Rift_Project_Handoff_Audit_
 - Reworked the pillar so the lead directive, immediate next move, and top execution order read more clearly at a glance.
 - Separated interpretation overlay from evidence-and-limits framing so coaching directives and guardrails feel less like a stacked report dump.
 - Extended the shared ordered-board primitive to emphasize the first item without reopening overview, shell, backend contracts, Champion Form, or Macro Lens.
+
+## 2026-03-29 - T009 Cross-Pillar Coherence Pass
+
+- Narrowed the pass to page-level coherence between overview and the three live pillars.
+- Added a clearer station-map route in the overview and a matching deep-dive route above the live pillar surfaces.
+- Standardized station/status language across Champion Form, Macro Lens, and Coaching Board so the page reads more like one connected analysis desk.
+- Kept backend contracts, analytics/report schemas, API routes, shell structure, and isolated pillar deep-redesign work unchanged.

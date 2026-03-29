@@ -27,7 +27,8 @@ import {
   SectionEyebrow,
   SectionHeading,
   SignalSpotlight,
-  StatusChip
+  StatusChip,
+  SurfaceNavigator
 } from "./primitives";
 
 type PillarSectionsProps = {
@@ -255,11 +256,47 @@ export function PillarSections({ analyticsSummary, reportArtifact, selectedProfi
     "Strength"
   ).slice(0, 3);
 
+  const deepDiveRouteItems = [
+    {
+      label: "Station 01",
+      title: "Champion Form",
+      href: "#champion-form",
+      detail: championFocus !== "Champion focus pending"
+        ? `${championFocus} anchors the form read, progression, and lane-checkpoint context.`
+        : "Champion identity, form windows, and lane-shape evidence.",
+      tone: "glow" as const
+    },
+    {
+      label: "Station 02",
+      title: "Macro Lens",
+      href: "#macro-lens",
+      detail: strongestMacro
+        ? `${strongestMacro.label} is the clearest macro swing in the current snapshot.`
+        : "Objective conversion, loss shape, and team-context contrast.",
+      tone: "gold" as const
+    },
+    {
+      label: "Station 03",
+      title: "Coaching Board",
+      href: "#coaching-board",
+      detail: asText(primaryPriority?.title)
+        ?? "Execution priorities, next moves, and evidence guardrails.",
+      tone: "ember" as const
+    }
+  ];
+
   return (
     <div className="space-y-8">
+      <SurfaceNavigator items={deepDiveRouteItems} title="Deep-dive stations" />
+
       <DashboardPanel className="p-6 sm:p-7" id="champion-form">
         <SectionHeading
-          action={<StatusChip label="T009 live" tone="positive" />}
+          action={
+            <div className="flex flex-wrap items-center gap-3">
+              <StatusChip label="Station 01" tone="neutral" />
+              <StatusChip label="T009 live" tone="positive" />
+            </div>
+          }
           description="Champion Form owns the player's champion identity, recent form pattern, and lane-shape evidence. This pass pushes it toward a true form desk instead of a split dump."
           title="Champion Form"
         />
@@ -447,7 +484,12 @@ export function PillarSections({ analyticsSummary, reportArtifact, selectedProfi
 
       <DashboardPanel className="p-6 sm:p-7" id="macro-lens">
         <SectionHeading
-          action={<StatusChip label="T009 live" tone="positive" />}
+          action={
+            <div className="flex flex-wrap items-center gap-3">
+              <StatusChip label="Station 02" tone="neutral" />
+              <StatusChip label="T009 live" tone="positive" />
+            </div>
+          }
           description="Macro Lens now opens like a command table: what wins look like, what losses look like, where the clearest macro swing lives, and how the report overlay interprets that deterministic evidence."
           title="Macro Lens"
         />
@@ -612,7 +654,12 @@ export function PillarSections({ analyticsSummary, reportArtifact, selectedProfi
 
       <DashboardPanel className="p-6 sm:p-7" id="coaching-board">
         <SectionHeading
-          action={<StatusChip label="T009 live" tone="positive" />}
+          action={
+            <div className="flex flex-wrap items-center gap-3">
+              <StatusChip label="Station 03" tone="neutral" />
+              <StatusChip label="T009 live" tone="positive" />
+            </div>
+          }
           description="Coaching Board now separates directive, execution order, and evidence guardrails so the user can see what matters most, what to do next, and how hard to trust the read."
           title="Coaching Board"
         />

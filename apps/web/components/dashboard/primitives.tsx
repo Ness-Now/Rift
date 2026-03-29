@@ -174,6 +174,58 @@ export function PillarTile({
   );
 }
 
+export function SurfaceNavigator({
+  title,
+  items,
+  emptyLabel = "No stations available yet."
+}: {
+  title: string;
+  items: Array<{
+    label: string;
+    title: string;
+    href: string;
+    detail: string;
+    tone?: "glow" | "gold" | "ember";
+  }>;
+  emptyLabel?: string;
+}) {
+  return (
+    <DashboardPanel className="p-5">
+      <div className="flex items-center justify-between gap-3">
+        <h3 className="font-display text-xl font-semibold tracking-tight text-frost">{title}</h3>
+        <span className="text-[0.62rem] font-semibold uppercase tracking-[0.22em] text-frost/34">Surface route</span>
+      </div>
+      {items.length === 0 ? (
+        <p className="mt-5 text-sm leading-7 text-frost/54">{emptyLabel}</p>
+      ) : (
+        <div className="mt-5 grid gap-3 lg:grid-cols-4">
+          {items.map((item) => {
+            const toneText = item.tone === "gold" ? "text-gold" : item.tone === "ember" ? "text-ember" : "text-glow";
+            const toneBorder = item.tone === "gold" ? "border-gold/12" : item.tone === "ember" ? "border-ember/12" : "border-glow/12";
+            const toneHover = item.tone === "gold" ? "group-hover:text-gold" : item.tone === "ember" ? "group-hover:text-ember" : "group-hover:text-glow";
+
+            return (
+              <a
+                key={`${title}-${item.label}`}
+                className={`group rounded-[1.35rem] border ${toneBorder} bg-white/[0.028] p-4 transition duration-200 hover:-translate-y-0.5 hover:bg-white/[0.05]`}
+                href={item.href}
+              >
+                <p className={`dashboard-tactical-label ${toneText}`}>{item.label}</p>
+                <p className="mt-3 text-sm font-semibold text-frost">{item.title}</p>
+                <p className="mt-2 text-sm leading-6 text-frost/56">{item.detail}</p>
+                <div className="mt-4 flex items-center justify-between border-t border-white/8 pt-3 text-[0.62rem] font-semibold uppercase tracking-[0.2em] text-frost/34">
+                  <span>Open station</span>
+                  <span className={`transition ${toneHover}`}>-&gt;</span>
+                </div>
+              </a>
+            );
+          })}
+        </div>
+      )}
+    </DashboardPanel>
+  );
+}
+
 export function MetricRail({
   items,
   columns = 4,

@@ -1,5 +1,24 @@
 # Development Journal
 
+## 2026-03-29 - T009 Cross-Pillar Coherence Pass
+
+### What was completed
+- Refined T009 at the page-coherence level rather than inside a single pillar.
+- Added a clearer overview-to-pillar station route and a matching deep-dive route above the live pillar surfaces.
+- Standardized pillar header status language so Champion Form, Macro Lens, and Coaching Board read as one connected product surface.
+
+### Decisions made
+- Keep the pass strictly on overview-to-pillar continuity, cross-pillar hierarchy, and shared navigation language.
+- Reuse shared navigation and status patterns instead of reopening any one pillar deeply.
+- Leave backend contracts, shell structure, and underlying analytics/report architecture unchanged.
+
+### Issues found
+- The three pillars had become stronger individually, but the transition from overview into the live deep-dive surfaces still felt too loose.
+- Badge language and section framing were not yet consistent enough to read like one premium analysis route.
+
+### Next step
+- Continue T009 only if another narrow product-surface pass is needed after reviewing the coherence improvements across the full page.
+
 ## 2026-03-29 - T009 Coaching Board Execution Pass
 
 ### What was completed
