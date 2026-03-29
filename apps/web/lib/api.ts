@@ -8,7 +8,8 @@ import type {
   ReportArtifact,
   ReportRun,
   RawMatchPayloadSummary,
-  RiotProfile
+  RiotProfile,
+  SystemReadiness
 } from "@rift/shared-types";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8000";
@@ -74,6 +75,12 @@ export async function login(credentials: AuthCredentials): Promise<AuthTokenResp
 export async function getCurrentUser(token: string): Promise<AuthUser> {
   return request<AuthUser>("/auth/me", {
     token,
+    cache: "no-store"
+  });
+}
+
+export async function getSystemReadiness(): Promise<SystemReadiness> {
+  return request<SystemReadiness>("/readiness", {
     cache: "no-store"
   });
 }

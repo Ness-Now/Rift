@@ -9,6 +9,16 @@ export interface VersionResponse {
   version: string;
 }
 
+export interface SystemReadiness {
+  environment: string;
+  workflow_mode: "server_configured_self_use";
+  pipeline_ready: boolean;
+  riot_api_configured: boolean;
+  openai_api_configured: boolean;
+  missing_requirements: string[];
+  service: "api";
+}
+
 export interface AuthUser {
   id: number;
   email: string;

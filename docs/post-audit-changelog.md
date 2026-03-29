@@ -70,3 +70,10 @@ Tracks changes made after the baseline described in [Rift_Project_Handoff_Audit_
 - Added one overview-level orchestration surface that lets the user choose a Riot profile, run ingestion -> normalization -> analytics -> report in sequence, and see the latest stage state in one place.
 - Kept the secondary operational workbench available as a fallback instead of making the user operate five separate panels by default.
 - Kept backend contracts, analytics/report schemas, API routes, and the broader shell architecture unchanged.
+
+## 2026-03-29 - T009 Orchestration Readiness And Robustness Pass
+
+- Narrowed the pass to orchestration trust rather than another broad product-surface redesign.
+- Added a minimal backend readiness signal so the dashboard can tell whether the current self-use environment has Riot/OpenAI server-side configuration available.
+- Strengthened the Run Full Analysis surface with explicit readiness, latest blocking issue, coaching freshness, and stage-specific failure messaging.
+- Kept the broader architecture, analytics/report contracts, shell structure, and T010 scope unchanged.

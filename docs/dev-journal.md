@@ -1,5 +1,24 @@
 # Development Journal
 
+## 2026-03-29 - T009 Orchestration Readiness And Robustness Pass
+
+### What was completed
+- Strengthened the new overview-level orchestration surface without broadening the product scope.
+- Added explicit readiness, blocking, freshness, and handoff states so the current self-use mode feels less opaque.
+- Added a minimal backend-backed readiness signal for the current server-configured environment and used it in the premium dashboard surface.
+
+### Decisions made
+- Keep the pass narrowly focused on orchestration trust rather than redesigning any run domain or starting T010.
+- Add only one tiny backend support endpoint so the frontend can stop guessing whether Riot/OpenAI server-side configuration is present.
+- Continue to build trust primarily from existing run history and existing persisted report linkage instead of reopening analytics/report contracts.
+
+### Issues found
+- The first orchestration pass improved flow, but it still assumed environment readiness instead of proving it.
+- Stage history was visible, but the user still lacked a clear answer to whether the latest coaching chain was current enough to trust or what the next move should be when something failed.
+
+### Next step
+- Review whether the orchestration surface now feels trustworthy enough for the current self-use phase before deciding if T009 needs one more narrow trust/comprehension pass or is ready to stabilize.
+
 ## 2026-03-29 - T009 First-User Orchestration Pass
 
 ### What was completed
