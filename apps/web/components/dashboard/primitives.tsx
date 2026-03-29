@@ -226,6 +226,64 @@ export function SurfaceNavigator({
   );
 }
 
+export function WorkflowRail({
+  title,
+  items
+}: {
+  title: string;
+  items: Array<{
+    step: string;
+    title: string;
+    detail: string;
+    href?: string;
+    tone?: "glow" | "gold" | "ember";
+  }>;
+}) {
+  return (
+    <DashboardPanel className="p-5">
+      <div className="flex items-center justify-between gap-3">
+        <h3 className="font-display text-xl font-semibold tracking-tight text-frost">{title}</h3>
+        <span className="text-[0.62rem] font-semibold uppercase tracking-[0.22em] text-frost/34">Coaching flow</span>
+      </div>
+      <div className="mt-5 grid gap-4 lg:grid-cols-3">
+        {items.map((item) => {
+          const toneText = item.tone === "gold" ? "text-gold" : item.tone === "ember" ? "text-ember" : "text-glow";
+          const toneBorder = item.tone === "gold" ? "border-gold/12" : item.tone === "ember" ? "border-ember/12" : "border-glow/12";
+          const content = (
+            <>
+              <p className={`dashboard-tactical-label ${toneText}`}>{item.step}</p>
+              <p className="mt-3 text-sm font-semibold text-frost">{item.title}</p>
+              <p className="mt-2 text-sm leading-6 text-frost/58">{item.detail}</p>
+            </>
+          );
+
+          if (!item.href) {
+            return (
+              <div key={`${title}-${item.step}`} className={`rounded-[1.35rem] border ${toneBorder} bg-white/[0.028] p-4`}>
+                {content}
+              </div>
+            );
+          }
+
+          return (
+            <a
+              key={`${title}-${item.step}`}
+              className={`group rounded-[1.35rem] border ${toneBorder} bg-white/[0.028] p-4 transition duration-200 hover:-translate-y-0.5 hover:bg-white/[0.05]`}
+              href={item.href}
+            >
+              {content}
+              <div className="mt-4 flex items-center justify-between border-t border-white/8 pt-3 text-[0.62rem] font-semibold uppercase tracking-[0.2em] text-frost/34">
+                <span>Open step</span>
+                <span className={`transition ${item.tone === "gold" ? "group-hover:text-gold" : item.tone === "ember" ? "group-hover:text-ember" : "group-hover:text-glow"}`}>-&gt;</span>
+              </div>
+            </a>
+          );
+        })}
+      </div>
+    </DashboardPanel>
+  );
+}
+
 export function MetricRail({
   items,
   columns = 4,

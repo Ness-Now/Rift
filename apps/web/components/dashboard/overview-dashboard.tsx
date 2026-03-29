@@ -22,7 +22,8 @@ import {
   SectionEyebrow,
   SectionHeading,
   StatusChip,
-  SurfaceNavigator
+  SurfaceNavigator,
+  WorkflowRail
 } from "./primitives";
 
 type OverviewDashboardProps = {
@@ -261,6 +262,30 @@ export function OverviewDashboard({ token, userEmail }: OverviewDashboardProps) 
     }
   ];
 
+  const workflowItems = [
+    {
+      step: "Step 01",
+      title: "Read the evidence",
+      detail: "Start with the current snapshot, KPI strip, and sample context to understand what the clean data actually says.",
+      href: "#overview",
+      tone: "glow" as const
+    },
+    {
+      step: "Step 02",
+      title: "Read the interpretation",
+      detail: "Use the executive read and live pillar overlays to see how deterministic signals turn into coaching meaning.",
+      href: "#pillars",
+      tone: "gold" as const
+    },
+    {
+      step: "Step 03",
+      title: "Take the next move",
+      detail: "Finish on the Coaching Board so the guidance lands as a concrete execution sequence instead of a report dump.",
+      href: "#coaching-board",
+      tone: "ember" as const
+    }
+  ];
+
   return (
     <div className="space-y-8" id="overview">
       <DashboardPanel className="dashboard-grid p-0">
@@ -359,6 +384,8 @@ export function OverviewDashboard({ token, userEmail }: OverviewDashboardProps) 
         </div>
       </DashboardPanel>
 
+      <WorkflowRail items={workflowItems} title="How to use this coaching surface" />
+
       <div className="grid gap-6 xl:grid-cols-[1.2fr_0.8fr]">
         <DashboardPanel className="p-6 sm:p-7">
           <SectionHeading
@@ -380,8 +407,8 @@ export function OverviewDashboard({ token, userEmail }: OverviewDashboardProps) 
                 </select>
               </label>
             }
-            description="The executive block blends persisted deterministic signals with the latest stored structured report artifact for the selected profile."
-            title="Executive briefing"
+            description="Read this handoff in order: evidence first, interpretation second, then the action path that should shape the next block of play."
+            title="Coaching handoff"
           />
 
           <div className="mt-6 grid gap-4 xl:grid-cols-[1.05fr_0.95fr]">
@@ -396,14 +423,14 @@ export function OverviewDashboard({ token, userEmail }: OverviewDashboardProps) 
 
               <div className="mt-6 grid gap-4 sm:grid-cols-2">
                 <div className="rounded-[1.35rem] border border-white/8 bg-night/30 px-4 py-4">
-                  <p className="dashboard-tactical-label text-frost/34">Profile vector</p>
+                  <p className="dashboard-tactical-label text-frost/34">Interpretation</p>
                   <p className="mt-3 text-lg font-semibold text-white">{playerStyle}</p>
                   <p className="mt-2 text-sm leading-6 text-frost/58">
                     {asText(firstStrength?.summary) ?? "Strength framing will sharpen after the next completed report artifact."}
                   </p>
                 </div>
                 <div className="rounded-[1.35rem] border border-gold/14 bg-gold/5 px-4 py-4">
-                  <p className="dashboard-tactical-label text-gold">Immediate lever</p>
+                  <p className="dashboard-tactical-label text-gold">Execution guidance</p>
                   <p className="mt-3 text-lg font-semibold text-white">{asText(primaryPriority?.title) ?? "No prioritized lever yet"}</p>
                   <p className="mt-2 text-sm leading-6 text-frost/58">
                     {asText(primaryPriority?.summary) ?? "Run or refresh the report to surface a prioritized coaching lever."}
@@ -414,7 +441,7 @@ export function OverviewDashboard({ token, userEmail }: OverviewDashboardProps) 
 
             <div className="space-y-4">
               <div className="rounded-[1.7rem] border border-white/8 bg-white/[0.03] p-5">
-                <SectionEyebrow tone="steel">Form snapshot</SectionEyebrow>
+                <SectionEyebrow tone="steel">Evidence snapshot</SectionEyebrow>
                 <div className="mt-4 space-y-4">
                   {recentWindowCards.length === 0 ? (
                     <p className="text-sm leading-7 text-frost/58">
@@ -438,7 +465,7 @@ export function OverviewDashboard({ token, userEmail }: OverviewDashboardProps) 
               </div>
 
               <div className="rounded-[1.7rem] border border-white/8 bg-white/[0.03] p-5">
-                <SectionEyebrow tone="steel">Confidence + limits</SectionEyebrow>
+                <SectionEyebrow tone="steel">Interpretation guardrails</SectionEyebrow>
                 <p className="mt-4 font-display text-2xl font-semibold text-white">{confidenceLevel}</p>
                 <p className="mt-3 text-sm leading-7 text-frost/60">
                   {asText(confidence?.explanation) ?? "Confidence will appear once a structured report is available."}
@@ -454,8 +481,8 @@ export function OverviewDashboard({ token, userEmail }: OverviewDashboardProps) 
 
         <DashboardPanel className="p-6">
           <SectionHeading
-            description="Supporting telemetry keeps the overview grounded without stealing focus from the main coaching read."
-            title="Support layer"
+            description="This evidence layer keeps the coaching grounded in artifact lineage, sample size, and the latest clean snapshot."
+            title="Evidence layer"
           />
           <div className="mt-6 grid gap-4">
             <div className="rounded-[1.4rem] border border-white/8 bg-white/[0.03] p-4">
@@ -475,7 +502,7 @@ export function OverviewDashboard({ token, userEmail }: OverviewDashboardProps) 
             </div>
 
             <div className="rounded-[1.4rem] border border-white/8 bg-white/[0.03] p-4">
-              <p className="dashboard-tactical-label text-frost/34">Current focus</p>
+              <p className="dashboard-tactical-label text-frost/34">Execution focus</p>
               <p className="mt-3 text-sm leading-7 text-frost/64">
                 {asText(primaryPriority?.summary) ?? "Priority levers will become visible here once the first report artifact is available."}
               </p>
@@ -485,14 +512,14 @@ export function OverviewDashboard({ token, userEmail }: OverviewDashboardProps) 
       </div>
 
       <div className="grid gap-6 xl:grid-cols-3">
-        <InsightList accent="glow" items={strengthsItems} title="Strength edge" />
-        <InsightList accent="ember" items={weaknessesItems} title="Pressure points" />
-        <InsightList accent="gold" items={nextActionItems} title="Next block" />
+        <InsightList accent="glow" items={strengthsItems} title="Evidence holding up" />
+        <InsightList accent="ember" items={weaknessesItems} title="Interpretation watchouts" />
+        <InsightList accent="gold" items={nextActionItems} title="Action queue" />
       </div>
 
       <DashboardPanel className="p-6 sm:p-7" id="pillars">
         <SectionHeading
-          description="The overview desk stays responsible for orientation. These deeper stations carry the champion, macro, and coaching-specific reads in a consistent route."
+          description="Move through the deep stations in the same coaching order: evidence first, interpretation second, and execution last."
           title="Station Map"
         />
         <div className="mt-6">

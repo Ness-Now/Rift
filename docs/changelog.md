@@ -22,6 +22,7 @@
 - T009 Macro Lens gained a narrower command-table pass that makes the win/loss macro contrast, strongest objective swing, and duration/session reinforcement easier to read before supporting splits.
 - T009 Coaching Board gained a narrower execution pass that makes the lead priority, immediate next move, ordered priorities, and evidence-versus-guardrail separation clearer.
 - T009 gained a narrow cross-pillar coherence pass that strengthens overview-to-pillar continuity, station-map navigation, and shared hierarchy language across the three live pillars.
+- T009 gained a workflow-readiness pass that makes evidence, interpretation, and execution guidance more explicit across the current live dashboard.
 
 ### Fixed
 - README, roadmap, and dashboard ticket files now match the actual implementation state.

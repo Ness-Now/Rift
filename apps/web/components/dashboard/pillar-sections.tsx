@@ -28,7 +28,8 @@ import {
   SectionHeading,
   SignalSpotlight,
   StatusChip,
-  SurfaceNavigator
+  SurfaceNavigator,
+  WorkflowRail
 } from "./primitives";
 
 type PillarSectionsProps = {
@@ -285,9 +286,34 @@ export function PillarSections({ analyticsSummary, reportArtifact, selectedProfi
     }
   ];
 
+  const deepDiveWorkflowItems = [
+    {
+      step: "Step 01",
+      title: "Evidence station",
+      detail: "Champion Form is the first deep read: stable performance evidence, form patterning, and lane-shape context.",
+      href: "#champion-form",
+      tone: "glow" as const
+    },
+    {
+      step: "Step 02",
+      title: "Interpretation station",
+      detail: "Macro Lens shows how those outcomes take shape across objectives, duration, and match context.",
+      href: "#macro-lens",
+      tone: "gold" as const
+    },
+    {
+      step: "Step 03",
+      title: "Execution station",
+      detail: "Coaching Board turns the interpreted signal into a sequence of next moves with confidence and limits attached.",
+      href: "#coaching-board",
+      tone: "ember" as const
+    }
+  ];
+
   return (
     <div className="space-y-8">
       <SurfaceNavigator items={deepDiveRouteItems} title="Deep-dive stations" />
+      <WorkflowRail items={deepDiveWorkflowItems} title="How to move through the deep read" />
 
       <DashboardPanel className="p-6 sm:p-7" id="champion-form">
         <SectionHeading
@@ -297,7 +323,7 @@ export function PillarSections({ analyticsSummary, reportArtifact, selectedProfi
               <StatusChip label="T009 live" tone="positive" />
             </div>
           }
-          description="Champion Form owns the player's champion identity, recent form pattern, and lane-shape evidence. This pass pushes it toward a true form desk instead of a split dump."
+          description="Evidence station. Champion Form is where the player identity, recent form pattern, and lane-shape reads become concrete before wider interpretation."
           title="Champion Form"
         />
 
@@ -476,7 +502,7 @@ export function PillarSections({ analyticsSummary, reportArtifact, selectedProfi
               accent="glow"
               emptyLabel="Champion-form commentary will appear after the first report artifact."
               items={championNarrative.slice(0, 3)}
-              title="Form interpretation"
+              title="Interpretation overlay"
             />
           </div>
         </div>
@@ -490,7 +516,7 @@ export function PillarSections({ analyticsSummary, reportArtifact, selectedProfi
               <StatusChip label="T009 live" tone="positive" />
             </div>
           }
-          description="Macro Lens now opens like a command table: what wins look like, what losses look like, where the clearest macro swing lives, and how the report overlay interprets that deterministic evidence."
+          description="Interpretation station. Macro Lens turns deterministic match outcomes into a clearer read of how wins, losses, and objective patterns actually take shape."
           title="Macro Lens"
         />
 
@@ -660,7 +686,7 @@ export function PillarSections({ analyticsSummary, reportArtifact, selectedProfi
               <StatusChip label="T009 live" tone="positive" />
             </div>
           }
-          description="Coaching Board now separates directive, execution order, and evidence guardrails so the user can see what matters most, what to do next, and how hard to trust the read."
+          description="Execution station. Coaching Board closes the loop by separating the next move, ordered priority, and the confidence limits that should shape how hard to push the advice."
           title="Coaching Board"
         />
 

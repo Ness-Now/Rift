@@ -1,5 +1,24 @@
 # Development Journal
 
+## 2026-03-29 - T009 Workflow Readiness Pass
+
+### What was completed
+- Refined T009 at the coaching-workflow level rather than adding a new feature.
+- Added a clearer evidence -> interpretation -> execution reading path across the overview and the live pillar area.
+- Updated overview and pillar labels so the current dashboard reads more like coaching delivery and less like a polished report surface.
+
+### Decisions made
+- Keep the pass strictly on sequencing, local UI wording, and workflow comprehension.
+- Reuse shared workflow/navigation primitives instead of reopening individual pillars deeply.
+- Leave backend contracts, analytics/report schemas, shell structure, and T010 untouched.
+
+### Issues found
+- The live surface had strong sections, but the user journey still relied too much on inference.
+- Evidence, interpretation, and execution guidance were present, but not yet explicit enough for a first-time coaching workflow.
+
+### Next step
+- Continue T009 only if another narrow presentation pass is needed after reviewing whether the live dashboard now feels usable as a first coaching product surface.
+
 ## 2026-03-29 - T009 Cross-Pillar Coherence Pass
 
 ### What was completed
