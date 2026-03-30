@@ -127,8 +127,15 @@ class ContextualChatService:
         reply: ContextualChatReply,
         grounding: ContextualChatGrounding
     ) -> ContextualChatReply:
+        evidence_points = list(reply.evidence_points)
         limitation_points = list(reply.limitation_points)
         evidence_mode = _derive_evidence_mode(reply.trace_labels)
+        if reply.answer_mode == "limited" and len(evidence_points) == 0:
+            evidence_points.append(
+                f"The displayed artifact supports only these areas for this answer: {_format_trace_labels(reply.trace_labels)}."
+            )
+        if reply.answer_mode == "limited" and len(limitation_points) == 0:
+            limitation_points.append(_build_default_limited_boundary(reply.trace_labels, grounding))
         if grounding.context_status == "stale":
             stale_notice = (
                 f"This answer is grounded in displayed report #{grounding.report_run_id} on analytics run "
@@ -149,7 +156,7 @@ class ContextualChatService:
             ),
             trace_labels=reply.trace_labels,
             answer=reply.answer,
-            evidence_points=reply.evidence_points,
+            evidence_points=evidence_points,
             limitation_points=limitation_points,
             suggested_follow_up=reply.suggested_follow_up
         )
@@ -177,3 +184,21 @@ def _derive_evidence_mode(trace_labels: list[str]) -> str:
     if uses_deterministic:
         return "deterministic"
     return "interpretive"
+
+
+def _build_default_limited_boundary(
+    trace_labels: list[str],
+    grounding: ContextualChatGrounding
+) -> str:
+    base = f"The displayed artifact does not support a stronger conclusion beyond these areas: {_format_trace_labels(trace_labels)}."
+    if grounding.context_status == "stale":
+        return f"{base} Newer upstream analytics may change the read."
+    return base
+
+
+def _format_trace_labels(trace_labels: list[str]) -> str:
+    return ", ".join(_format_trace_label(label) for label in trace_labels)
+
+
+def _format_trace_label(label: str) -> str:
+    return label.replace("artifact_digest.", "").replace("report_input.", "report input ").replace("_", " ")

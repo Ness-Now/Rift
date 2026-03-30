@@ -315,17 +315,23 @@ export function ContextualChatPanel({
                   {message.role === "assistant" ? (
                     <div className="mt-5 grid gap-4 xl:grid-cols-3">
                       <MiniList
-                        emptyLabel="No explicit evidence points returned."
+                        emptyLabel={message.answerMode === "limited"
+                          ? "No explicit supported points returned."
+                          : "No explicit evidence points returned."}
                         items={message.evidencePoints ?? []}
-                        title="Evidence"
+                        title={message.answerMode === "limited" ? "Artifact supports" : "Evidence"}
                       />
                       <MiniList
-                        emptyLabel="No explicit limitations returned."
+                        emptyLabel={message.answerMode === "limited"
+                          ? "No explicit unsupported areas returned."
+                          : "No explicit limitations returned."}
                         items={message.limitationPoints ?? []}
-                        title="Limits"
+                        title={message.answerMode === "limited" ? "Cannot conclude" : "Limits"}
                       />
                       <div className="rounded-[1.2rem] border border-white/8 bg-white/[0.03] p-4">
-                        <p className="dashboard-tactical-label text-frost/34">Scope bounds</p>
+                        <p className="dashboard-tactical-label text-frost/34">
+                          {message.answerMode === "limited" ? "Answer bounds" : "Scope bounds"}
+                        </p>
                         <p className="mt-3 text-sm leading-7 text-frost/70">
                           {message.scopeNote ?? "No explicit scope note returned."}
                         </p>

@@ -121,3 +121,9 @@ Tracks changes made after the baseline described in [Rift_Project_Handoff_Audit_
 - Narrowed the pass to one remaining reply-level semantic blur rather than expanding T010 capability.
 - Added an `evidence_mode` field so each contextual chat reply now declares whether it is based mainly on deterministic artifact evidence, interpreted report output, or a mix of both.
 - Derived that evidence-layer mode conservatively from the actual trace labels in backend reply shaping and exposed it lightly in the chat UI beside the existing support-status chips.
+
+## 2026-03-30 - T010 Limited-Answer Separation Pass
+
+- Narrowed the pass to one remaining bounded-answer weakness rather than adding new T010 behavior.
+- Added deterministic backend fallback so limited replies now always preserve a clearer split between what the displayed artifact supports and what it cannot conclude, even if the model leaves that separation too soft.
+- Updated the prompt and chat UI wording so partially answerable questions read less like generic polite refusals and more like bounded artifact-grounded coaching answers.

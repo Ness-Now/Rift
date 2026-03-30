@@ -1,5 +1,24 @@
 # Development Journal
 
+## 2026-03-30 - T010 Limited-Answer Separation Pass
+
+### What was completed
+- Inspected the current T010 chat contract, service shaping, prompt asset, traceability rendering, and stale/missing-context handling before making changes.
+- Built a compact evaluation set of realistic T010 questions with emphasis on partially answerable asks, where the main risk is over-soft or weakly separated limited answers.
+- Hardened limited replies so the system now enforces a clearer split between what the displayed artifact supports and what it cannot conclude when the model leaves that boundary too soft.
+
+### Decisions made
+- Keep the pass narrow and behavior-focused rather than adding any new capability or contract surface.
+- Prefer deterministic backend hardening for limited replies over relying on prompt quality alone.
+- Preserve the existing chat trust model (`answer_mode`, `scope_note`, `trace_labels`, `evidence_mode`) and tighten only how limited answers use those existing fields.
+
+### Issues found
+- The strongest remaining weakness was in partially answerable questions: the contract already had evidence and limitation fields, but nothing ensured limited replies used them clearly enough to separate support from uncertainty.
+- That created a risk of limited answers sounding polite but still too generic about what the artifact truly supports versus what it cannot conclude.
+
+### Next step
+- Reassess whether T010 now has enough bounded-answer clarity to shift the next narrow hardening pass toward interaction quality rather than more semantics around limited-answer trust.
+
 ## 2026-03-30 - T010 Evidence-Layer Separation Pass
 
 ### What was completed

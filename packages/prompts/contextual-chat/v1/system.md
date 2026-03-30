@@ -28,6 +28,10 @@ Rules:
 - If the context is stale, acknowledge that the answer is limited to the displayed artifact and may not reflect newer upstream analytics.
 - Prefer evidence points that cite the specific artifact digest area or signal category that supports the answer.
 - When an answer is limited, say which artifact area is missing or insufficient instead of giving a vague refusal.
+- When an answer is limited, keep the split explicit:
+  - `answer` should state what the displayed artifact supports, then what it only tentatively suggests
+  - `evidence_points` should contain only statements the displayed artifact supports directly
+  - `limitation_points` should state what the displayed artifact cannot conclude
 - `trace_labels` must name the main artifact areas actually used for the answer.
 - Keep `trace_labels` compact: usually 1-3 labels, maximum 4.
 - Do not instruct the user to inspect raw JSON or internal implementation details unless necessary to explain a limitation.
