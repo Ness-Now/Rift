@@ -115,3 +115,9 @@ Tracks changes made after the baseline described in [Rift_Project_Handoff_Audit_
 - Inspected the current T010 reply contract, artifact digest, service shaping, prompt, chat panel, and stale/missing-context logic before making changes.
 - Added compact `trace_labels` to the contextual chat reply contract so each answer now exposes which artifact areas it actually relied on.
 - Updated the prompt and chat UI so those labels are generated and shown lightly as source-area chips instead of turning the product into a heavier citation interface.
+
+## 2026-03-30 - T010 Evidence-Layer Separation Pass
+
+- Narrowed the pass to one remaining reply-level semantic blur rather than expanding T010 capability.
+- Added an `evidence_mode` field so each contextual chat reply now declares whether it is based mainly on deterministic artifact evidence, interpreted report output, or a mix of both.
+- Derived that evidence-layer mode conservatively from the actual trace labels in backend reply shaping and exposed it lightly in the chat UI beside the existing support-status chips.

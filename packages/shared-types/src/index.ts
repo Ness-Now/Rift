@@ -171,6 +171,7 @@ export interface ContextualChatGrounding {
 
 export interface ContextualChatReply {
   answer_mode: "grounded" | "limited";
+  evidence_mode: "deterministic" | "interpretive" | "mixed";
   scope_note: string;
   trace_labels: Array<
     | "priority_levers"

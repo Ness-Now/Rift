@@ -1,5 +1,24 @@
 # Development Journal
 
+## 2026-03-30 - T010 Evidence-Layer Separation Pass
+
+### What was completed
+- Inspected the current T010 reply contract, trace label handling, artifact digest, prompt instructions, and frontend chat rendering before changing anything.
+- Added one compact reply-level field, `evidence_mode`, so each contextual chat answer now declares whether it relies mainly on deterministic artifact evidence, interpreted report output, or a mix of both.
+- Updated the chat UI to render that evidence-layer basis lightly alongside the existing support-status and trace labels.
+
+### Decisions made
+- Keep the pass narrow and semantic rather than adding any new capability, retrieval, or provenance system.
+- Derive `evidence_mode` conservatively in the backend from the actual `trace_labels` instead of trusting the model alone to self-classify its answer basis.
+- Preserve the existing `answer_mode`, `scope_note`, `artifact_digest`, and `trace_labels` architecture; this pass only separates deterministic versus interpretive reliance more clearly.
+
+### Issues found
+- The chat could already show which artifact areas it used, but users still could not tell whether an answer was leaning on deterministic report-input evidence, interpreted report-output coaching, or both.
+- That left one remaining trust blur between “which fields were used” and “what kind of grounding basis the answer really has.”
+
+### Next step
+- Reassess whether the current T010 chat now has enough grounding honesty to shift the next narrow pass toward interaction quality rather than more reply-semantics hardening.
+
 ## 2026-03-30 - T010 Answer Traceability Pass
 
 ### What was completed

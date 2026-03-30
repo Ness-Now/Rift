@@ -24,6 +24,7 @@ class ContextualChatGrounding(BaseModel):
 
 class ContextualChatReply(BaseModel):
     answer_mode: Literal["grounded", "limited"]
+    evidence_mode: Literal["deterministic", "interpretive", "mixed"]
     scope_note: str = Field(min_length=1)
     trace_labels: list[
         Literal[

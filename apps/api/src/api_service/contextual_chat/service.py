@@ -29,6 +29,22 @@ from pydantic import ValidationError
 
 
 RUN_STATUS_COMPLETED = "completed"
+DETERMINISTIC_TRACE_LABELS = {
+    "report_input.overview",
+    "report_input.macro",
+    "report_input.progression",
+    "report_input.data_quality",
+    "artifact_digest.signal_digest",
+}
+INTERPRETIVE_TRACE_LABELS = {
+    "priority_levers",
+    "coaching_focus",
+    "next_actions",
+    "strengths",
+    "weaknesses",
+    "confidence_and_limits",
+    "artifact_digest.report_digest",
+}
 
 
 @dataclass(slots=True)
@@ -112,6 +128,7 @@ class ContextualChatService:
         grounding: ContextualChatGrounding
     ) -> ContextualChatReply:
         limitation_points = list(reply.limitation_points)
+        evidence_mode = _derive_evidence_mode(reply.trace_labels)
         if grounding.context_status == "stale":
             stale_notice = (
                 f"This answer is grounded in displayed report #{grounding.report_run_id} on analytics run "
@@ -124,6 +141,7 @@ class ContextualChatService:
 
         return ContextualChatReply(
             answer_mode="limited" if grounding.context_status == "stale" else reply.answer_mode,
+            evidence_mode=evidence_mode,
             scope_note=(
                 f"Bound to displayed report #{grounding.report_run_id} and analytics #{grounding.analytics_run_id}; newer upstream analytics exist."
                 if grounding.context_status == "stale"
@@ -149,3 +167,13 @@ def build_contextual_chat_service(
         analytics=analytics,
         openai_chat=openai_chat
     )
+
+
+def _derive_evidence_mode(trace_labels: list[str]) -> str:
+    uses_deterministic = any(label in DETERMINISTIC_TRACE_LABELS for label in trace_labels)
+    uses_interpretive = any(label in INTERPRETIVE_TRACE_LABELS for label in trace_labels)
+    if uses_deterministic and uses_interpretive:
+        return "mixed"
+    if uses_deterministic:
+        return "deterministic"
+    return "interpretive"

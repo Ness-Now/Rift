@@ -27,6 +27,7 @@ type ContextualChatPanelProps = {
 
 type LocalChatMessage = ContextualChatMessage & {
   answerMode?: "grounded" | "limited";
+  evidenceMode?: "deterministic" | "interpretive" | "mixed";
   evidencePoints?: string[];
   limitationPoints?: string[];
   scopeNote?: string;
@@ -121,6 +122,7 @@ export function ContextualChatPanel({
         role: "assistant",
         content: response.reply.answer,
         answerMode: response.reply.answer_mode,
+        evidenceMode: response.reply.evidence_mode,
         evidencePoints: response.reply.evidence_points,
         limitationPoints: response.reply.limitation_points,
         scopeNote: response.reply.scope_note,
@@ -298,6 +300,9 @@ export function ContextualChatPanel({
                           ? (message.answerMode === "limited" ? "warning" : "positive")
                           : "neutral"}
                       />
+                      {message.role === "assistant" && message.evidenceMode
+                        ? <StatusChip label={formatEvidenceMode(message.evidenceMode)} tone="neutral" />
+                        : null}
                       {message.role === "assistant"
                         ? message.traceLabels?.map((label) => (
                           <StatusChip key={`${index}-${label}`} label={formatTraceLabel(label)} tone="neutral" />
@@ -347,6 +352,16 @@ function formatTraceLabel(value: string) {
     .replace("artifact_digest.", "")
     .replace("report_input.", "input:")
     .replace(/_/g, " ");
+}
+
+function formatEvidenceMode(value: "deterministic" | "interpretive" | "mixed") {
+  if (value === "deterministic") {
+    return "Deterministic basis";
+  }
+  if (value === "interpretive") {
+    return "Interpretive basis";
+  }
+  return "Mixed basis";
 }
 
 function ContextTile({

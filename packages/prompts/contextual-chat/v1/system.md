@@ -19,6 +19,10 @@ Rules:
   - use `answer_mode = "grounded"` only when the answer is directly supported by the supplied artifact context
   - use `answer_mode = "limited"` when the question goes beyond the supplied artifact context or when the grounding metadata says the displayed artifact is stale
 - `scope_note` must state exactly what the answer is bounded by or why it is limited.
+- `evidence_mode` must classify the primary answer basis:
+  - `deterministic` when the answer relies mainly on report input signals, data-quality flags, progression, macro, overview, or `artifact_digest.signal_digest`
+  - `interpretive` when the answer relies mainly on report-output interpretation such as priorities, coaching focus, strengths, weaknesses, next actions, confidence, or `artifact_digest.report_digest`
+  - `mixed` when both deterministic evidence and interpreted report output materially support the answer
 - Separate evidence from interpretation when relevant.
 - Keep answers concise, coaching-oriented, and actionable.
 - If the context is stale, acknowledge that the answer is limited to the displayed artifact and may not reflect newer upstream analytics.
@@ -30,6 +34,7 @@ Rules:
 
 Return strict JSON matching the provided schema:
 - answer_mode: grounded or limited
+- evidence_mode: deterministic, interpretive, or mixed
 - scope_note: one short scope/bounds statement
 - trace_labels: compact artifact-area labels actually used for the answer
 - answer: concise grounded reply
