@@ -454,7 +454,7 @@ export function OverviewDashboard({ token, userEmail }: OverviewDashboardProps) 
 
         <DashboardPanel className="p-6">
           <SectionHeading
-            description="This evidence layer keeps the coaching grounded in artifact lineage and shows whether the visible interpretation is coherent with or behind upstream persisted data."
+            description="This evidence layer keeps the coaching grounded in artifact lineage and shows whether the visible interpretation is aligned with its backing artifacts. Use Run Full Analysis for end-to-end freshness."
             title="Evidence layer"
           />
           <div className="mt-6 grid gap-4">
@@ -579,15 +579,15 @@ function buildArtifactTruthState({
 }): ArtifactTruthState {
   if (!displayedAnalyticsRun && !latestReportRun) {
     return {
-      headline: "No displayed coaching chain",
-      detail: "Run analytics and report generation before the dashboard can show a persisted coaching read.",
+      headline: "No displayed interpretation chain",
+      detail: "Run analytics and report generation before the dashboard can show a persisted coaching interpretation.",
       tone: "warning"
     };
   }
 
   if (latestReportRun && !displayedAnalyticsRun) {
     return {
-      headline: "Displayed report is missing its analytics source",
+      headline: "Displayed interpretation is missing its analytics source",
       detail: `Report #${latestReportRun.id} exists, but its backing analytics run is not available as a completed artifact in the current dashboard state.`,
       tone: "warning"
     };
@@ -604,7 +604,7 @@ function buildArtifactTruthState({
   if (!displayedAnalyticsRun || !latestReportRun) {
     return {
       headline: "Displayed chain unavailable",
-      detail: "The dashboard does not yet have a coherent analytics/report artifact chain to display.",
+      detail: "The dashboard does not yet have an internally aligned analytics/report artifact pair to display.",
       tone: "warning"
     };
   }
@@ -619,15 +619,15 @@ function buildArtifactTruthState({
 
   if (latestAnalyticsRun && latestAnalyticsRun.id !== displayedAnalyticsRun.id) {
     return {
-      headline: "Displayed coaching is behind newer analytics",
+      headline: "Displayed interpretation is behind newer analytics",
       detail: `The visible coaching read uses analytics run #${displayedAnalyticsRun.id} through report #${latestReportRun.id}, while newer analytics run #${latestAnalyticsRun.id} exists upstream.`,
       tone: "warning"
     };
   }
 
   return {
-    headline: "Displayed coaching chain is coherent",
-    detail: `The visible coaching read is backed by analytics run #${displayedAnalyticsRun.id} and report #${latestReportRun.id}. No newer completed analytics run exists upstream.`,
+    headline: "Displayed interpretation is internally coherent",
+    detail: `The visible coaching read is backed by analytics run #${displayedAnalyticsRun.id} and report #${latestReportRun.id}. This status is about displayed interpretation integrity, not full upstream freshness.`,
     tone: "positive"
   };
 }

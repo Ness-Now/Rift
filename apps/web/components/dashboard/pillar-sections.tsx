@@ -297,7 +297,7 @@ export function PillarSections({
       <DashboardPanel className="p-5">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
           <div>
-            <SectionEyebrow tone="steel">Displayed deep-read status</SectionEyebrow>
+            <SectionEyebrow tone="steel">Displayed interpretation status</SectionEyebrow>
             <h3 className="mt-3 font-display text-2xl font-semibold tracking-tight text-white">
               {artifactTruthState.headline}
             </h3>
@@ -306,7 +306,7 @@ export function PillarSections({
             </p>
           </div>
           <StatusChip
-            label={artifactTruthState.tone === "positive" ? "Coherent" : artifactTruthState.tone === "neutral" ? "Partial" : "Mixed"}
+            label={artifactTruthState.tone === "positive" ? "Aligned" : artifactTruthState.tone === "neutral" ? "Partial" : "Mixed"}
             tone={artifactTruthState.tone}
           />
         </div>

@@ -84,3 +84,9 @@ Tracks changes made after the baseline described in [Rift_Project_Handoff_Audit_
 - Changed the overview and pillar handoff so the displayed analytics summary follows the analytics run that actually backs the displayed report artifact whenever a report exists.
 - Tightened orchestration wording and truth-state labels so the UI says "displayed" and "coherent" where that is what the code can actually justify.
 - Kept backend scope unchanged for this pass and derived the stricter truth states from existing persisted runs and artifacts.
+
+## 2026-03-30 - T009 Stabilization And Final-Readiness Pass
+
+- Narrowed the pass to one remaining stabilization issue rather than adding further polish.
+- Clarified the distinction between displayed interpretation integrity and end-to-end pipeline freshness so the live dashboard no longer blurs those two truth layers.
+- Left the broader product surface stable and treated T009 as close to freeze rather than reopening more refinement scope.

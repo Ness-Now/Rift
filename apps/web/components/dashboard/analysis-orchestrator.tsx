@@ -420,7 +420,7 @@ export function AnalysisOrchestrator({
               <article className="rounded-[1.35rem] border border-white/8 bg-white/[0.03] p-4">
                 <div className="flex items-start justify-between gap-3">
                   <div>
-                    <p className="dashboard-tactical-label text-frost/34">Coaching freshness</p>
+                    <p className="dashboard-tactical-label text-frost/34">End-to-end freshness</p>
                     <p className="mt-3 text-sm font-semibold text-white">{freshnessState.headline}</p>
                   </div>
                   <StatusChip label={freshnessState.isCurrent ? "Coherent" : "Mixed"} tone={freshnessState.tone} />
@@ -759,7 +759,7 @@ function buildFreshnessState({
 
   if (isOlderThanHours(latestCompletedReport.completed_at, 24)) {
     return {
-      headline: "Displayed coaching is coherent but older than one day",
+      headline: "Latest successful pipeline is older than one day",
       detail: `The latest successful coaching chain completed ${formatRelativeTime(latestCompletedReport.completed_at)}.`,
       tone: "neutral",
       isCurrent: true
@@ -767,7 +767,7 @@ function buildFreshnessState({
   }
 
   return {
-    headline: "Displayed coaching matches the latest completed chain",
+    headline: "Displayed coaching matches the latest completed upstream pipeline",
     detail: `The visible coaching output completed ${formatRelativeTime(latestCompletedReport.completed_at)} and matches the latest successful upstream chain.`,
     tone: "positive",
     isCurrent: true
