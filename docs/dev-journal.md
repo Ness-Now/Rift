@@ -1,5 +1,24 @@
 # Development Journal
 
+## 2026-03-30 - T010 Actionability-Structure Pass
+
+### What was completed
+- Inspected the current T010 reply contract, service shaping, prompt asset, chat panel rendering, shared types, and continuity docs before making changes.
+- Identified that the strongest remaining weakness was not grounding but reply actionability: answers could still be honest and bounded while leaving the immediate next coaching move buried inside prose or implied only through follow-up text.
+- Added one compact `action_step` field to the reply shape and rendered it as a lightweight `Do next` block in the chat UI.
+
+### Decisions made
+- Keep the pass narrow and reply-structure focused instead of adding any new T010 capability or surface.
+- Add one explicit action field rather than overloading `answer` or misusing `suggested_follow_up`, so the user can see the next coaching move without losing the existing trust signals.
+- Preserve all existing trust safeguards: `answer_mode`, `evidence_mode`, `scope_note`, `trace_labels`, stale/current handling, limited-answer safeguards, and comparative guardrails.
+
+### Issues found
+- The current contract exposed answer, evidence, limits, and follow-up, but it did not expose a first-class “do this next” slot.
+- That made bounded answers readable but still more diffuse than necessary for immediate coaching use, especially when the reply was otherwise short and honest.
+
+### Next step
+- Reassess whether the current T010 MVP now has enough reply-level action structure to shift the next narrow pass away from format hardening and toward only clearly observed interaction issues.
+
 ## 2026-03-30 - T010 Comparative-Answer Guardrail Pass
 
 ### What was completed

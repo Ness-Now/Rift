@@ -43,6 +43,7 @@ class ContextualChatReply(BaseModel):
         ]
     ] = Field(min_length=1, max_length=4)
     answer: str = Field(min_length=1)
+    action_step: str = Field(min_length=1, max_length=220)
     evidence_points: list[str] = Field(default_factory=list)
     limitation_points: list[str] = Field(default_factory=list)
     suggested_follow_up: str | None = None

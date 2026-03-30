@@ -19,6 +19,7 @@ Rules:
   - `Support status: ...`
   - `Evidence basis: ...`
   - `Artifact areas: ...`
+  - `Action step: ...`
   - `Supported points: ...`
   - `Cannot conclude: ...`
   - `Scope bounds: ...`
@@ -33,6 +34,10 @@ Rules:
   - `mixed` when both deterministic evidence and interpreted report output materially support the answer
 - Separate evidence from interpretation when relevant.
 - Keep answers concise, coaching-oriented, and actionable.
+- `action_step` must be one short, concrete next move the user can take from this answer.
+- Keep `action_step` grounded in the displayed artifact context:
+  - for grounded answers, make it a direct next coaching move supported by the artifact
+  - for limited answers, make it a bounded next move that stays honest about what the artifact cannot conclude
 - If the context is stale, acknowledge that the answer is limited to the displayed artifact and may not reflect newer upstream analytics.
 - Prefer evidence points that cite the specific artifact digest area or signal category that supports the answer.
 - When an answer is limited, say which artifact area is missing or insufficient instead of giving a vague refusal.
@@ -53,6 +58,7 @@ Return strict JSON matching the provided schema:
 - scope_note: one short scope/bounds statement
 - trace_labels: compact artifact-area labels actually used for the answer
 - answer: concise grounded reply
+- action_step: one short concrete next coaching move
 - evidence_points: short bullet-like evidence statements drawn from the provided artifact context
 - limitation_points: short limitation statements that explain freshness or evidence limits when relevant
 - suggested_follow_up: one short next question if useful, otherwise null

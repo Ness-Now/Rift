@@ -176,6 +176,7 @@ class ContextualChatService:
             ),
             trace_labels=reply.trace_labels,
             answer=reply.answer,
+            action_step=reply.action_step,
             evidence_points=evidence_points,
             limitation_points=limitation_points,
             suggested_follow_up=reply.suggested_follow_up

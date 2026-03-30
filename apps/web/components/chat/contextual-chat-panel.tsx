@@ -28,6 +28,7 @@ type ContextualChatPanelProps = {
 type LocalChatMessage = ContextualChatMessage & {
   answerMode?: "grounded" | "limited";
   evidenceMode?: "deterministic" | "interpretive" | "mixed";
+  actionStep?: string;
   evidencePoints?: string[];
   limitationPoints?: string[];
   scopeNote?: string;
@@ -124,6 +125,7 @@ export function ContextualChatPanel({
         content: response.reply.answer,
         answerMode: response.reply.answer_mode,
         evidenceMode: response.reply.evidence_mode,
+        actionStep: response.reply.action_step,
         evidencePoints: response.reply.evidence_points,
         limitationPoints: response.reply.limitation_points,
         scopeNote: response.reply.scope_note,
@@ -337,6 +339,11 @@ export function ContextualChatPanel({
                           {message.scopeNote ?? "No explicit scope note returned."}
                         </p>
                         <div className="dashboard-line my-4" />
+                        <p className="dashboard-tactical-label text-frost/34">Do next</p>
+                        <p className="mt-3 text-sm leading-7 text-frost/70">
+                          {message.actionStep ?? "No explicit action step returned."}
+                        </p>
+                        <div className="dashboard-line my-4" />
                         <p className="dashboard-tactical-label text-frost/34">Follow-up</p>
                         <p className="mt-3 text-sm leading-7 text-frost/70">
                           {message.suggestedFollowUp ?? "No suggested follow-up for this reply."}
@@ -386,6 +393,9 @@ function buildHistoryContent(message: LocalChatMessage) {
   }
   if (message.traceLabels && message.traceLabels.length > 0) {
     lines.push(`Artifact areas: ${message.traceLabels.join(", ")}`);
+  }
+  if (message.actionStep) {
+    lines.push(`Action step: ${message.actionStep}`);
   }
   if (message.evidencePoints && message.evidencePoints.length > 0) {
     lines.push(`Supported points: ${message.evidencePoints.slice(0, 2).join(" | ")}`);

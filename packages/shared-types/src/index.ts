@@ -188,6 +188,7 @@ export interface ContextualChatReply {
     | "artifact_digest.report_digest"
   >;
   answer: string;
+  action_step: string;
   evidence_points: string[];
   limitation_points: string[];
   suggested_follow_up: string | null;

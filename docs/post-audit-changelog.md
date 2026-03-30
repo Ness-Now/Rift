@@ -139,3 +139,9 @@ Tracks changes made after the baseline described in [Rift_Project_Handoff_Audit_
 - Narrowed the pass to one remaining comparison-heavy overclaiming risk rather than adding new T010 scope.
 - Added a deterministic backend guardrail that limits answers when the user asks for a dominant winner or when a comparison relies on interpretive/mixed evidence instead of clearly deterministic support.
 - Updated the prompt so comparative/tradeoff questions must keep the difference explicit between artifact-supported priority/contrast and a proven strongest cause.
+## 2026-03-30 - T010 Actionability-Structure Pass
+
+- Narrowed the pass to one remaining reply-structure weakness rather than adding any new T010 capability.
+- Added a compact `action_step` field so each contextual chat reply now carries one explicit next coaching move alongside its answer, evidence, limits, and follow-up.
+- Updated the prompt, shared types, and chat UI so the new action step stays grounded in the displayed artifact context and is rendered lightly as a `Do next` block.
+
