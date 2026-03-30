@@ -36,6 +36,7 @@ type LocalChatMessage = ContextualChatMessage & {
 };
 
 const MAX_MESSAGE_HISTORY = 6;
+const MAX_HISTORY_CONTENT_LENGTH = 1200;
 
 export function ContextualChatPanel({
   token,
@@ -105,7 +106,7 @@ export function ContextualChatPanel({
     const nextMessages = [...messages, userMessage];
     const payloadMessages = nextMessages
       .slice(-MAX_MESSAGE_HISTORY)
-      .map((message) => ({ role: message.role, content: message.content }));
+      .map((message) => ({ role: message.role, content: buildHistoryContent(message) }));
 
     setMessages(nextMessages);
     setDraft("");
@@ -368,6 +369,42 @@ function formatEvidenceMode(value: "deterministic" | "interpretive" | "mixed") {
     return "Interpretive basis";
   }
   return "Mixed basis";
+}
+
+function buildHistoryContent(message: LocalChatMessage) {
+  if (message.role === "user") {
+    return trimHistoryContent(message.content);
+  }
+
+  const lines = [
+    `Answer: ${message.content}`,
+    `Support status: ${message.answerMode === "limited" ? "limited" : "grounded"}`
+  ];
+
+  if (message.evidenceMode) {
+    lines.push(`Evidence basis: ${message.evidenceMode}`);
+  }
+  if (message.traceLabels && message.traceLabels.length > 0) {
+    lines.push(`Artifact areas: ${message.traceLabels.join(", ")}`);
+  }
+  if (message.evidencePoints && message.evidencePoints.length > 0) {
+    lines.push(`Supported points: ${message.evidencePoints.slice(0, 2).join(" | ")}`);
+  }
+  if (message.limitationPoints && message.limitationPoints.length > 0) {
+    lines.push(`Cannot conclude: ${message.limitationPoints.slice(0, 2).join(" | ")}`);
+  }
+  if (message.scopeNote) {
+    lines.push(`Scope bounds: ${message.scopeNote}`);
+  }
+
+  return trimHistoryContent(lines.join("\n"));
+}
+
+function trimHistoryContent(value: string) {
+  if (value.length <= MAX_HISTORY_CONTENT_LENGTH) {
+    return value;
+  }
+  return `${value.slice(0, MAX_HISTORY_CONTENT_LENGTH - 3)}...`;
 }
 
 function ContextTile({

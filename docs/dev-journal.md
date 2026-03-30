@@ -1,5 +1,24 @@
 # Development Journal
 
+## 2026-03-30 - T010 Multi-Turn Continuity Pass
+
+### What was completed
+- Inspected the current T010 multi-turn path across the frontend chat panel, request payload shaping, reply contract, backend service, and prompt instructions before changing anything.
+- Built a compact evaluation set of realistic short follow-up exchanges, focusing on cases like “what specifically supports that?”, “only from the artifact, what can you really say?”, and correction-style turns.
+- Hardened ephemeral multi-turn continuity by sending a compact structured recap of prior assistant trust metadata back through local history, so follow-up questions retain the previous answer’s bounds, basis, and artifact areas.
+
+### Decisions made
+- Keep the fix narrow and local to ephemeral T010 history shaping instead of adding new persistence, memory, or contract complexity.
+- Prefer deterministic frontend history shaping over hoping the model will preserve prior trust signals from plain assistant prose alone.
+- Preserve the existing visible chat UI and trust model; this pass only improves what the model sees on follow-up turns.
+
+### Issues found
+- The strongest remaining multi-turn weakness was that prior assistant turns were sent back to the backend as plain answer text only.
+- That meant short follow-ups could lose the earlier answer’s support status, evidence basis, trace labels, limits, and scope bounds even though the UI already had those trust signals locally.
+
+### Next step
+- Reassess whether the current T010 MVP now preserves enough bounded continuity across short exchanges to shift future hardening toward response quality rather than history semantics.
+
 ## 2026-03-30 - T010 Limited-Answer Separation Pass
 
 ### What was completed
