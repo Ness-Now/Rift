@@ -26,6 +26,7 @@ class OpenAIContextualChatClient:
         system_prompt: str,
         profile: RiotProfile,
         grounding: ContextualChatGrounding,
+        artifact_digest: dict[str, object],
         report_input: ReportInputContract,
         report_output: ReportOutput,
         messages: list[ContextualChatMessage]
@@ -48,6 +49,7 @@ class OpenAIContextualChatClient:
                 "platform_region": profile.platform_region,
                 "account_region_routing": profile.account_region_routing
             },
+            "artifact_digest": artifact_digest,
             "displayed_report_input": report_input.model_dump(mode="json"),
             "displayed_report_output": report_output.model_dump(mode="json"),
             "conversation": [message.model_dump(mode="json") for message in messages]

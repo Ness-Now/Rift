@@ -1,5 +1,24 @@
 # Development Journal
 
+## 2026-03-30 - T010 Evaluation And Reply-Quality Hardening Pass
+
+### What was completed
+- Audited the first T010 contextual chat MVP by inspecting the route, service, prompt asset, shared contracts, frontend panel, and displayed-artifact truth logic.
+- Ran a compact offline evaluation set of realistic user questions against the current artifact-grounding shape because this environment does not have `OPENAI_API_KEY` available for live model completions.
+- Hardened the chat payload with a deterministic artifact digest/source map so the model no longer has to infer common coaching answers from a large raw report payload alone.
+
+### Decisions made
+- Fix the highest-value reply-quality weakness at the prompt/context-shaping layer instead of adding any new chat capability.
+- Keep the pass narrow: no persistence, no thread model, no generic assistant behavior, no T009 reopening.
+- Use the digest as a primary routing surface for common grounded questions while keeping the full persisted report input/output available for deeper supported detail.
+
+### Issues found
+- The grounded chat had the right persisted artifact context, but directly answerable questions still depended on the model discovering the right evidence inside a large unshaped payload.
+- That made generic-sounding answers the biggest remaining reply-quality risk even when the artifact already contained enough information to answer concretely.
+
+### Next step
+- Review whether the contextual chat now answers common artifact-grounded questions with enough specificity to justify the next narrow T010 pass being about interaction quality rather than grounding or trust semantics.
+
 ## 2026-03-30 - T010 Audit And Hardening Pass
 
 ### What was completed

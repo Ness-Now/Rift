@@ -5,6 +5,7 @@ from api_service.contextual_chat.client import (
     OpenAIContextualChatClient,
     build_openai_contextual_chat_client
 )
+from api_service.contextual_chat.context_builder import build_artifact_digest
 from api_service.contextual_chat.contracts import (
     CHAT_VERSION,
     ContextualChatGrounding,
@@ -75,11 +76,18 @@ class ContextualChatService:
         )
 
         prompt_asset = load_prompt_asset()
+        artifact_digest = build_artifact_digest(
+            profile=profile,
+            grounding=grounding,
+            report_input=report_input,
+            report_output=report_output
+        )
         reply = self.openai_chat.generate_reply(
             chat_version=CHAT_VERSION,
             system_prompt=prompt_asset.system_prompt,
             profile=profile,
             grounding=grounding,
+            artifact_digest=artifact_digest,
             report_input=report_input,
             report_output=report_output,
             messages=payload.messages

@@ -103,3 +103,9 @@ Tracks changes made after the baseline described in [Rift_Project_Handoff_Audit_
 - Audited the current T010 chat implementation across the route, service, prompt asset, shared contracts, frontend panel, and overview integration before making changes.
 - Tightened the contextual chat reply contract so every answer now carries an explicit support status (`grounded` or `limited`) plus a scope/bounds note.
 - Updated the prompt, backend deterministic limit handling, and frontend rendering so contextual chat truthfulness no longer depends on implied grounding alone.
+
+## 2026-03-30 - T010 Evaluation And Reply-Quality Hardening Pass
+
+- Ran a compact offline evaluation set of realistic grounded/limited/stale-context chat questions against the current T010 payload shape because no live OpenAI API key is available in this environment.
+- Identified the main remaining weakness as generic answer risk caused by sending only large raw report input/output structures without a tighter deterministic source map for common coaching questions.
+- Added an internal artifact digest/source map to contextual chat grounding and updated the prompt to use it as the primary answer-routing surface before falling back to the full persisted artifact.
