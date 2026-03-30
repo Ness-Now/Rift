@@ -108,7 +108,11 @@ class ContextualChatService:
             report_output=report_output,
             messages=payload.messages
         )
-        reply = self._apply_deterministic_limits(reply=reply, grounding=grounding)
+        reply = self._apply_deterministic_limits(
+            reply=reply,
+            grounding=grounding,
+            latest_user_question=payload.messages[-1].content
+        )
 
         return {
             "grounding": grounding,
@@ -125,17 +129,31 @@ class ContextualChatService:
     def _apply_deterministic_limits(
         *,
         reply: ContextualChatReply,
-        grounding: ContextualChatGrounding
+        grounding: ContextualChatGrounding,
+        latest_user_question: str
     ) -> ContextualChatReply:
         evidence_points = list(reply.evidence_points)
         limitation_points = list(reply.limitation_points)
         evidence_mode = _derive_evidence_mode(reply.trace_labels)
+        comparative_boundary = _build_comparative_boundary(
+            latest_user_question=latest_user_question,
+            evidence_mode=evidence_mode
+        )
+        answer_mode = reply.answer_mode
         if reply.answer_mode == "limited" and len(evidence_points) == 0:
             evidence_points.append(
                 f"The displayed artifact supports only these areas for this answer: {_format_trace_labels(reply.trace_labels)}."
             )
         if reply.answer_mode == "limited" and len(limitation_points) == 0:
             limitation_points.append(_build_default_limited_boundary(reply.trace_labels, grounding))
+        if comparative_boundary is not None:
+            answer_mode = "limited"
+            if comparative_boundary not in limitation_points:
+                limitation_points.append(comparative_boundary)
+            if len(evidence_points) == 0:
+                evidence_points.append(
+                    f"The displayed artifact supports only a bounded contrast across these areas: {_format_trace_labels(reply.trace_labels)}."
+                )
         if grounding.context_status == "stale":
             stale_notice = (
                 f"This answer is grounded in displayed report #{grounding.report_run_id} on analytics run "
@@ -147,11 +165,13 @@ class ContextualChatService:
                 limitation_points.append(stale_notice)
 
         return ContextualChatReply(
-            answer_mode="limited" if grounding.context_status == "stale" else reply.answer_mode,
+            answer_mode="limited" if grounding.context_status == "stale" else answer_mode,
             evidence_mode=evidence_mode,
             scope_note=(
                 f"Bound to displayed report #{grounding.report_run_id} and analytics #{grounding.analytics_run_id}; newer upstream analytics exist."
                 if grounding.context_status == "stale"
+                else f"{reply.scope_note} Comparison remains bounded to artifact-supported priority or contrast, not a proven dominant winner."
+                if comparative_boundary is not None and answer_mode == "limited"
                 else reply.scope_note
             ),
             trace_labels=reply.trace_labels,
@@ -202,3 +222,40 @@ def _format_trace_labels(trace_labels: list[str]) -> str:
 
 def _format_trace_label(label: str) -> str:
     return label.replace("artifact_digest.", "").replace("report_input.", "report input ").replace("_", " ")
+
+
+def _build_comparative_boundary(*, latest_user_question: str, evidence_mode: str) -> str | None:
+    question = latest_user_question.lower()
+    dominance_markers = [
+        "main reason",
+        "main issue",
+        "main cause",
+        "biggest reason",
+        "biggest issue",
+        "clearly",
+        "dominant",
+        "matters more",
+        "more important",
+        "main thing",
+    ]
+    comparative_markers = [
+        " vs ",
+        " versus ",
+        " or ",
+        "better than",
+        "worse than",
+        "stronger than",
+        "weaker than",
+        "strongest vs weakest",
+        "compare",
+        "comparison",
+    ]
+    if any(marker in question for marker in dominance_markers):
+        return (
+            "The displayed artifact can support a priority or contrast here, but it does not prove a single dominant cause or clean winner."
+        )
+    if any(marker in question for marker in comparative_markers) and evidence_mode != "deterministic":
+        return (
+            "The displayed artifact supports only a bounded comparison here and does not prove a clean winner between the compared options."
+        )
+    return None

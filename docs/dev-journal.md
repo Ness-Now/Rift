@@ -1,5 +1,24 @@
 # Development Journal
 
+## 2026-03-30 - T010 Comparative-Answer Guardrail Pass
+
+### What was completed
+- Inspected the current T010 service shaping, prompt instructions, and chat UI after the multi-turn continuity pass, with emphasis on comparative, ranking, and tradeoff questions.
+- Built a compact evaluation set around asks like “macro or laning?”, “fundamentals or champion pool?”, “main reason I lose?”, and “is X clearly worse than Y?” to isolate the remaining comparative overclaiming risk.
+- Added a narrow backend guardrail so comparative answers now downgrade conservatively when the question asks for a dominant winner or when the reply relies on interpretive/mixed evidence instead of deterministic comparison support.
+
+### Decisions made
+- Keep the pass narrow and semantic rather than adding any new T010 capability or UI surface.
+- Prefer deterministic service hardening over prompt-only hope for comparison-heavy questions.
+- Preserve the current reply contract and trust stack; this pass only tightens when comparative answers must be limited.
+
+### Issues found
+- The strongest remaining weakness was that the chat could still let a priority or interpretive emphasis read like a proven dominant cause on binary comparison questions.
+- That was especially risky for questions that ask for the “main reason,” “more important,” or a clean winner between two candidate issues.
+
+### Next step
+- Reassess whether the current T010 MVP now constrains comparative answers enough to shift future hardening toward interaction clarity rather than more semantic guardrails.
+
 ## 2026-03-30 - T010 Multi-Turn Continuity Pass
 
 ### What was completed

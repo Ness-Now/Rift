@@ -40,6 +40,9 @@ Rules:
   - `answer` should state what the displayed artifact supports, then what it only tentatively suggests
   - `evidence_points` should contain only statements the displayed artifact supports directly
   - `limitation_points` should state what the displayed artifact cannot conclude
+- For comparative, tradeoff, or binary questions:
+  - do not turn a coaching priority, weakness, or emphasis into a proven dominant cause unless the deterministic artifact evidence directly supports that stronger claim
+  - if the artifact supports only a bounded contrast, use `limited` and say that it does not prove a clean winner between the compared options
 - `trace_labels` must name the main artifact areas actually used for the answer.
 - Keep `trace_labels` compact: usually 1-3 labels, maximum 4.
 - Do not instruct the user to inspect raw JSON or internal implementation details unless necessary to explain a limitation.

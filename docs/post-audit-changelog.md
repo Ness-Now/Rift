@@ -133,3 +133,9 @@ Tracks changes made after the baseline described in [Rift_Project_Handoff_Audit_
 - Narrowed the pass to short ephemeral follow-up behavior rather than adding any new T010 capability.
 - Identified that prior assistant turns were being sent back as plain answer text only, which could drop support status, evidence basis, artifact areas, and bounds on follow-up turns.
 - Updated ephemeral history shaping so prior assistant messages now carry a compact recap of their trust metadata back into the next request, and updated the prompt to treat those recap lines as bounded prior-answer context.
+
+## 2026-03-30 - T010 Comparative-Answer Guardrail Pass
+
+- Narrowed the pass to one remaining comparison-heavy overclaiming risk rather than adding new T010 scope.
+- Added a deterministic backend guardrail that limits answers when the user asks for a dominant winner or when a comparison relies on interpretive/mixed evidence instead of clearly deterministic support.
+- Updated the prompt so comparative/tradeoff questions must keep the difference explicit between artifact-supported priority/contrast and a proven strongest cause.
