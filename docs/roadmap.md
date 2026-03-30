@@ -36,7 +36,7 @@
 
 1. Stabilize repo-facing documentation and continuation notes so the current state is trustworthy and easy to resume from.
 2. Continue T009 refinement with stronger chart treatment, tighter evidence-to-narrative coupling, and deeper interaction polish inside each pillar.
-3. Decide whether to keep remote Google Fonts in build environments or localize them before stricter offline/CI expectations.
+3. Continue narrow repository hardening so offline/restricted build expectations stay satisfied without reopening product semantics.
 4. Keep ingestion, normalization, analytics, report, and presentation boundaries explicit while T009 deepens.
 
 ## Risks To Manage Early
@@ -45,6 +45,5 @@
 - Letting raw Riot shapes leak into UI or report presentation logic
 - Letting analytics depend directly on raw Riot payloads instead of clean normalized tables
 - Letting prompt/report code bypass the persisted analytics summary contract
-- Letting the Google Fonts build dependency surprise offline or restricted CI environments
 - Mixing deterministic calculations with prompt behavior or presentation logic
 - Expanding into T010 before T009 surfaces are stable enough to anchor chat context

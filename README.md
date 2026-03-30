@@ -42,8 +42,6 @@ tickets/        Delivery roadmap tickets
 
 The frontend expects the API base URL in `apps/web/.env.local`. Start from [`apps/web/.env.example`](./apps/web/.env.example).
 
-Known limitation: [`apps/web/app/layout.tsx`](./apps/web/app/layout.tsx) uses `next/font/google` for `Manrope` and `Space_Grotesk`. `npm run build:web` works when outbound access to Google Fonts is available, but offline or network-restricted environments may fail during font fetching.
-
 ### API
 
 1. Create and activate a virtual environment:

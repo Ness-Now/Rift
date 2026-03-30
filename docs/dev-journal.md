@@ -1,5 +1,26 @@
 # Development Journal
 
+## 2026-03-31 - Web Build Font-Dependency Hardening Pass
+
+### What was completed
+- Confirmed the real `Ness-Now/Rift` checkout, inspected the app shell and repo-facing docs, and reproduced the current web build situation before changing code.
+- Verified there were no committed local font assets available to reuse outside dependency folders or `.next` artifacts.
+- Removed `next/font/google` from the web app shell and preserved the existing font-variable pattern by moving `--font-sans` and `--font-display` to disciplined local/system fallback stacks in CSS.
+- Updated the minimal repo-facing docs that still described the remote Google Fonts dependency as an unresolved limitation.
+
+### Decisions made
+- Keep the pass narrow and build-focused with no T009 or T010 behavior changes.
+- Prefer CSS-based local/system fallback stacks over adding new font assets, since no committed source font files existed in the repository.
+- Keep `Manrope` and `Space Grotesk` at the front of the fallback stacks so typography stays as close as practical on machines that already have them installed locally.
+
+### Issues found
+- `apps/web/app/layout.tsx` still used `next/font/google`, so the production build retained a build-time dependency on outbound Google Fonts access.
+- In the real clone, the build passed after `npm install`, but that success still depended on network availability rather than a self-contained font path.
+
+### Next step
+- Continue repository hardening only where a concrete build or verification risk remains, without reopening product semantics.
+
+
 ## 2026-03-30 - T010 Actionability-Structure Pass
 
 ### What was completed
@@ -398,7 +419,7 @@
 ### Issues found
 - Repo-facing documentation drifted behind implementation after T008 and the first T009 pass.
 - Ticket files for T008 and T009 were still future-tense instead of reflecting delivered work plus remaining refinement.
-- The web build still depends on remote Google Fonts via `next/font/google`, which is a known limitation for offline or restricted CI environments.
+- At that point, the web build still depended on remote Google Fonts via `next/font/google`, which was a known limitation for offline or restricted CI environments.
 
 ### Next step
 - Continue T009 refinement in the pillar surfaces: stronger chart treatment, tighter evidence-to-narrative coupling, and deeper interaction polish without reopening backend contracts.

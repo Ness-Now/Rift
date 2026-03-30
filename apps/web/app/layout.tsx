@@ -1,18 +1,7 @@
 import type { Metadata } from "next";
-import { Manrope, Space_Grotesk } from "next/font/google";
 
 import { AuthProvider } from "@/components/auth/auth-provider";
 import "./globals.css";
-
-const manrope = Manrope({
-  subsets: ["latin"],
-  variable: "--font-sans"
-});
-
-const spaceGrotesk = Space_Grotesk({
-  subsets: ["latin"],
-  variable: "--font-display"
-});
 
 export const metadata: Metadata = {
   title: "Rift",
@@ -24,7 +13,7 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <body className={`${manrope.variable} ${spaceGrotesk.variable} bg-night text-frost antialiased`}>
+      <body className="bg-night text-frost antialiased">
         <AuthProvider>{children}</AuthProvider>
       </body>
     </html>

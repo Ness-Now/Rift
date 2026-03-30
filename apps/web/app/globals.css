@@ -4,6 +4,8 @@
 
 :root {
   color-scheme: dark;
+  --font-sans: "Manrope", "Avenir Next", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  --font-display: "Space Grotesk", "Avenir Next Condensed", "Arial Narrow", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
   --background-deep: #071019;
   --background-mid: #0c1724;
   --background-panel: rgba(16, 28, 42, 0.82);
@@ -14,7 +16,7 @@
 }
 
 html {
-  font-family: var(--font-sans), sans-serif;
+  font-family: var(--font-sans);
   background:
     radial-gradient(circle at top, rgba(53, 207, 166, 0.11), transparent 24%),
     radial-gradient(circle at 85% 12%, rgba(212, 166, 58, 0.1), transparent 18%),
@@ -83,7 +85,7 @@ a {
 }
 
 .font-display {
-  font-family: var(--font-display), sans-serif;
+  font-family: var(--font-display);
 }
 
 .dashboard-panel {

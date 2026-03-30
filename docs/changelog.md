@@ -17,6 +17,7 @@
 ### Changed
 - The web app evolved from a functional shell into a premium dark product surface with an overview desk plus live Champion Form, Macro Lens, and Coaching Board sections.
 - Operational controls were moved behind a secondary workbench so the product-facing experience leads.
+- The web app now uses local/system fallback font stacks behind the existing `--font-sans` and `--font-display` variables instead of `next/font/google`.
 - T010 gained an actionability-structure pass that adds one explicit next-step field to contextual chat replies so bounded coaching answers are easier to act on immediately.
 - T010 gained a comparative-answer guardrail pass that downgrades dominant-winner and interpretive tradeoff answers more conservatively, so priority-like coaching reads do not silently become proven strongest causes.
 - T010 gained a multi-turn continuity pass that feeds a compact recap of prior assistant trust metadata back through ephemeral chat history so short follow-up questions stay bounded to the earlier answer’s basis and limits.
@@ -42,6 +43,7 @@
 ### Fixed
 - README, roadmap, and dashboard ticket files now match the actual implementation state.
 - The current continuation point is documented chronologically for future contributors.
+- The web build no longer depends on outbound Google Fonts access at build time.
 - Contextual chat replies now expose one explicit next coaching move instead of leaving the immediate action buried inside answer prose.
 - Comparative T010 answers now preserve a clearer boundary between artifact-supported priority/contrast and a proven dominant winner.
 - Short follow-up chat turns now preserve prior answer bounds, evidence basis, and artifact areas more reliably instead of relying on plain assistant prose alone.
@@ -52,7 +54,6 @@
 - Contextual chat replies now expose which artifact areas they relied on, making grounded answers more auditable without adding a heavy citation system.
 
 ### Known issues
-- `apps/web/app/layout.tsx` uses `next/font/google` (`Manrope` and `Space_Grotesk`), so `npm run build:web` may fail in offline or network-restricted environments.
 - SQLite remains the lightweight persistence layer for the current development phase; production-grade PostgreSQL, migrations discipline, and queue infra are still deferred.
 - T009 is live but still in its first pass; deeper charting, tighter pillar interactions, and final polish remain.
 - T010 has started with a narrow ephemeral contextual chat surface only; persisted chat history, richer interaction design, and any broader thread architecture are still intentionally deferred.
