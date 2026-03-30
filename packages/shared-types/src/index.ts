@@ -170,6 +170,8 @@ export interface ContextualChatGrounding {
 }
 
 export interface ContextualChatReply {
+  answer_mode: "grounded" | "limited";
+  scope_note: string;
   answer: string;
   evidence_points: string[];
   limitation_points: string[];

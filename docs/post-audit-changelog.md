@@ -97,3 +97,9 @@ Tracks changes made after the baseline described in [Rift_Project_Handoff_Audit_
 - Added an authenticated contextual chat reply route that answers only from the selected Riot profile and the displayed persisted report artifact, including the report input contract plus report output.
 - Added versioned `contextual-chat/v1` prompt assets and a dashboard chat panel with explicit grounding context, stale/missing-artifact warnings, and ephemeral local history only.
 - Reset local chat history whenever the selected profile or displayed report artifact changes so the surface does not silently mix contexts.
+
+## 2026-03-30 - T010 Audit And Hardening Pass
+
+- Audited the current T010 chat implementation across the route, service, prompt asset, shared contracts, frontend panel, and overview integration before making changes.
+- Tightened the contextual chat reply contract so every answer now carries an explicit support status (`grounded` or `limited`) plus a scope/bounds note.
+- Updated the prompt, backend deterministic limit handling, and frontend rendering so contextual chat truthfulness no longer depends on implied grounding alone.

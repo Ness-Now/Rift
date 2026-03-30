@@ -17,6 +17,7 @@
 ### Changed
 - The web app evolved from a functional shell into a premium dark product surface with an overview desk plus live Champion Form, Macro Lens, and Coaching Board sections.
 - Operational controls were moved behind a secondary workbench so the product-facing experience leads.
+- T010 gained an audit-and-hardening pass that requires each contextual chat reply to declare whether it is fully grounded or limited, plus an explicit scope/bounds note.
 - T009 gained a first-user orchestration pass that adds one overview-level "Run Full Analysis" surface on top of the existing run domains, making the self-use flow feel closer to one coaching action instead of five separate admin panels.
 - T009 gained an orchestration readiness and robustness pass that adds explicit environment-readiness, stage-failure, coaching-freshness, and coaching-handoff states to the Run Full Analysis surface.
 - T009 gained an artifact-truth pass that makes the overview and pillar handoff follow one displayed analytics/report chain more strictly and replaces overly optimistic freshness/current labels with more conservative artifact-truth language.
@@ -34,6 +35,7 @@
 ### Fixed
 - README, roadmap, and dashboard ticket files now match the actual implementation state.
 - The current continuation point is documented chronologically for future contributors.
+- Contextual chat replies now expose explicit support-status semantics instead of implying that every answer is equally well-supported by the displayed artifact.
 
 ### Known issues
 - `apps/web/app/layout.tsx` uses `next/font/google` (`Manrope` and `Space_Grotesk`), so `npm run build:web` may fail in offline or network-restricted environments.

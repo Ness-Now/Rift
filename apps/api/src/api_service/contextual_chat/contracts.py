@@ -23,6 +23,8 @@ class ContextualChatGrounding(BaseModel):
 
 
 class ContextualChatReply(BaseModel):
+    answer_mode: Literal["grounded", "limited"]
+    scope_note: str = Field(min_length=1)
     answer: str = Field(min_length=1)
     evidence_points: list[str] = Field(default_factory=list)
     limitation_points: list[str] = Field(default_factory=list)

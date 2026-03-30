@@ -1,5 +1,24 @@
 # Development Journal
 
+## 2026-03-30 - T010 Audit And Hardening Pass
+
+### What was completed
+- Audited the first grounded contextual chat MVP across the route, service, prompt asset, shared contracts, frontend panel, and overview integration before making any change.
+- Tightened the chat reply contract so every assistant answer must now declare whether it is fully grounded or limited, plus a short scope/bounds note.
+- Updated the prompt and frontend rendering so reply trust now depends on explicit answer support status instead of implied grounding alone.
+
+### Decisions made
+- Fix the highest-value weakness at the contract/prompt boundary rather than adding more chat features.
+- Keep the pass narrow: no persistence, no new architecture, no thread system, no broader T010 behavior expansion.
+- Prefer explicit support-status semantics over optimistic “grounded by default” UI language.
+
+### Issues found
+- The first T010 pass was grounded in the right persisted artifact, but the reply schema still allowed answers to sound more fully supported than they might actually be.
+- The UI showed evidence and limits, but it did not require an explicit answer-level declaration of whether the response was grounded or limited.
+
+### Next step
+- Review whether the contextual chat now feels semantically strict enough to continue T010 with another narrow interaction-quality pass instead of reopening trust foundations again.
+
 ## 2026-03-30 - T010 First Grounded Contextual Chat Pass
 
 ### What was completed

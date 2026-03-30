@@ -115,6 +115,12 @@ class ContextualChatService:
                 limitation_points.append(stale_notice)
 
         return ContextualChatReply(
+            answer_mode="limited" if grounding.context_status == "stale" else reply.answer_mode,
+            scope_note=(
+                f"Bound to displayed report #{grounding.report_run_id} and analytics #{grounding.analytics_run_id}; newer upstream analytics exist."
+                if grounding.context_status == "stale"
+                else reply.scope_note
+            ),
             answer=reply.answer,
             evidence_points=reply.evidence_points,
             limitation_points=limitation_points,

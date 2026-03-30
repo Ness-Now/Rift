@@ -26,8 +26,10 @@ type ContextualChatPanelProps = {
 };
 
 type LocalChatMessage = ContextualChatMessage & {
+  answerMode?: "grounded" | "limited";
   evidencePoints?: string[];
   limitationPoints?: string[];
+  scopeNote?: string;
   suggestedFollowUp?: string | null;
 };
 
@@ -117,8 +119,10 @@ export function ContextualChatPanel({
       const assistantMessage: LocalChatMessage = {
         role: "assistant",
         content: response.reply.answer,
+        answerMode: response.reply.answer_mode,
         evidencePoints: response.reply.evidence_points,
         limitationPoints: response.reply.limitation_points,
+        scopeNote: response.reply.scope_note,
         suggestedFollowUp: response.reply.suggested_follow_up
       };
       setMessages((current) => [...current, assistantMessage]);
@@ -284,8 +288,12 @@ export function ContextualChatPanel({
                       {message.role === "assistant" ? "Grounded reply" : "Your question"}
                     </p>
                     <StatusChip
-                      label={message.role === "assistant" ? "Artifact-bounded" : "Local prompt"}
-                      tone={message.role === "assistant" ? "positive" : "neutral"}
+                      label={message.role === "assistant"
+                        ? (message.answerMode === "limited" ? "Limited answer" : "Grounded answer")
+                        : "Local prompt"}
+                      tone={message.role === "assistant"
+                        ? (message.answerMode === "limited" ? "warning" : "positive")
+                        : "neutral"}
                     />
                   </div>
                   <p className="mt-4 text-sm leading-7 text-frost/78">{message.content}</p>
@@ -303,6 +311,11 @@ export function ContextualChatPanel({
                         title="Limits"
                       />
                       <div className="rounded-[1.2rem] border border-white/8 bg-white/[0.03] p-4">
+                        <p className="dashboard-tactical-label text-frost/34">Scope bounds</p>
+                        <p className="mt-3 text-sm leading-7 text-frost/70">
+                          {message.scopeNote ?? "No explicit scope note returned."}
+                        </p>
+                        <div className="dashboard-line my-4" />
                         <p className="dashboard-tactical-label text-frost/34">Follow-up</p>
                         <p className="mt-3 text-sm leading-7 text-frost/70">
                           {message.suggestedFollowUp ?? "No suggested follow-up for this reply."}
