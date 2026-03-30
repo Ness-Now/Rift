@@ -18,7 +18,8 @@ const primaryNavigation = [
   { label: "Overview Desk", href: "#overview", state: "live" },
   { label: "Champion Form", href: "#champion-form", state: "live" },
   { label: "Macro Lens", href: "#macro-lens", state: "live" },
-  { label: "Coaching Board", href: "#coaching-board", state: "live" }
+  { label: "Coaching Board", href: "#coaching-board", state: "live" },
+  { label: "Contextual Chat", href: "#contextual-chat", state: "live" }
 ] as const;
 
 export function ProtectedAppShell() {
@@ -126,13 +127,13 @@ export function ProtectedAppShell() {
           <header className="dashboard-panel rounded-[2.2rem] p-5 sm:p-6">
             <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
               <div className="space-y-3">
-                <p className="dashboard-tactical-label text-glow">T009 pillar build</p>
+                <p className="dashboard-tactical-label text-glow">T010 contextual grounding</p>
                 <div>
                   <h2 className="font-display text-3xl font-semibold tracking-tight text-white sm:text-4xl">
-                    Deeper pillar surfaces are now live
+                    Grounded coaching chat now sits on top of the live dashboard
                   </h2>
                   <p className="mt-3 max-w-3xl text-sm leading-7 text-frost/62">
-                    The overview remains the briefing layer. Champion Form, Macro Lens, and Coaching Board now carry the deeper product reads while the operational controls stay behind the secondary workbench.
+                    The overview, pillar surfaces, and orchestration remain stable. This first T010 pass adds a contextual chat surface that is explicitly grounded in the selected profile and the displayed persisted coaching artifact.
                   </p>
                 </div>
               </div>
@@ -144,7 +145,7 @@ export function ProtectedAppShell() {
                 >
                   Open workbench
                 </a>
-                <StatusChip label="T009 in progress" tone="positive" />
+                <StatusChip label="Grounded chat live" tone="positive" />
               </div>
             </div>
           </header>

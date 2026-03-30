@@ -1,5 +1,24 @@
 # Development Journal
 
+## 2026-03-30 - T010 First Grounded Contextual Chat Pass
+
+### What was completed
+- Inspected the existing persisted artifact chain and started T010 with the narrowest coherent grounded chat seam instead of adding a broader assistant system.
+- Added an authenticated contextual chat route that answers only from the selected profile plus the displayed persisted report artifact and its backing report input contract.
+- Added a dashboard chat panel with explicit grounding context, stale/missing-artifact handling, and ephemeral local history that resets when the profile or displayed report artifact changes.
+
+### Decisions made
+- Use the persisted report artifact as the chat grounding source of truth, specifically `report_input_json` plus `report_output_json`, rather than recomputing analytics or building a new context store.
+- Keep the first pass ephemeral with no persisted chat threads, no memory, and no orchestration/chat coupling beyond reading the currently displayed artifact context.
+- Keep truth semantics strict: the chat can answer over a stale displayed artifact, but it must say that it is stale and remain limited to that artifact.
+
+### Issues found
+- The repo already had the right report-artifact grounding seam, but no authenticated route or product surface to interrogate it.
+- Local chat state would have become misleading if it survived profile/report changes, so the panel now resets on context changes.
+
+### Next step
+- Review whether the first T010 pass is sufficient as a truthful contextual interrogation surface, then decide whether the next pass should stay on narrow interaction quality or add only the smallest missing chat capability.
+
 ## 2026-03-30 - T009 Stabilization And Final-Readiness Pass
 
 ### What was completed

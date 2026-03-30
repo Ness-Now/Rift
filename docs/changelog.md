@@ -12,6 +12,7 @@
 - Structured report generation runs with versioned prompts and persisted report artifacts.
 - Premium overview dashboard and first live T009 pillar surfaces.
 - Persistent developer journal and repository changelog.
+- First T010 grounded contextual chat pass with one authenticated reply endpoint, versioned prompt assets, and a dashboard chat panel tied to the selected profile plus displayed report artifact.
 
 ### Changed
 - The web app evolved from a functional shell into a premium dark product surface with an overview desk plus live Champion Form, Macro Lens, and Coaching Board sections.
@@ -20,6 +21,7 @@
 - T009 gained an orchestration readiness and robustness pass that adds explicit environment-readiness, stage-failure, coaching-freshness, and coaching-handoff states to the Run Full Analysis surface.
 - T009 gained an artifact-truth pass that makes the overview and pillar handoff follow one displayed analytics/report chain more strictly and replaces overly optimistic freshness/current labels with more conservative artifact-truth language.
 - T009 gained a stabilization/readiness pass that separates displayed interpretation integrity from end-to-end pipeline freshness more clearly, reducing one remaining semantic mismatch in the live dashboard.
+- The authenticated product shell now exposes a first grounded contextual chat surface and updates its top-level framing from T009-only language to T010 contextual grounding.
 - Repository-facing documentation now reflects the implemented T001-T009 state instead of the earlier roadmap-only state.
 - T009 second-pass refinement reduced the table-first feel in the pillar surfaces and improved scan order, signal emphasis, and coaching-board decisiveness.
 - T009 Champion Form gained a narrower comparison pass that makes the main pick, overall baseline, and latest recent-form window easier to compare at a glance.
@@ -37,4 +39,4 @@
 - `apps/web/app/layout.tsx` uses `next/font/google` (`Manrope` and `Space_Grotesk`), so `npm run build:web` may fail in offline or network-restricted environments.
 - SQLite remains the lightweight persistence layer for the current development phase; production-grade PostgreSQL, migrations discipline, and queue infra are still deferred.
 - T009 is live but still in its first pass; deeper charting, tighter pillar interactions, and final polish remain.
-- T010 contextual chat has not started.
+- T010 has started with a narrow ephemeral contextual chat surface only; persisted chat history, richer interaction design, and any broader thread architecture are still intentionally deferred.

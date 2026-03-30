@@ -1,6 +1,8 @@
 import type {
   AnalyticsRun,
   AnalyticsSummary,
+  ContextualChatMessage,
+  ContextualChatResponse,
   AuthTokenResponse,
   AuthUser,
   IngestionRun,
@@ -246,6 +248,23 @@ export async function getReportArtifact(
   return request<ReportArtifact>(`/report-runs/${runId}/report`, {
     token,
     cache: "no-store"
+  });
+}
+
+export interface CreateContextualChatReplyInput {
+  riot_profile_id: number;
+  report_run_id: number;
+  messages: ContextualChatMessage[];
+}
+
+export async function createContextualChatReply(
+  token: string,
+  payload: CreateContextualChatReplyInput
+): Promise<ContextualChatResponse> {
+  return request<ContextualChatResponse>("/contextual-chat/reply", {
+    method: "POST",
+    token,
+    body: JSON.stringify(payload)
   });
 }
 

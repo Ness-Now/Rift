@@ -90,3 +90,10 @@ Tracks changes made after the baseline described in [Rift_Project_Handoff_Audit_
 - Narrowed the pass to one remaining stabilization issue rather than adding further polish.
 - Clarified the distinction between displayed interpretation integrity and end-to-end pipeline freshness so the live dashboard no longer blurs those two truth layers.
 - Left the broader product surface stable and treated T009 as close to freeze rather than reopening more refinement scope.
+
+## 2026-03-30 - T010 First Grounded Contextual Chat Pass
+
+- Started T010 with one narrow grounded chat seam instead of a broader assistant system.
+- Added an authenticated contextual chat reply route that answers only from the selected Riot profile and the displayed persisted report artifact, including the report input contract plus report output.
+- Added versioned `contextual-chat/v1` prompt assets and a dashboard chat panel with explicit grounding context, stale/missing-artifact warnings, and ephemeral local history only.
+- Reset local chat history whenever the selected profile or displayed report artifact changes so the surface does not silently mix contexts.

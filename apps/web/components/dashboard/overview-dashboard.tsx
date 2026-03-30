@@ -13,6 +13,7 @@ import {
 } from "@/lib/api";
 import { asArray, asBoolean, asRecord, asText, formatCompactNumber, formatMetric, formatPercent } from "@/lib/dashboard";
 
+import { ContextualChatPanel } from "../chat/contextual-chat-panel";
 import { AnalysisOrchestrator } from "./analysis-orchestrator";
 import { PillarSections } from "./pillar-sections";
 import {
@@ -529,6 +530,13 @@ export function OverviewDashboard({ token, userEmail }: OverviewDashboardProps) 
         artifactTruthState={artifactTruthState}
         reportArtifact={reportArtifact}
         selectedProfile={selectedProfile}
+      />
+
+      <ContextualChatPanel
+        artifactTruthState={artifactTruthState}
+        reportArtifact={reportArtifact}
+        selectedProfile={selectedProfile}
+        token={token}
       />
 
       {(isLoading || isLoadingArtifacts || error || selectedProfile === null) ? (

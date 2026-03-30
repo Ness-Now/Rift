@@ -152,3 +152,31 @@ export interface ReportArtifact {
   prompt_version: string;
   report: StructuredReport;
 }
+
+export interface ContextualChatMessage {
+  role: "user" | "assistant";
+  content: string;
+}
+
+export interface ContextualChatGrounding {
+  riot_profile_id: number;
+  report_run_id: number;
+  analytics_run_id: number;
+  analytics_version: string;
+  report_version: string;
+  source_snapshot_type: "latest_clean_snapshot";
+  context_status: "current" | "stale";
+  latest_completed_analytics_run_id: number | null;
+}
+
+export interface ContextualChatReply {
+  answer: string;
+  evidence_points: string[];
+  limitation_points: string[];
+  suggested_follow_up: string | null;
+}
+
+export interface ContextualChatResponse {
+  grounding: ContextualChatGrounding;
+  reply: ContextualChatReply;
+}

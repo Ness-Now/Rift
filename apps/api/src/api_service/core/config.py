@@ -17,6 +17,7 @@ class Settings(BaseModel):
     riot_api_retry_backoff_seconds: float = 1.0
     openai_api_key: str = ""
     openai_report_model: str = "gpt-5-mini"
+    openai_chat_model: str = "gpt-5-mini"
     openai_api_timeout_seconds: int = 30
     data_directory: Path = Path(__file__).resolve().parents[3] / "data"
     sqlite_database_path: Path = Path(__file__).resolve().parents[3] / "data" / "rift.db"
@@ -36,5 +37,6 @@ def get_settings() -> Settings:
         riot_api_retry_backoff_seconds=float(getenv("RIOT_API_RETRY_BACKOFF_SECONDS", "1.0")),
         openai_api_key=getenv("OPENAI_API_KEY", ""),
         openai_report_model=getenv("OPENAI_REPORT_MODEL", "gpt-5-mini"),
+        openai_chat_model=getenv("OPENAI_CHAT_MODEL", "gpt-5-mini"),
         openai_api_timeout_seconds=int(getenv("OPENAI_API_TIMEOUT_SECONDS", "30"))
     )
