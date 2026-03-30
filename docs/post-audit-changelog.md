@@ -109,3 +109,9 @@ Tracks changes made after the baseline described in [Rift_Project_Handoff_Audit_
 - Ran a compact offline evaluation set of realistic grounded/limited/stale-context chat questions against the current T010 payload shape because no live OpenAI API key is available in this environment.
 - Identified the main remaining weakness as generic answer risk caused by sending only large raw report input/output structures without a tighter deterministic source map for common coaching questions.
 - Added an internal artifact digest/source map to contextual chat grounding and updated the prompt to use it as the primary answer-routing surface before falling back to the full persisted artifact.
+
+## 2026-03-30 - T010 Answer Traceability Pass
+
+- Inspected the current T010 reply contract, artifact digest, service shaping, prompt, chat panel, and stale/missing-context logic before making changes.
+- Added compact `trace_labels` to the contextual chat reply contract so each answer now exposes which artifact areas it actually relied on.
+- Updated the prompt and chat UI so those labels are generated and shown lightly as source-area chips instead of turning the product into a heavier citation interface.

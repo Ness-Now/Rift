@@ -25,6 +25,22 @@ class ContextualChatGrounding(BaseModel):
 class ContextualChatReply(BaseModel):
     answer_mode: Literal["grounded", "limited"]
     scope_note: str = Field(min_length=1)
+    trace_labels: list[
+        Literal[
+            "priority_levers",
+            "coaching_focus",
+            "next_actions",
+            "strengths",
+            "weaknesses",
+            "confidence_and_limits",
+            "report_input.overview",
+            "report_input.macro",
+            "report_input.progression",
+            "report_input.data_quality",
+            "artifact_digest.signal_digest",
+            "artifact_digest.report_digest",
+        ]
+    ] = Field(min_length=1, max_length=4)
     answer: str = Field(min_length=1)
     evidence_points: list[str] = Field(default_factory=list)
     limitation_points: list[str] = Field(default_factory=list)

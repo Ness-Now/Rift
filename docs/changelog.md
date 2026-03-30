@@ -17,6 +17,7 @@
 ### Changed
 - The web app evolved from a functional shell into a premium dark product surface with an overview desk plus live Champion Form, Macro Lens, and Coaching Board sections.
 - Operational controls were moved behind a secondary workbench so the product-facing experience leads.
+- T010 gained an answer-traceability pass that adds compact artifact-area trace labels to each contextual chat reply and renders them lightly in the chat UI.
 - T010 gained an audit-and-hardening pass that requires each contextual chat reply to declare whether it is fully grounded or limited, plus an explicit scope/bounds note.
 - T010 gained an evaluation-and-hardening pass that adds a deterministic artifact digest/source map to contextual chat grounding so common coaching questions can be answered more specifically from persisted artifacts.
 - T009 gained a first-user orchestration pass that adds one overview-level "Run Full Analysis" surface on top of the existing run domains, making the self-use flow feel closer to one coaching action instead of five separate admin panels.
@@ -38,6 +39,7 @@
 - The current continuation point is documented chronologically for future contributors.
 - Contextual chat replies now expose explicit support-status semantics instead of implying that every answer is equally well-supported by the displayed artifact.
 - Contextual chat now sends a tighter deterministic source digest to the model, reducing the risk of generic answers when the persisted artifact already contains enough evidence to answer concretely.
+- Contextual chat replies now expose which artifact areas they relied on, making grounded answers more auditable without adding a heavy citation system.
 
 ### Known issues
 - `apps/web/app/layout.tsx` uses `next/font/google` (`Manrope` and `Space_Grotesk`), so `npm run build:web` may fail in offline or network-restricted environments.

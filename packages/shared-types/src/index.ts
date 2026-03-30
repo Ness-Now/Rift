@@ -172,6 +172,20 @@ export interface ContextualChatGrounding {
 export interface ContextualChatReply {
   answer_mode: "grounded" | "limited";
   scope_note: string;
+  trace_labels: Array<
+    | "priority_levers"
+    | "coaching_focus"
+    | "next_actions"
+    | "strengths"
+    | "weaknesses"
+    | "confidence_and_limits"
+    | "report_input.overview"
+    | "report_input.macro"
+    | "report_input.progression"
+    | "report_input.data_quality"
+    | "artifact_digest.signal_digest"
+    | "artifact_digest.report_digest"
+  >;
   answer: string;
   evidence_points: string[];
   limitation_points: string[];

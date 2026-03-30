@@ -1,5 +1,24 @@
 # Development Journal
 
+## 2026-03-30 - T010 Answer Traceability Pass
+
+### What was completed
+- Inspected the current T010 reply contract, artifact digest, service shaping, prompt asset, chat panel rendering, and displayed-artifact truth logic before making changes.
+- Added a compact answer-traceability field so each contextual chat reply now carries explicit artifact-area labels for the parts of the displayed artifact it relied on.
+- Updated the frontend chat panel to render those trace labels lightly as trust-supporting source chips rather than a heavier citations system.
+
+### Decisions made
+- Keep the pass narrow and traceability-focused instead of expanding capability or building provenance infrastructure.
+- Use a compact enumerated `trace_labels` field rather than freeform citations so the trace stays auditable, stable, and lightweight.
+- Leave stale/current bounds, answer modes, and the artifact digest architecture intact; this pass only makes the answer’s source areas more visible to the user.
+
+### Issues found
+- The chat already exposed evidence text and scope bounds, but it still did not clearly tell the user which displayed artifact areas the answer actually drew from.
+- That left one remaining trust gap between “grounded in principle” and “auditable in practice.”
+
+### Next step
+- Review whether the current T010 surface now provides enough trust and answer auditability to focus the next pass on interaction quality rather than additional grounding semantics.
+
 ## 2026-03-30 - T010 Evaluation And Reply-Quality Hardening Pass
 
 ### What was completed

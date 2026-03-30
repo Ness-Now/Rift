@@ -129,6 +129,7 @@ class ContextualChatService:
                 if grounding.context_status == "stale"
                 else reply.scope_note
             ),
+            trace_labels=reply.trace_labels,
             answer=reply.answer,
             evidence_points=reply.evidence_points,
             limitation_points=limitation_points,

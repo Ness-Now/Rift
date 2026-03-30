@@ -30,6 +30,7 @@ type LocalChatMessage = ContextualChatMessage & {
   evidencePoints?: string[];
   limitationPoints?: string[];
   scopeNote?: string;
+  traceLabels?: string[];
   suggestedFollowUp?: string | null;
 };
 
@@ -123,6 +124,7 @@ export function ContextualChatPanel({
         evidencePoints: response.reply.evidence_points,
         limitationPoints: response.reply.limitation_points,
         scopeNote: response.reply.scope_note,
+        traceLabels: response.reply.trace_labels,
         suggestedFollowUp: response.reply.suggested_follow_up
       };
       setMessages((current) => [...current, assistantMessage]);
@@ -287,14 +289,21 @@ export function ContextualChatPanel({
                     <p className="dashboard-tactical-label text-frost/34">
                       {message.role === "assistant" ? "Grounded reply" : "Your question"}
                     </p>
-                    <StatusChip
-                      label={message.role === "assistant"
-                        ? (message.answerMode === "limited" ? "Limited answer" : "Grounded answer")
-                        : "Local prompt"}
-                      tone={message.role === "assistant"
-                        ? (message.answerMode === "limited" ? "warning" : "positive")
-                        : "neutral"}
-                    />
+                    <div className="flex flex-wrap items-center justify-end gap-2">
+                      <StatusChip
+                        label={message.role === "assistant"
+                          ? (message.answerMode === "limited" ? "Limited answer" : "Grounded answer")
+                          : "Local prompt"}
+                        tone={message.role === "assistant"
+                          ? (message.answerMode === "limited" ? "warning" : "positive")
+                          : "neutral"}
+                      />
+                      {message.role === "assistant"
+                        ? message.traceLabels?.map((label) => (
+                          <StatusChip key={`${index}-${label}`} label={formatTraceLabel(label)} tone="neutral" />
+                        ))
+                        : null}
+                    </div>
                   </div>
                   <p className="mt-4 text-sm leading-7 text-frost/78">{message.content}</p>
 
@@ -331,6 +340,13 @@ export function ContextualChatPanel({
       </div>
     </DashboardPanel>
   );
+}
+
+function formatTraceLabel(value: string) {
+  return value
+    .replace("artifact_digest.", "")
+    .replace("report_input.", "input:")
+    .replace(/_/g, " ");
 }
 
 function ContextTile({
