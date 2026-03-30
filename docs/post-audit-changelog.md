@@ -77,3 +77,10 @@ Tracks changes made after the baseline described in [Rift_Project_Handoff_Audit_
 - Added a minimal backend readiness signal so the dashboard can tell whether the current self-use environment has Riot/OpenAI server-side configuration available.
 - Strengthened the Run Full Analysis surface with explicit readiness, latest blocking issue, coaching freshness, and stage-specific failure messaging.
 - Kept the broader architecture, analytics/report contracts, shell structure, and T010 scope unchanged.
+
+## 2026-03-30 - T009 Artifact Truth And Displayed-Result Integrity Pass
+
+- Narrowed the pass to artifact-truth semantics rather than adding another new product layer.
+- Changed the overview and pillar handoff so the displayed analytics summary follows the analytics run that actually backs the displayed report artifact whenever a report exists.
+- Tightened orchestration wording and truth-state labels so the UI says "displayed" and "coherent" where that is what the code can actually justify.
+- Kept backend scope unchanged for this pass and derived the stricter truth states from existing persisted runs and artifacts.

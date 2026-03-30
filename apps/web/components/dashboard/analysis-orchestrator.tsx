@@ -191,6 +191,12 @@ export function AnalysisOrchestrator({
     }),
     [analyticsRuns, ingestionRuns, normalizationRuns, reportRuns, selectedProfileId]
   );
+  const latestStableTimestamp = Math.max(
+    latestCompletedIngestion ? timestampForRun(latestCompletedIngestion) : 0,
+    latestCompletedNormalization ? timestampForRun(latestCompletedNormalization) : 0,
+    latestCompletedAnalytics ? timestampForRun(latestCompletedAnalytics) : 0,
+    latestCompletedReport ? timestampForRun(latestCompletedReport) : 0
+  );
 
   const readinessState = buildReadinessState(readiness, profiles, selectedProfile);
   const freshnessState = buildFreshnessState({
@@ -205,6 +211,7 @@ export function AnalysisOrchestrator({
     selectedProfile,
     latestFailedStage,
     latestCompletedReport,
+    latestStableTimestamp,
     freshnessState
   });
 
@@ -257,7 +264,7 @@ export function AnalysisOrchestrator({
       ensureCompleted("Report", reportRun.status, reportRun.error_message);
 
       await Promise.all([loadState(), onPipelineComplete()]);
-      setSuccessMessage(`Latest coaching is ready from report run #${reportRun.id}.`);
+      setSuccessMessage(`Displayed coaching refreshed from report run #${reportRun.id}.`);
       document.getElementById("coaching-board")?.scrollIntoView({ behavior: "smooth", block: "start" });
     } catch (requestError) {
       setError(buildStageFailureMessage(activeStage, requestError));
@@ -293,7 +300,7 @@ export function AnalysisOrchestrator({
                 className="rounded-full border border-glow/16 bg-glow/10 px-4 py-2 text-sm font-medium text-glow transition hover:border-glow/28 hover:text-white"
                 href="#coaching-board"
               >
-                {freshnessState.isCurrent ? "View current coaching" : "View latest coaching"}
+                View displayed coaching
               </a>
             ) : null}
           </div>
@@ -375,8 +382,8 @@ export function AnalysisOrchestrator({
               <p className="text-sm font-semibold text-white">{successMessage}</p>
               <p className="mt-2 text-sm leading-7 text-frost/72">
                 {freshnessState.isCurrent
-                  ? "The latest successful chain now lines up with the coaching surface below."
-                  : "The latest report finished, but upstream stages may still be newer than the coaching output."}
+                  ? "The visible coaching surface is now aligned with the latest completed artifact chain."
+                  : "The visible coaching surface may still sit behind newer upstream artifacts."}
               </p>
             </div>
           ) : null}
@@ -416,7 +423,7 @@ export function AnalysisOrchestrator({
                     <p className="dashboard-tactical-label text-frost/34">Coaching freshness</p>
                     <p className="mt-3 text-sm font-semibold text-white">{freshnessState.headline}</p>
                   </div>
-                  <StatusChip label={freshnessState.isCurrent ? "Latest" : "Review"} tone={freshnessState.tone} />
+                  <StatusChip label={freshnessState.isCurrent ? "Coherent" : "Mixed"} tone={freshnessState.tone} />
                 </div>
                 <p className="mt-3 text-sm leading-6 text-frost/60">{freshnessState.detail}</p>
               </article>
@@ -441,9 +448,9 @@ export function AnalysisOrchestrator({
           <DashboardPanel className="p-5">
             <div className="flex items-center justify-between gap-3">
               <div>
-                <SectionEyebrow tone="steel">Current pipeline state</SectionEyebrow>
+                <SectionEyebrow tone="steel">Known stage status</SectionEyebrow>
                 <h3 className="mt-3 font-display text-2xl font-semibold tracking-tight text-white">
-                  Latest run chain for this profile
+                  Latest known run per stage
                 </h3>
               </div>
               {isLoading ? <StatusChip label="Refreshing" tone="warning" /> : null}
@@ -752,7 +759,7 @@ function buildFreshnessState({
 
   if (isOlderThanHours(latestCompletedReport.completed_at, 24)) {
     return {
-      headline: "Coaching is older than one day",
+      headline: "Displayed coaching is coherent but older than one day",
       detail: `The latest successful coaching chain completed ${formatRelativeTime(latestCompletedReport.completed_at)}.`,
       tone: "neutral",
       isCurrent: true
@@ -760,7 +767,7 @@ function buildFreshnessState({
   }
 
   return {
-    headline: "Latest coaching chain is current",
+    headline: "Displayed coaching matches the latest completed chain",
     detail: `The visible coaching output completed ${formatRelativeTime(latestCompletedReport.completed_at)} and matches the latest successful upstream chain.`,
     tone: "positive",
     isCurrent: true
@@ -773,6 +780,7 @@ function buildBlockingState({
   selectedProfile,
   latestFailedStage,
   latestCompletedReport,
+  latestStableTimestamp,
   freshnessState
 }: {
   readiness: SystemReadiness | null;
@@ -780,6 +788,7 @@ function buildBlockingState({
   selectedProfile: RiotProfile | null;
   latestFailedStage: FailedStage | null;
   latestCompletedReport: ReportRun | null;
+  latestStableTimestamp: number;
   freshnessState: FreshnessState;
 }): BlockingState {
   if (readiness === null) {
@@ -802,7 +811,7 @@ function buildBlockingState({
     };
   }
 
-  if (latestFailedStage) {
+  if (latestFailedStage && timestampForRun(latestFailedStage.run) > latestStableTimestamp) {
     return {
       headline: `${formatStageLabel(latestFailedStage.stage)} failed last`,
       detail: latestFailedStage.run.error_message ?? "The latest run failed without a stored error message.",
@@ -866,7 +875,7 @@ function getStageNextStep(stage: StageKey, selectedProfile: RiotProfile | null) 
 
 function renderStageChip(status: StageDisplayStatus) {
   if (status === "completed") {
-    return <StatusChip label="Ready" tone="positive" />;
+    return <StatusChip label="Completed" tone="positive" />;
   }
   if (status === "running") {
     return <StatusChip label="Running" tone="warning" />;

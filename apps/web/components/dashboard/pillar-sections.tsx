@@ -31,8 +31,15 @@ import {
   WorkflowRail
 } from "./primitives";
 
+type ArtifactTruthState = {
+  headline: string;
+  detail: string;
+  tone: "neutral" | "positive" | "warning";
+};
+
 type PillarSectionsProps = {
   analyticsSummary: AnalyticsSummary | null;
+  artifactTruthState: ArtifactTruthState;
   reportArtifact: ReportArtifact | null;
   selectedProfile: RiotProfile | null;
 };
@@ -49,7 +56,12 @@ type RankedRow = {
   emphasis?: number | null;
 };
 
-export function PillarSections({ analyticsSummary, reportArtifact, selectedProfile }: PillarSectionsProps) {
+export function PillarSections({
+  analyticsSummary,
+  artifactTruthState,
+  reportArtifact,
+  selectedProfile
+}: PillarSectionsProps) {
   const overview = asRecord(analyticsSummary?.overview);
   const progression = asRecord(analyticsSummary?.progression);
   const splits = asRecord(analyticsSummary?.splits);
@@ -282,6 +294,24 @@ export function PillarSections({ analyticsSummary, reportArtifact, selectedProfi
 
   return (
     <div className="space-y-8">
+      <DashboardPanel className="p-5">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+          <div>
+            <SectionEyebrow tone="steel">Displayed deep-read status</SectionEyebrow>
+            <h3 className="mt-3 font-display text-2xl font-semibold tracking-tight text-white">
+              {artifactTruthState.headline}
+            </h3>
+            <p className="mt-3 max-w-3xl text-sm leading-7 text-frost/62">
+              {artifactTruthState.detail}
+            </p>
+          </div>
+          <StatusChip
+            label={artifactTruthState.tone === "positive" ? "Coherent" : artifactTruthState.tone === "neutral" ? "Partial" : "Mixed"}
+            tone={artifactTruthState.tone}
+          />
+        </div>
+      </DashboardPanel>
+
       <WorkflowRail items={deepDiveWorkflowItems} title="Deep-read flow" />
 
       <DashboardPanel className="p-6 sm:p-7" id="champion-form">

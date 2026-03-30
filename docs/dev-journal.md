@@ -1,5 +1,24 @@
 # Development Journal
 
+## 2026-03-30 - T009 Artifact Truth And Displayed-Result Integrity Pass
+
+### What was completed
+- Tightened the live dashboard so the visible coaching interpretation no longer silently drifts ahead of or behind the artifact chain it actually displays.
+- Changed the overview and deep-read handoff to anchor the displayed analytics summary to the same analytics run that backs the displayed report artifact whenever a report exists.
+- Tightened orchestration wording and status semantics so the UI now distinguishes more carefully between displayed, coherent, mixed, and launch-ready states.
+
+### Decisions made
+- Keep the pass strictly inside T009 and avoid any new backend scope; all truth-state tightening was derived from existing persisted run/artifact relationships already available in the frontend.
+- Prefer conservative copy like "displayed" and "coherent" over more optimistic labels like "current" or "latest" unless the code could actually justify them.
+- Keep stale-or-mixed truth visible at both the overview and pillar-handoff layers instead of burying it inside the orchestration panel only.
+
+### Issues found
+- The overview was loading the latest completed analytics summary and latest completed report independently, which could silently pair newer deterministic evidence with older interpretation.
+- The orchestration surface still used a few optimistic labels that implied stronger freshness/currentness than the displayed artifact chain could always justify.
+
+### Next step
+- Review whether the dashboard now tells a strict enough truth about displayed artifacts, or whether T009 should stop here and shift toward stabilization rather than further product-surface layering.
+
 ## 2026-03-29 - T009 Orchestration Readiness And Robustness Pass
 
 ### What was completed

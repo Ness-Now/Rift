@@ -31,6 +31,12 @@ type OverviewDashboardProps = {
   userEmail: string;
 };
 
+type ArtifactTruthState = {
+  headline: string;
+  detail: string;
+  tone: "neutral" | "positive" | "warning";
+};
+
 export function OverviewDashboard({ token, userEmail }: OverviewDashboardProps) {
   const [profiles, setProfiles] = useState<RiotProfile[]>([]);
   const [analyticsRuns, setAnalyticsRuns] = useState<AnalyticsRun[]>([]);
@@ -83,15 +89,14 @@ export function OverviewDashboard({ token, userEmail }: OverviewDashboardProps) 
     async function loadArtifactsForProfile(profileId: number) {
       setIsLoadingArtifacts(true);
       try {
-        const latestAnalyticsRun = analyticsRuns.find(
-          (run) => run.riot_profile_id === profileId && run.status === "completed"
-        ) ?? null;
-        const latestReportRun = reportRuns.find(
-          (run) => run.riot_profile_id === profileId && run.status === "completed"
-        ) ?? null;
+        const latestAnalyticsRun = latestCompletedRunForProfile(analyticsRuns, profileId);
+        const latestReportRun = latestCompletedRunForProfile(reportRuns, profileId);
+        const displayedAnalyticsRun = latestReportRun
+          ? analyticsRuns.find((run) => run.id === latestReportRun.analytics_run_id && run.status === "completed") ?? null
+          : latestAnalyticsRun;
 
         const [nextSummary, nextReport] = await Promise.all([
-          latestAnalyticsRun ? getAnalyticsSummary(token, latestAnalyticsRun.id) : Promise.resolve(null),
+          displayedAnalyticsRun ? getAnalyticsSummary(token, displayedAnalyticsRun.id) : Promise.resolve(null),
           latestReportRun ? getReportArtifact(token, latestReportRun.id) : Promise.resolve(null)
         ]);
 
@@ -118,12 +123,16 @@ export function OverviewDashboard({ token, userEmail }: OverviewDashboardProps) 
   }, [analyticsRuns, reportRuns, selectedProfileId, token]);
 
   const selectedProfile = profiles.find((profile) => profile.id === selectedProfileId) ?? null;
-  const latestAnalyticsRun =
-    analyticsRuns.find((run) => run.riot_profile_id === selectedProfileId && run.status === "completed")
-    ?? null;
-  const latestReportRun =
-    reportRuns.find((run) => run.riot_profile_id === selectedProfileId && run.status === "completed")
-    ?? null;
+  const latestAnalyticsRun = latestCompletedRunForProfile(analyticsRuns, selectedProfileId);
+  const latestReportRun = latestCompletedRunForProfile(reportRuns, selectedProfileId);
+  const displayedAnalyticsRun = latestReportRun
+    ? analyticsRuns.find((run) => run.id === latestReportRun.analytics_run_id && run.status === "completed") ?? null
+    : latestAnalyticsRun;
+  const artifactTruthState = buildArtifactTruthState({
+    displayedAnalyticsRun,
+    latestAnalyticsRun,
+    latestReportRun
+  });
 
   const overview = asRecord(analyticsSummary?.overview);
   const progression = asRecord(analyticsSummary?.progression);
@@ -141,7 +150,9 @@ export function OverviewDashboard({ token, userEmail }: OverviewDashboardProps) 
 
   const heroTitle = selectedProfile?.riot_id_display ?? "No Riot profile selected";
   const heroSubtitle =
-    asText(executiveSummary?.summary)
+    artifactTruthState.tone === "warning"
+      ? artifactTruthState.detail
+      : asText(executiveSummary?.summary)
     ?? "Generate analytics and a structured report to populate the first coaching overview.";
   const playerStyle = asText(playerProfile?.primary_style) ?? "Structured profile pending";
   const championFocus = asText(playerProfile?.champion_focus)
@@ -154,7 +165,9 @@ export function OverviewDashboard({ token, userEmail }: OverviewDashboardProps) 
   const routeLabel = [selectedProfile?.region, selectedProfile?.platform_region, selectedProfile?.account_region_routing]
     .filter((value): value is string => Boolean(value))
     .join(" / ");
-  const profileStatus = selectedProfile?.is_primary ? "Primary scouting profile" : "Owned linked profile";
+  const profileStatus = selectedProfile
+    ? (selectedProfile.is_primary ? "Primary scouting profile" : "Owned linked profile")
+    : "No profile selected";
   const primaryPriority = asRecord(priorityLevers[0]);
   const primaryRisk = asRecord(riskFlags[0]);
   const firstStrength = asRecord(strengths[0]);
@@ -217,11 +230,11 @@ export function OverviewDashboard({ token, userEmail }: OverviewDashboardProps) 
     },
     {
       label: "Artifact chain",
-      value: latestAnalyticsRun && latestReportRun
-        ? `Analytics #${latestAnalyticsRun.id} -> Report #${latestReportRun.id}`
-        : latestAnalyticsRun
-          ? `Analytics #${latestAnalyticsRun.id}`
-          : "No completed artifact chain"
+      value: latestReportRun && displayedAnalyticsRun
+        ? `Displayed analytics #${displayedAnalyticsRun.id} -> report #${latestReportRun.id}`
+        : displayedAnalyticsRun
+          ? `Displayed analytics #${displayedAnalyticsRun.id}`
+          : "No displayed artifact chain"
     }
   ];
 
@@ -261,9 +274,10 @@ export function OverviewDashboard({ token, userEmail }: OverviewDashboardProps) 
             <div className="space-y-8">
               <div className="flex flex-wrap items-center gap-3">
                 <SectionEyebrow tone="gold">Elite overview desk</SectionEyebrow>
-                <StatusChip label={profileStatus} tone="positive" />
+                <StatusChip label={profileStatus} tone={selectedProfile ? "positive" : "warning"} />
+                <StatusChip label={artifactTruthState.headline} tone={artifactTruthState.tone} />
                 {latestReportRun ? <StatusChip label={`Report ${latestReportRun.report_version}`} tone="neutral" /> : null}
-                {latestAnalyticsRun ? <StatusChip label={latestAnalyticsRun.analytics_version} tone="neutral" /> : null}
+                {displayedAnalyticsRun ? <StatusChip label={displayedAnalyticsRun.analytics_version} tone="neutral" /> : null}
               </div>
 
               <div className="space-y-5">
@@ -366,7 +380,7 @@ export function OverviewDashboard({ token, userEmail }: OverviewDashboardProps) 
                 tone={selectedProfile ? "neutral" : "warning"}
               />
             }
-            description="Read this handoff in order: evidence first, interpretation second, then the action path that should shape the next block of play."
+            description="Read this handoff in order: evidence first, interpretation second, then the action path that should shape the next block of play. Interpretation blocks only reflect the displayed report artifact, not any newer upstream analytics."
             title="Coaching handoff"
           />
 
@@ -440,15 +454,16 @@ export function OverviewDashboard({ token, userEmail }: OverviewDashboardProps) 
 
         <DashboardPanel className="p-6">
           <SectionHeading
-            description="This evidence layer keeps the coaching grounded in artifact lineage, sample size, and the latest clean snapshot."
+            description="This evidence layer keeps the coaching grounded in artifact lineage and shows whether the visible interpretation is coherent with or behind upstream persisted data."
             title="Evidence layer"
           />
           <div className="mt-6 grid gap-4">
             <div className="rounded-[1.4rem] border border-white/8 bg-white/[0.03] p-4">
               <p className="dashboard-tactical-label text-frost/34">Artifact chain</p>
               <div className="mt-4 flex flex-wrap gap-3">
-                <StatusChip label={latestAnalyticsRun ? `Analytics #${latestAnalyticsRun.id}` : "No analytics"} tone={latestAnalyticsRun ? "positive" : "warning"} />
-                <StatusChip label={latestReportRun ? `Report #${latestReportRun.id}` : "No report"} tone={latestReportRun ? "positive" : "warning"} />
+                <StatusChip label={displayedAnalyticsRun ? `Displayed analytics #${displayedAnalyticsRun.id}` : "No analytics"} tone={displayedAnalyticsRun ? "positive" : "warning"} />
+                <StatusChip label={latestReportRun ? `Displayed report #${latestReportRun.id}` : "No report"} tone={latestReportRun ? "positive" : "warning"} />
+                <StatusChip label={artifactTruthState.headline} tone={artifactTruthState.tone} />
               </div>
             </div>
 
@@ -456,7 +471,7 @@ export function OverviewDashboard({ token, userEmail }: OverviewDashboardProps) 
               <p className="dashboard-tactical-label text-frost/34">Sample integrity</p>
               <p className="mt-3 font-display text-3xl font-semibold text-white">{formatMetric(dataQuality?.matches_analyzed, 0)}</p>
               <p className="mt-2 text-sm leading-6 text-frost/58">
-                Signed in as {userEmail}. The current overview is anchored to the latest clean snapshot for this owned Riot profile.
+                Signed in as {userEmail}. The current overview is anchored to analytics run #{displayedAnalyticsRun?.id ?? "N/A"}, which is the exact deterministic artifact backing the visible coaching interpretation.
               </p>
             </div>
 
@@ -509,7 +524,12 @@ export function OverviewDashboard({ token, userEmail }: OverviewDashboardProps) 
         </div>
       </DashboardPanel>
 
-      <PillarSections analyticsSummary={analyticsSummary} reportArtifact={reportArtifact} selectedProfile={selectedProfile} />
+      <PillarSections
+        analyticsSummary={analyticsSummary}
+        artifactTruthState={artifactTruthState}
+        reportArtifact={reportArtifact}
+        selectedProfile={selectedProfile}
+      />
 
       {(isLoading || isLoadingArtifacts || error || selectedProfile === null) ? (
         <DashboardPanel className="p-6">
@@ -526,4 +546,88 @@ export function OverviewDashboard({ token, userEmail }: OverviewDashboardProps) 
       ) : null}
     </div>
   );
+}
+
+function latestCompletedRunForProfile<T extends { id: number; riot_profile_id: number; status: string }>(
+  runs: T[],
+  profileId: number | null
+): T | null {
+  if (profileId === null) {
+    return null;
+  }
+
+  let latest: T | null = null;
+  for (const run of runs) {
+    if (run.riot_profile_id !== profileId || run.status !== "completed") {
+      continue;
+    }
+    if (latest === null || run.id > latest.id) {
+      latest = run;
+    }
+  }
+  return latest;
+}
+
+function buildArtifactTruthState({
+  displayedAnalyticsRun,
+  latestAnalyticsRun,
+  latestReportRun
+}: {
+  displayedAnalyticsRun: AnalyticsRun | null;
+  latestAnalyticsRun: AnalyticsRun | null;
+  latestReportRun: ReportRun | null;
+}): ArtifactTruthState {
+  if (!displayedAnalyticsRun && !latestReportRun) {
+    return {
+      headline: "No displayed coaching chain",
+      detail: "Run analytics and report generation before the dashboard can show a persisted coaching read.",
+      tone: "warning"
+    };
+  }
+
+  if (latestReportRun && !displayedAnalyticsRun) {
+    return {
+      headline: "Displayed report is missing its analytics source",
+      detail: `Report #${latestReportRun.id} exists, but its backing analytics run is not available as a completed artifact in the current dashboard state.`,
+      tone: "warning"
+    };
+  }
+
+  if (!latestReportRun && displayedAnalyticsRun) {
+    return {
+      headline: "Interpretation not generated yet",
+      detail: `Analytics run #${displayedAnalyticsRun.id} is available, but no completed report artifact exists for the visible coaching interpretation.`,
+      tone: "neutral"
+    };
+  }
+
+  if (!displayedAnalyticsRun || !latestReportRun) {
+    return {
+      headline: "Displayed chain unavailable",
+      detail: "The dashboard does not yet have a coherent analytics/report artifact chain to display.",
+      tone: "warning"
+    };
+  }
+
+  if (latestReportRun.analytics_run_id !== displayedAnalyticsRun.id) {
+    return {
+      headline: "Displayed report is not aligned with its analytics source",
+      detail: `Report #${latestReportRun.id} points to analytics run #${latestReportRun.analytics_run_id}, but the dashboard is currently holding analytics run #${displayedAnalyticsRun.id}.`,
+      tone: "warning"
+    };
+  }
+
+  if (latestAnalyticsRun && latestAnalyticsRun.id !== displayedAnalyticsRun.id) {
+    return {
+      headline: "Displayed coaching is behind newer analytics",
+      detail: `The visible coaching read uses analytics run #${displayedAnalyticsRun.id} through report #${latestReportRun.id}, while newer analytics run #${latestAnalyticsRun.id} exists upstream.`,
+      tone: "warning"
+    };
+  }
+
+  return {
+    headline: "Displayed coaching chain is coherent",
+    detail: `The visible coaching read is backed by analytics run #${displayedAnalyticsRun.id} and report #${latestReportRun.id}. No newer completed analytics run exists upstream.`,
+    tone: "positive"
+  };
 }
