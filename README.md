@@ -68,6 +68,12 @@ The frontend expects the API base URL in `apps/web/.env.local`. Start from [`app
 
 The API environment variables are documented in [`apps/api/.env.example`](./apps/api/.env.example).
 
+After the API environment is installed, you can rerun the focused frozen-seam regression checks from the repo root with:
+
+```powershell
+npm run test:api:contextual-chat
+```
+
 ### Worker
 
 The worker shell uses only the Python standard library for now.
