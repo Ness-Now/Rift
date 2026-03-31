@@ -31,7 +31,7 @@
 - T009 gained an artifact-truth pass that makes the overview and pillar handoff follow one displayed analytics/report chain more strictly and replaces overly optimistic freshness/current labels with more conservative artifact-truth language.
 - T009 gained a stabilization/readiness pass that separates displayed interpretation integrity from end-to-end pipeline freshness more clearly, reducing one remaining semantic mismatch in the live dashboard.
 - The authenticated product shell now exposes a first grounded contextual chat surface and updates its top-level framing from T009-only language to T010 contextual grounding.
-- Repository-facing documentation now reflects the implemented T001-T009 state instead of the earlier roadmap-only state.
+- Repository-facing documentation now reflects the implemented T001-T010 state instead of the earlier roadmap-only state.
 - T009 second-pass refinement reduced the table-first feel in the pillar surfaces and improved scan order, signal emphasis, and coaching-board decisiveness.
 - T009 Champion Form gained a narrower comparison pass that makes the main pick, overall baseline, and latest recent-form window easier to compare at a glance.
 - T009 Macro Lens gained a narrower command-table pass that makes the win/loss macro contrast, strongest objective swing, and duration/session reinforcement easier to read before supporting splits.
@@ -52,6 +52,7 @@
 - Contextual chat replies now expose explicit support-status semantics instead of implying that every answer is equally well-supported by the displayed artifact.
 - Contextual chat now sends a tighter deterministic source digest to the model, reducing the risk of generic answers when the persisted artifact already contains enough evidence to answer concretely.
 - Contextual chat replies now expose which artifact areas they relied on, making grounded answers more auditable without adding a heavy citation system.
+- README, roadmap, and the T010 ticket no longer describe the current grounded contextual chat MVP as deferred or not started.
 
 ### Known issues
 - SQLite remains the lightweight persistence layer for the current development phase; production-grade PostgreSQL, migrations discipline, and queue infra are still deferred.

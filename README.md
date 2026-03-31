@@ -90,11 +90,14 @@ python -m worker_service.cli --job placeholder
   - Champion Form
   - Macro Lens
   - Coaching Board
+- First live T010 contextual chat MVP:
+  - Grounded to the selected profile and the displayed persisted report artifact
+  - Ephemeral local history only with no persisted chat threads or generic assistant system
 
 ## Current deferred scope
 
 - Final pillar polish and richer chart treatment
-- Contextual chat surface (T010)
+- Broader chat persistence, richer interaction design, and any generic thread or assistant architecture beyond the current grounded T010 MVP
 - Production-grade PostgreSQL, migrations discipline, queue infra, and broader test coverage
 
 ## Repo continuity

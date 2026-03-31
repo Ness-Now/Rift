@@ -22,7 +22,7 @@
 
 - T008 dashboard overview completed
 - T009 dashboard pillars first live pass completed
-- T010 contextual chat not started
+- T010 contextual chat MVP started and hardened through narrow follow-up passes
 
 ## Current Product Surface State
 
@@ -30,6 +30,7 @@
 - Champion Form is live as the first deeper pillar surface for champion pool, progression, lane/checkpoint context, and time-based patterning.
 - Macro Lens is live as the first deeper pillar surface for objective conversion, game-shape reads, and team-context metrics.
 - Coaching Board is live as the first deeper pillar surface for priority levers, coaching focus, risk flags, confidence, and execution steps.
+- Contextual Chat is live as a narrow grounded interrogation surface tied to the selected profile plus the displayed persisted report artifact, with ephemeral local history only.
 - Operational data controls remain available in a secondary workbench rather than leading the product UI.
 
 ## Near-Term Priorities
@@ -46,4 +47,4 @@
 - Letting analytics depend directly on raw Riot payloads instead of clean normalized tables
 - Letting prompt/report code bypass the persisted analytics summary contract
 - Mixing deterministic calculations with prompt behavior or presentation logic
-- Expanding into T010 before T009 surfaces are stable enough to anchor chat context
+- Expanding T010 beyond its current grounded ephemeral scope before T009 surfaces are stable enough to anchor broader chat context

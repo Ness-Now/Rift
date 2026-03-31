@@ -1,5 +1,26 @@
 # Development Journal
 
+## 2026-03-31 - Repository Truth Alignment Pass
+
+### What was completed
+- Rechecked the implemented T010 seam in the real `Ness-Now/Rift` checkout before editing docs: the authenticated contextual chat route, backend service, versioned prompt assets, and dashboard chat panel are all present.
+- Confirmed the current T010 scope remains narrow: grounded to the selected profile plus the displayed persisted report artifact, with ephemeral local history only and no broader assistant/thread architecture.
+- Updated the smallest set of repo-facing source-of-truth docs that still described T010 as deferred or not started.
+
+### Decisions made
+- Keep this pass documentation-only and avoid any T009 or T010 code changes.
+- Preserve the current disciplined framing of T010 as a grounded contextual chat MVP rather than broadening it into a generic assistant roadmap.
+- Update only the docs that should describe current repository truth, leaving historical audit snapshots alone.
+
+### Issues found
+- `README.md` still listed T010 in deferred scope even though the contextual chat route, prompt assets, and UI panel already exist.
+- `docs/roadmap.md` still said T010 was not started, which contradicted the current codebase, changelog, and development journal.
+- `tickets/T010-chat-contextual.md` still read like a future ticket instead of distinguishing implemented MVP scope from intentionally deferred chat architecture.
+
+### Next step
+- Keep repo-facing docs aligned as narrow implementation passes land, especially when a ticket has started but remains intentionally constrained.
+
+
 ## 2026-03-31 - Web Build Font-Dependency Hardening Pass
 
 ### What was completed
