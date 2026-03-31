@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 
-import type { AnalyticsRun, ReportRun } from "@rift/shared-types";
+import type { AnalyticsRun, ReportRun, RiotProfile } from "@rift/shared-types";
 
 import {
   buildContextualChatResetKey,
@@ -11,6 +11,7 @@ import {
   MAX_MESSAGE_HISTORY
 } from "./components/chat/contextual-chat-panel.helpers";
 import { buildArtifactTruthState, buildFreshnessState } from "./components/dashboard/frozen-seams";
+import { selectPreferredProfile } from "./lib/profiles";
 
 function completedAnalyticsRun(id: number): AnalyticsRun {
   return {
@@ -40,6 +41,25 @@ function completedReportRun(id: number, analyticsRunId: number, completedAt = "2
     analytics_version: "analytics_v1",
     report_version: "report_v1",
     source_snapshot_type: "latest_clean_snapshot"
+  };
+}
+
+function ownedProfile(id: number, isPrimary = false): RiotProfile {
+  return {
+    id,
+    user_id: 1,
+    game_name: `Player${id}`,
+    tag_line: "EUW",
+    riot_id_display: `Player${id}#EUW`,
+    riot_id_norm: `player${id}#euw`,
+    region: "EUW",
+    puuid: `puuid-${id}`,
+    account_region_routing: "europe",
+    platform_region: "euw1",
+    is_primary: isPrimary,
+    created_at: "2026-03-30T10:00:00Z",
+    updated_at: "2026-03-30T10:00:00Z",
+    last_verified_at: "2026-03-30T10:00:00Z"
   };
 }
 
@@ -163,4 +183,13 @@ test("buildContextualChatResetKey changes whenever the selected profile or displ
   assert.equal(buildContextualChatResetKey(7, 22), buildContextualChatResetKey(7, 22));
   assert.notEqual(buildContextualChatResetKey(7, 22), buildContextualChatResetKey(8, 22));
   assert.notEqual(buildContextualChatResetKey(7, 22), buildContextualChatResetKey(7, 23));
+});
+
+test("selectPreferredProfile keeps a still-valid selection before falling back to primary then first", () => {
+  const profiles = [ownedProfile(7), ownedProfile(9, true), ownedProfile(12)];
+
+  assert.equal(selectPreferredProfile(profiles, 12)?.id, 12);
+  assert.equal(selectPreferredProfile(profiles, 999)?.id, 9);
+  assert.equal(selectPreferredProfile([ownedProfile(4), ownedProfile(6)], 999)?.id, 4);
+  assert.equal(selectPreferredProfile([], 999), null);
 });

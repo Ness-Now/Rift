@@ -12,6 +12,7 @@ import {
   listRiotProfiles
 } from "@/lib/api";
 import { asArray, asBoolean, asRecord, asText, formatCompactNumber, formatMetric, formatPercent } from "@/lib/dashboard";
+import { selectPreferredProfile } from "@/lib/profiles";
 
 import { ContextualChatPanel } from "../chat/contextual-chat-panel";
 import { AnalysisOrchestrator } from "./analysis-orchestrator";
@@ -57,15 +58,7 @@ export function OverviewDashboard({ token, userEmail }: OverviewDashboardProps) 
       setReportRuns(nextReportRuns);
       setError(null);
 
-      if (nextProfiles.length === 0) {
-        setSelectedProfileId(null);
-      } else {
-        const preferredProfile =
-          nextProfiles.find((profile) => profile.id === selectedProfileId)
-          ?? nextProfiles.find((profile) => profile.is_primary)
-          ?? nextProfiles[0];
-        setSelectedProfileId(preferredProfile.id);
-      }
+      setSelectedProfileId(selectPreferredProfile(nextProfiles, selectedProfileId)?.id ?? null);
     } catch (requestError) {
       if (requestError instanceof ApiError) {
         setError(requestError.message);
