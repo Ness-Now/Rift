@@ -6,7 +6,7 @@ Implement the first live pillar surfaces that deepen the product beyond the over
 
 ## Status
 
-In progress with a first live pass implemented.
+Frozen at the current product-logic level after the first live pass.
 
 ## Context
 
@@ -35,16 +35,15 @@ The product promise includes fixed pillars rather than a loose feed of observati
 - Final charting depth for every pillar
 - Replacing the overview as the primary briefing surface
 
-## Remaining Work
+## Deferred Beyond The Freeze State
 
-- Stronger chart treatment and richer visual storytelling inside each pillar
-- Tighter evidence-to-narrative coupling within Champion Form, Macro Lens, and Coaching Board
-- Deeper pillar-specific interaction polish and final product refinement
-- Any last consistency adjustments needed before T010 planning begins
+- Any later stronger chart treatment or richer visual storytelling, only if T009 is deliberately reopened
+- Any later evidence-to-narrative or interaction polish, only if a concrete product defect justifies reopening T009
+- Any later consistency adjustments discovered after freeze, handled as defect correction rather than routine roadmap continuation
 
-## Definition Of Done For The First Pass
+## Definition Of Done For The Frozen First Pass
 
 - Fixed pillars are visible and implemented in the product surface
 - Each pillar reads from clear persisted contracts
 - Pillar content is coherent and deeper than the overview rather than duplicating it
-- The dashboard is ready for further pillar refinement without reopening backend contracts
+- The dashboard is frozen at the current product-logic level unless a later deliberate reopen is justified

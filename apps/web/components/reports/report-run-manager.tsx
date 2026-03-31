@@ -11,6 +11,7 @@ import {
   listReportRuns,
   listRiotProfiles
 } from "@/lib/api";
+import { selectPreferredProfile } from "@/lib/profiles";
 
 export function ReportRunManager({ token }: { token: string }) {
   const [profiles, setProfiles] = useState<RiotProfile[]>([]);
@@ -67,12 +68,7 @@ export function ReportRunManager({ token }: { token: string }) {
       setReportRuns(nextReportRuns);
       setError(null);
 
-      const preferredProfile =
-        nextProfiles.find((profile) => profile.id === selectedProfileId)
-        ?? nextProfiles.find((profile) => profile.is_primary)
-        ?? nextProfiles[0]
-        ?? null;
-      const nextProfileId = preferredProfile?.id ?? null;
+      const nextProfileId = selectPreferredProfile(nextProfiles, selectedProfileId)?.id ?? null;
       setSelectedProfileId(nextProfileId);
 
       const preferredAnalyticsRun =

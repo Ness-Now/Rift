@@ -21,29 +21,31 @@
 ### Phase 4: Product Surfaces
 
 - T008 dashboard overview completed
-- T009 dashboard pillars first live pass completed
-- T010 contextual chat not started
+- T009 dashboard pillars frozen at the current product-logic level after the first live pass
+- T010 contextual chat MVP frozen as a narrow grounded product seam after narrow hardening passes
 
 ## Current Product Surface State
 
 - Overview Desk is the premium briefing layer for identity, top KPIs, executive summary, and cross-pillar orientation.
-- Champion Form is live as the first deeper pillar surface for champion pool, progression, lane/checkpoint context, and time-based patterning.
-- Macro Lens is live as the first deeper pillar surface for objective conversion, game-shape reads, and team-context metrics.
-- Coaching Board is live as the first deeper pillar surface for priority levers, coaching focus, risk flags, confidence, and execution steps.
+- Champion Form is live as the frozen first deeper pillar surface for champion pool, progression, lane/checkpoint context, and time-based patterning.
+- Macro Lens is live as the frozen first deeper pillar surface for objective conversion, game-shape reads, and team-context metrics.
+- Coaching Board is live as the frozen first deeper pillar surface for priority levers, coaching focus, risk flags, confidence, and execution steps.
+- Contextual Chat is live as the frozen narrow grounded interrogation surface tied to the selected profile plus the displayed persisted report artifact, with ephemeral local history only.
 - Operational data controls remain available in a secondary workbench rather than leading the product UI.
 
 ## Near-Term Priorities
 
-1. Stabilize repo-facing documentation and continuation notes so the current state is trustworthy and easy to resume from.
-2. Continue T009 refinement with stronger chart treatment, tighter evidence-to-narrative coupling, and deeper interaction polish inside each pillar.
-3. Continue narrow repository hardening so offline/restricted build expectations stay satisfied without reopening product semantics.
-4. Keep ingestion, normalization, analytics, report, and presentation boundaries explicit while T009 deepens.
+1. Keep repo-facing documentation and continuation notes aligned with the current frozen T009 and T010 state so future work resumes from truthful source-of-truth docs.
+2. Continue narrow repository hardening where concrete build or verification risks remain, without reopening product semantics.
+3. Focus future product work on other concrete risks or later deliberate reopens rather than routine T009 or T010 refinement by default.
+4. Keep ingestion, normalization, analytics, report, and presentation boundaries explicit unless a later deliberate reopen requires a justified change.
 
 ## Risks To Manage Early
 
-- Letting dashboard refinement drift into backend contract churn without a product need
+- Reopening T009 dashboard refinement by default instead of waiting for a concrete defect or a later deliberate product revisit
+- Letting dashboard changes drift into backend contract churn without a product need
 - Letting raw Riot shapes leak into UI or report presentation logic
 - Letting analytics depend directly on raw Riot payloads instead of clean normalized tables
 - Letting prompt/report code bypass the persisted analytics summary contract
 - Mixing deterministic calculations with prompt behavior or presentation logic
-- Expanding into T010 before T009 surfaces are stable enough to anchor chat context
+- Reopening or expanding T010 beyond its current grounded ephemeral scope without a concrete defect or a later deliberate product revisit

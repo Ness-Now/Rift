@@ -1,24 +1,65 @@
 # Development Journal
 
+## 2026-03-31 - Freeze-State Recording Pass
+
+### What was completed
+- Rechecked the latest freeze-readiness conclusion against the real `Ness-Now/Rift` repository state before editing docs.
+- Recorded, in the repo-facing source-of-truth docs, that T009 is now frozen at its current product-logic level and T010 is now frozen as the current narrow grounded contextual chat MVP.
+- Updated the smallest set of docs that still implied routine T009/T010 refinement should continue by default.
+
+### Decisions made
+- Keep this pass documentation-only with no code, UI, contract, or behavior changes.
+- Preserve the disciplined framing that T010 remains grounded to the selected profile plus displayed persisted report artifact, with ephemeral local history only.
+- Treat future T009 or T010 work as deliberate reopen territory rather than the default continuation path unless a concrete defect is discovered.
+
+### Issues found
+- `docs/roadmap.md` still framed T009 as something expected to keep deepening by default and did not yet record a freeze state for either T009 or T010.
+- `README.md` still described final pillar polish as ordinary deferred scope rather than work that would require a later deliberate reopen.
+- `tickets/T009-dashboard-pillars.md` still implied routine refinement and pre-T010 sequencing instead of a completed freeze state.
+
+### Next step
+- Keep the repository truth aligned if a later defect or explicit reopen changes the frozen T009/T010 state.
+
+## 2026-03-31 - Repository Truth Alignment Pass
+
+### What was completed
+- Rechecked the implemented T010 seam in the real `Ness-Now/Rift` checkout before editing docs: the authenticated contextual chat route, backend service, versioned prompt assets, and dashboard chat panel are all present.
+- Confirmed the current T010 scope remains narrow: grounded to the selected profile plus the displayed persisted report artifact, with ephemeral local history only and no broader assistant/thread architecture.
+- Updated the smallest set of repo-facing source-of-truth docs that still described T010 as deferred or not started.
+
+### Decisions made
+- Keep this pass documentation-only and avoid any T009 or T010 code changes.
+- Preserve the current disciplined framing of T010 as a grounded contextual chat MVP rather than broadening it into a generic assistant roadmap.
+- Update only the docs that should describe current repository truth, leaving historical audit snapshots alone.
+
+### Issues found
+- `README.md` still listed T010 in deferred scope even though the contextual chat route, prompt assets, and UI panel already exist.
+- `docs/roadmap.md` still said T010 was not started, which contradicted the current codebase, changelog, and development journal.
+- `tickets/T010-chat-contextual.md` still read like a future ticket instead of distinguishing implemented MVP scope from intentionally deferred chat architecture.
+
+### Next step
+- Keep repo-facing docs aligned as narrow implementation passes land, especially when a ticket has started but remains intentionally constrained.
+
+
 ## 2026-03-31 - Web Build Font-Dependency Hardening Pass
 
 ### What was completed
-- Inspected the web app shell, global styling, Tailwind config, repo continuity docs, and local asset locations before making changes.
-- Confirmed there were no committed project font assets available to reuse outside dependency folders or `.next` artifacts.
-- Removed the app shell dependency on `next/font/google` and kept the existing `--font-sans` / `--font-display` structure by defining disciplined local/system fallback stacks in CSS instead.
-- Updated repo-facing docs so they no longer describe remote Google Fonts as a known unresolved build limitation.
+- Confirmed the real `Ness-Now/Rift` checkout, inspected the app shell and repo-facing docs, and reproduced the current web build situation before changing code.
+- Verified there were no committed local font assets available to reuse outside dependency folders or `.next` artifacts.
+- Removed `next/font/google` from the web app shell and preserved the existing font-variable pattern by moving `--font-sans` and `--font-display` to disciplined local/system fallback stacks in CSS.
+- Updated the minimal repo-facing docs that still described the remote Google Fonts dependency as an unresolved limitation.
 
 ### Decisions made
-- Keep the pass narrow and build-focused: no dashboard, chat, contract, or architecture changes.
-- Prefer a local/system fallback over introducing new font assets, because no committed source font files were present and the smallest robust fix was to eliminate outbound fetching entirely.
-- Preserve the current typography intent as closely as practical by keeping `Manrope` and `Space Grotesk` at the front of the stacks for environments where they are already installed locally.
+- Keep the pass narrow and build-focused with no T009 or T010 behavior changes.
+- Prefer CSS-based local/system fallback stacks over adding new font assets, since no committed source font files existed in the repository.
+- Keep `Manrope` and `Space Grotesk` at the front of the fallback stacks so typography stays as close as practical on machines that already have them installed locally.
 
 ### Issues found
-- The app shell was loading `Manrope` and `Space_Grotesk` through `next/font/google`, which creates a build-time dependency on outbound Google Fonts access.
-- In this checkout, `npm run build:web` was also initially blocked by a non-executable `node_modules/.bin/next` shim, which had to be worked around during verification before the repo-level font hardening could be validated.
+- `apps/web/app/layout.tsx` still used `next/font/google`, so the production build retained a build-time dependency on outbound Google Fonts access.
+- In the real clone, the build passed after `npm install`, but that success still depended on network availability rather than a self-contained font path.
 
 ### Next step
-- Resume repository hardening and stabilization without reopening T009/T010 product semantics unless a later build or verification pass requires it.
+- Continue repository hardening only where a concrete build or verification risk remains, without reopening product semantics.
 
 
 ## 2026-03-30 - T010 Actionability-Structure Pass
@@ -419,7 +460,7 @@
 ### Issues found
 - Repo-facing documentation drifted behind implementation after T008 and the first T009 pass.
 - Ticket files for T008 and T009 were still future-tense instead of reflecting delivered work plus remaining refinement.
-- The web build still depends on remote Google Fonts via `next/font/google`, which is a known limitation for offline or restricted CI environments.
+- At that point, the web build still depended on remote Google Fonts via `next/font/google`, which was a known limitation for offline or restricted CI environments.
 
 ### Next step
 - Continue T009 refinement in the pillar surfaces: stronger chart treatment, tighter evidence-to-narrative coupling, and deeper interaction polish without reopening backend contracts.

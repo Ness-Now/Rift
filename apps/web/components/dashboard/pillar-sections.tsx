@@ -30,12 +30,7 @@ import {
   StatusChip,
   WorkflowRail
 } from "./primitives";
-
-type ArtifactTruthState = {
-  headline: string;
-  detail: string;
-  tone: "neutral" | "positive" | "warning";
-};
+import type { ArtifactTruthState } from "./frozen-seams";
 
 type PillarSectionsProps = {
   analyticsSummary: AnalyticsSummary | null;

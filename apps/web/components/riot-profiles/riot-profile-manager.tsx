@@ -146,7 +146,7 @@ export function RiotProfileManager({ token }: { token: string }) {
             Link a Riot profile to your account
           </h2>
           <p className="text-sm leading-6 text-ink/70">
-            This step only resolves Riot ID to PUUID and stores the owned profile. Match ingestion and analytics still land later.
+            This step resolves Riot ID to PUUID and stores the owned profile. Secondary workbench controls below handle ingestion, normalization, analytics, and report generation.
           </p>
         </div>
 
