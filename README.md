@@ -2,7 +2,7 @@
 
 Rift is a greenfield monorepo for a League of Legends analytics and coaching platform. The product ingests ranked Solo/Duo match data from Riot, normalizes it into clean tables, computes deterministic analytics, and then sends a narrower report contract to OpenAI to produce structured coaching reports.
 
-The repository now includes the full T001-T007 backend/product foundation, a premium T008 overview surface, frozen T009 pillar surfaces at the current product-logic level, and a frozen narrow T010 grounded contextual chat MVP. The current focus is disciplined stabilization, hardening, and truthful continuation notes rather than routine T009/T010 refinement or broad scope expansion.
+The repository now includes the full T001-T007 backend/product foundation, a premium T008 overview surface, and a first live T009 pillar pass. The current focus is disciplined stabilization and refinement rather than broad scope expansion.
 
 ## Repository layout
 
@@ -51,38 +51,22 @@ The frontend expects the API base URL in `apps/web/.env.local`. Start from [`app
    .\.venv\Scripts\Activate.ps1
    ```
 
-2. For auth-ready local startup, install the minimum API runtime dependencies:
-
-   ```powershell
-   pip install fastapi "uvicorn[standard]" itsdangerous
-   ```
-
-3. Start the API with the repo-encoded local launcher:
-
-   ```powershell
-   npm run dev:api
-   ```
-
-   This launcher adds `apps/api/src` and `packages/analytics/src` to `PYTHONPATH` so local auth/signup works without rediscovering the analytics import-path requirement by hand.
-
-4. Check `http://localhost:8000/docs` or send a signup request to `http://localhost:8000/auth/signup`.
-
-5. If you want the full editable package setup instead of the lightweight auth-ready path, install the analytics package and API package in editable mode:
+2. Install the analytics package and API package in editable mode:
 
    ```powershell
    pip install -e packages/analytics
    pip install -e apps/api
    ```
 
-6. `WEB_ORIGIN` in [`apps/api/.env.example`](./apps/api/.env.example) must match the web app origin for browser auth requests. `RIOT_API_KEY` and `OPENAI_API_KEY` are only required for full pipeline runs, not for signup/login.
+3. Start the API:
+
+   ```powershell
+   uvicorn api_service.main:app --app-dir apps/api/src --reload
+   ```
+
+4. Check `http://localhost:8000/health`.
 
 The API environment variables are documented in [`apps/api/.env.example`](./apps/api/.env.example).
-
-After the API environment is installed, you can rerun the focused frozen-seam regression checks from the repo root with:
-
-```powershell
-npm run test:api:contextual-chat
-```
 
 ### Worker
 
@@ -106,14 +90,11 @@ python -m worker_service.cli --job placeholder
   - Champion Form
   - Macro Lens
   - Coaching Board
-- First live T010 contextual chat MVP:
-  - Grounded to the selected profile and the displayed persisted report artifact
-  - Ephemeral local history only with no persisted chat threads or generic assistant system
 
 ## Current deferred scope
 
-- Any later pillar polish or richer chart treatment, only if T009 is deliberately reopened after freeze
-- Broader chat persistence, richer interaction design, and any generic thread or assistant architecture beyond the current grounded T010 MVP
+- Final pillar polish and richer chart treatment
+- Contextual chat surface (T010)
 - Production-grade PostgreSQL, migrations discipline, queue infra, and broader test coverage
 
 ## Repo continuity

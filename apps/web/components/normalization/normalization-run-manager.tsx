@@ -9,7 +9,6 @@ import {
   listNormalizationRuns,
   listRiotProfiles
 } from "@/lib/api";
-import { selectPreferredProfile } from "@/lib/profiles";
 
 export function NormalizationRunManager({ token }: { token: string }) {
   const [profiles, setProfiles] = useState<RiotProfile[]>([]);
@@ -31,7 +30,12 @@ export function NormalizationRunManager({ token }: { token: string }) {
       setRuns(nextRuns);
       setError(null);
 
-      setSelectedProfileId((current) => selectPreferredProfile(nextProfiles, current)?.id ?? null);
+      if (nextProfiles.length > 0) {
+        const preferredProfile = nextProfiles.find((profile) => profile.is_primary) ?? nextProfiles[0];
+        setSelectedProfileId((current) => current ?? preferredProfile.id);
+      } else {
+        setSelectedProfileId(null);
+      }
     } catch (requestError) {
       if (requestError instanceof ApiError) {
         setError(requestError.message);

@@ -1,6 +1,7 @@
 "use client";
 
 import type {
+  ContextualChatMessage,
   ContextualChatResponse,
   ReportArtifact,
   RiotProfile
@@ -9,15 +10,13 @@ import { useEffect, useMemo, useState } from "react";
 
 import { ApiError, createContextualChatReply } from "@/lib/api";
 
-import {
-  buildContextualChatResetKey,
-  buildPayloadMessages,
-  formatEvidenceMode,
-  formatTraceLabel,
-  type HistoryChatMessage
-} from "./contextual-chat-panel.helpers";
-import type { ArtifactTruthState } from "../dashboard/frozen-seams";
 import { DashboardPanel, SectionEyebrow, SectionHeading, StatusChip } from "../dashboard/primitives";
+
+type ArtifactTruthState = {
+  headline: string;
+  detail: string;
+  tone: "neutral" | "positive" | "warning";
+};
 
 type ContextualChatPanelProps = {
   token: string;
@@ -26,7 +25,19 @@ type ContextualChatPanelProps = {
   artifactTruthState: ArtifactTruthState;
 };
 
-type LocalChatMessage = HistoryChatMessage;
+type LocalChatMessage = ContextualChatMessage & {
+  answerMode?: "grounded" | "limited";
+  evidenceMode?: "deterministic" | "interpretive" | "mixed";
+  actionStep?: string;
+  evidencePoints?: string[];
+  limitationPoints?: string[];
+  scopeNote?: string;
+  traceLabels?: string[];
+  suggestedFollowUp?: string | null;
+};
+
+const MAX_MESSAGE_HISTORY = 6;
+const MAX_HISTORY_CONTENT_LENGTH = 1200;
 
 export function ContextualChatPanel({
   token,
@@ -39,14 +50,13 @@ export function ContextualChatPanel({
   const [latestResponse, setLatestResponse] = useState<ContextualChatResponse | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const resetKey = buildContextualChatResetKey(selectedProfile?.id, reportArtifact?.report_run_id);
 
   useEffect(() => {
     setMessages([]);
     setLatestResponse(null);
     setError(null);
     setDraft("");
-  }, [resetKey]);
+  }, [reportArtifact?.report_run_id, selectedProfile?.id]);
 
   const chatAvailability = useMemo(() => {
     if (selectedProfile === null) {
@@ -95,7 +105,9 @@ export function ContextualChatPanel({
       content
     };
     const nextMessages = [...messages, userMessage];
-    const payloadMessages = buildPayloadMessages(nextMessages);
+    const payloadMessages = nextMessages
+      .slice(-MAX_MESSAGE_HISTORY)
+      .map((message) => ({ role: message.role, content: buildHistoryContent(message) }));
 
     setMessages(nextMessages);
     setDraft("");
@@ -347,6 +359,62 @@ export function ContextualChatPanel({
       </div>
     </DashboardPanel>
   );
+}
+
+function formatTraceLabel(value: string) {
+  return value
+    .replace("artifact_digest.", "")
+    .replace("report_input.", "input:")
+    .replace(/_/g, " ");
+}
+
+function formatEvidenceMode(value: "deterministic" | "interpretive" | "mixed") {
+  if (value === "deterministic") {
+    return "Deterministic basis";
+  }
+  if (value === "interpretive") {
+    return "Interpretive basis";
+  }
+  return "Mixed basis";
+}
+
+function buildHistoryContent(message: LocalChatMessage) {
+  if (message.role === "user") {
+    return trimHistoryContent(message.content);
+  }
+
+  const lines = [
+    `Answer: ${message.content}`,
+    `Support status: ${message.answerMode === "limited" ? "limited" : "grounded"}`
+  ];
+
+  if (message.evidenceMode) {
+    lines.push(`Evidence basis: ${message.evidenceMode}`);
+  }
+  if (message.traceLabels && message.traceLabels.length > 0) {
+    lines.push(`Artifact areas: ${message.traceLabels.join(", ")}`);
+  }
+  if (message.actionStep) {
+    lines.push(`Action step: ${message.actionStep}`);
+  }
+  if (message.evidencePoints && message.evidencePoints.length > 0) {
+    lines.push(`Supported points: ${message.evidencePoints.slice(0, 2).join(" | ")}`);
+  }
+  if (message.limitationPoints && message.limitationPoints.length > 0) {
+    lines.push(`Cannot conclude: ${message.limitationPoints.slice(0, 2).join(" | ")}`);
+  }
+  if (message.scopeNote) {
+    lines.push(`Scope bounds: ${message.scopeNote}`);
+  }
+
+  return trimHistoryContent(lines.join("\n"));
+}
+
+function trimHistoryContent(value: string) {
+  if (value.length <= MAX_HISTORY_CONTENT_LENGTH) {
+    return value;
+  }
+  return `${value.slice(0, MAX_HISTORY_CONTENT_LENGTH - 3)}...`;
 }
 
 function ContextTile({

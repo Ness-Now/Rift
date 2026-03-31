@@ -24,7 +24,6 @@ import {
 } from "@/lib/api";
 import { formatMetric } from "@/lib/dashboard";
 
-import { buildFreshnessState, type FreshnessState } from "./frozen-seams";
 import { DashboardPanel, SectionEyebrow, SectionHeading, StatusChip } from "./primitives";
 
 const DEFAULT_MAX_MATCHES = 50;
@@ -58,6 +57,13 @@ type ReadinessState = {
   detail: string;
   tone: ReadinessTone;
   canRun: boolean;
+};
+
+type FreshnessState = {
+  headline: string;
+  detail: string;
+  tone: ReadinessTone;
+  isCurrent: boolean;
 };
 
 type BlockingState = {
@@ -701,6 +707,70 @@ function buildReadinessState(
     detail: `${selectedProfile.riot_id_display} can launch the current self-use pipeline from ingestion through report generation.`,
     tone: "positive",
     canRun: true
+  };
+}
+
+function buildFreshnessState({
+  latestCompletedIngestion,
+  latestCompletedNormalization,
+  latestCompletedAnalytics,
+  latestCompletedReport
+}: {
+  latestCompletedIngestion: IngestionRun | null;
+  latestCompletedNormalization: NormalizationRun | null;
+  latestCompletedAnalytics: AnalyticsRun | null;
+  latestCompletedReport: ReportRun | null;
+}): FreshnessState {
+  if (!latestCompletedReport) {
+    return {
+      headline: "No coaching output yet",
+      detail: "Run the full pipeline to create the first complete coaching chain for this profile.",
+      tone: "warning",
+      isCurrent: false
+    };
+  }
+
+  if (!latestCompletedAnalytics || latestCompletedReport.analytics_run_id !== latestCompletedAnalytics.id) {
+    return {
+      headline: "Coaching is behind analytics",
+      detail: "A newer analytics snapshot exists than the report currently shown on the coaching surface.",
+      tone: "warning",
+      isCurrent: false
+    };
+  }
+
+  if (isRunNewer(latestCompletedNormalization, latestCompletedAnalytics)) {
+    return {
+      headline: "Analytics is behind normalization",
+      detail: "A newer clean snapshot exists than the analytics summary currently feeding the report.",
+      tone: "warning",
+      isCurrent: false
+    };
+  }
+
+  if (isRunNewer(latestCompletedIngestion, latestCompletedNormalization)) {
+    return {
+      headline: "Raw ingestion is ahead of the clean snapshot",
+      detail: "A newer ingestion run has landed since the last completed normalization.",
+      tone: "warning",
+      isCurrent: false
+    };
+  }
+
+  if (isOlderThanHours(latestCompletedReport.completed_at, 24)) {
+    return {
+      headline: "Latest successful pipeline is older than one day",
+      detail: `The latest successful coaching chain completed ${formatRelativeTime(latestCompletedReport.completed_at)}.`,
+      tone: "neutral",
+      isCurrent: true
+    };
+  }
+
+  return {
+    headline: "Displayed coaching matches the latest completed upstream pipeline",
+    detail: `The visible coaching output completed ${formatRelativeTime(latestCompletedReport.completed_at)} and matches the latest successful upstream chain.`,
+    tone: "positive",
+    isCurrent: true
   };
 }
 

@@ -6,12 +6,9 @@
     "packages/shared-types"
   ],
   "scripts": {
-    "dev:api": "python apps/api/dev_server.py",
     "dev:web": "npm run dev --workspace @rift/web",
     "build:web": "npm run build --workspace @rift/web",
     "start:web": "npm run start --workspace @rift/web",
-    "typecheck:web": "npm run typecheck --workspace @rift/web",
-    "test:web": "npx --yes tsx --test apps/web/frozen-seams.test.ts",
-    "test:api:contextual-chat": "python apps/api/tests/run_contextual_chat_helper_tests.py"
+    "typecheck:web": "npm run typecheck --workspace @rift/web"
   }
 }
