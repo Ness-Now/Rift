@@ -9,6 +9,7 @@
     "dev:web": "npm run dev --workspace @rift/web",
     "build:web": "npm run build --workspace @rift/web",
     "start:web": "npm run start --workspace @rift/web",
-    "typecheck:web": "npm run typecheck --workspace @rift/web"
+    "typecheck:web": "npm run typecheck --workspace @rift/web",
+    "test:web": "npx --yes tsx --test apps/web/frozen-seams.test.ts"
   }
 }

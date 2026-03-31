@@ -15,6 +15,7 @@ import { asArray, asBoolean, asRecord, asText, formatCompactNumber, formatMetric
 
 import { ContextualChatPanel } from "../chat/contextual-chat-panel";
 import { AnalysisOrchestrator } from "./analysis-orchestrator";
+import { buildArtifactTruthState, type ArtifactTruthState } from "./frozen-seams";
 import { PillarSections } from "./pillar-sections";
 import {
   DashboardPanel,
@@ -30,12 +31,6 @@ import {
 type OverviewDashboardProps = {
   token: string;
   userEmail: string;
-};
-
-type ArtifactTruthState = {
-  headline: string;
-  detail: string;
-  tone: "neutral" | "positive" | "warning";
 };
 
 export function OverviewDashboard({ token, userEmail }: OverviewDashboardProps) {
@@ -574,68 +569,4 @@ function latestCompletedRunForProfile<T extends { id: number; riot_profile_id: n
     }
   }
   return latest;
-}
-
-function buildArtifactTruthState({
-  displayedAnalyticsRun,
-  latestAnalyticsRun,
-  latestReportRun
-}: {
-  displayedAnalyticsRun: AnalyticsRun | null;
-  latestAnalyticsRun: AnalyticsRun | null;
-  latestReportRun: ReportRun | null;
-}): ArtifactTruthState {
-  if (!displayedAnalyticsRun && !latestReportRun) {
-    return {
-      headline: "No displayed interpretation chain",
-      detail: "Run analytics and report generation before the dashboard can show a persisted coaching interpretation.",
-      tone: "warning"
-    };
-  }
-
-  if (latestReportRun && !displayedAnalyticsRun) {
-    return {
-      headline: "Displayed interpretation is missing its analytics source",
-      detail: `Report #${latestReportRun.id} exists, but its backing analytics run is not available as a completed artifact in the current dashboard state.`,
-      tone: "warning"
-    };
-  }
-
-  if (!latestReportRun && displayedAnalyticsRun) {
-    return {
-      headline: "Interpretation not generated yet",
-      detail: `Analytics run #${displayedAnalyticsRun.id} is available, but no completed report artifact exists for the visible coaching interpretation.`,
-      tone: "neutral"
-    };
-  }
-
-  if (!displayedAnalyticsRun || !latestReportRun) {
-    return {
-      headline: "Displayed chain unavailable",
-      detail: "The dashboard does not yet have an internally aligned analytics/report artifact pair to display.",
-      tone: "warning"
-    };
-  }
-
-  if (latestReportRun.analytics_run_id !== displayedAnalyticsRun.id) {
-    return {
-      headline: "Displayed report is not aligned with its analytics source",
-      detail: `Report #${latestReportRun.id} points to analytics run #${latestReportRun.analytics_run_id}, but the dashboard is currently holding analytics run #${displayedAnalyticsRun.id}.`,
-      tone: "warning"
-    };
-  }
-
-  if (latestAnalyticsRun && latestAnalyticsRun.id !== displayedAnalyticsRun.id) {
-    return {
-      headline: "Displayed interpretation is behind newer analytics",
-      detail: `The visible coaching read uses analytics run #${displayedAnalyticsRun.id} through report #${latestReportRun.id}, while newer analytics run #${latestAnalyticsRun.id} exists upstream.`,
-      tone: "warning"
-    };
-  }
-
-  return {
-    headline: "Displayed interpretation is internally coherent",
-    detail: `The visible coaching read is backed by analytics run #${displayedAnalyticsRun.id} and report #${latestReportRun.id}. This status is about displayed interpretation integrity, not full upstream freshness.`,
-    tone: "positive"
-  };
 }
