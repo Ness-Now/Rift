@@ -51,20 +51,30 @@ The frontend expects the API base URL in `apps/web/.env.local`. Start from [`app
    .\.venv\Scripts\Activate.ps1
    ```
 
-2. Install the analytics package and API package in editable mode:
+2. For auth-ready local startup, install the minimum API runtime dependencies:
+
+   ```powershell
+   pip install fastapi "uvicorn[standard]" itsdangerous
+   ```
+
+3. Start the API with the repo-encoded local launcher:
+
+   ```powershell
+   npm run dev:api
+   ```
+
+   This launcher adds `apps/api/src` and `packages/analytics/src` to `PYTHONPATH` so local auth/signup works without rediscovering the analytics import-path requirement by hand.
+
+4. Check `http://localhost:8000/docs` or send a signup request to `http://localhost:8000/auth/signup`.
+
+5. If you want the full editable package setup instead of the lightweight auth-ready path, install the analytics package and API package in editable mode:
 
    ```powershell
    pip install -e packages/analytics
    pip install -e apps/api
    ```
 
-3. Start the API:
-
-   ```powershell
-   uvicorn api_service.main:app --app-dir apps/api/src --reload
-   ```
-
-4. Check `http://localhost:8000/health`.
+6. `WEB_ORIGIN` in [`apps/api/.env.example`](./apps/api/.env.example) must match the web app origin for browser auth requests. `RIOT_API_KEY` and `OPENAI_API_KEY` are only required for full pipeline runs, not for signup/login.
 
 The API environment variables are documented in [`apps/api/.env.example`](./apps/api/.env.example).
 
