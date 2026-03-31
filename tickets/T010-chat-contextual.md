@@ -6,7 +6,11 @@ Add a contextual chat surface that uses existing dashboard and report context wi
 
 ## Context
 
-T010 has started as a narrow grounded contextual chat MVP that builds on the existing analytics, reports, and dashboard pillars without broadening into a general assistant system.
+T010 is frozen as a narrow grounded contextual chat MVP that builds on the existing analytics, reports, and dashboard pillars without broadening into a general assistant system.
+
+## Status
+
+Frozen as the current narrow grounded MVP.
 
 ## Implemented Scope
 
@@ -35,4 +39,4 @@ T010 has started as a narrow grounded contextual chat MVP that builds on the exi
 - Inputs and outputs are bounded and documented
 - The feature complements rather than replaces the dashboard
 - Product limitations and safety boundaries are clear
-- Persisted memory, generic assistant behavior, and broader thread architecture remain out of scope for this ticket's narrow MVP
+- Persisted memory, generic assistant behavior, and broader thread architecture remain out of scope unless T010 is deliberately reopened beyond this frozen MVP

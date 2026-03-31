@@ -15,6 +15,7 @@
 - First T010 grounded contextual chat pass with one authenticated reply endpoint, versioned prompt assets, and a dashboard chat panel tied to the selected profile plus displayed report artifact.
 
 ### Changed
+- Repository-facing source-of-truth docs now record T009 as frozen at its current product-logic level and T010 as frozen as the current narrow grounded contextual chat MVP, instead of implying routine refinement remains the default continuation path.
 - The web app evolved from a functional shell into a premium dark product surface with an overview desk plus live Champion Form, Macro Lens, and Coaching Board sections.
 - Operational controls were moved behind a secondary workbench so the product-facing experience leads.
 - The web app now uses local/system fallback font stacks behind the existing `--font-sans` and `--font-display` variables instead of `next/font/google`.
@@ -42,6 +43,7 @@
 
 ### Fixed
 - README, roadmap, and dashboard ticket files now match the actual implementation state.
+- README, roadmap, and T009/T010 continuity docs no longer imply that routine T009/T010 product refinement should continue by default after the freeze-readiness decision.
 - The current continuation point is documented chronologically for future contributors.
 - The web build no longer depends on outbound Google Fonts access at build time.
 - Contextual chat replies now expose one explicit next coaching move instead of leaving the immediate action buried inside answer prose.
@@ -56,5 +58,5 @@
 
 ### Known issues
 - SQLite remains the lightweight persistence layer for the current development phase; production-grade PostgreSQL, migrations discipline, and queue infra are still deferred.
-- T009 is live but still in its first pass; deeper charting, tighter pillar interactions, and final polish remain.
-- T010 has started with a narrow ephemeral contextual chat surface only; persisted chat history, richer interaction design, and any broader thread architecture are still intentionally deferred.
+- T009 is frozen at its current product-logic level; any later charting, interaction polish, or presentation deepening should happen only through defect correction or a deliberate reopen.
+- T010 is frozen as the current narrow grounded contextual chat MVP; persisted chat history, richer interaction design, and any broader thread architecture are still intentionally deferred unless T010 is deliberately reopened.

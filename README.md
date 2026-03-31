@@ -2,7 +2,7 @@
 
 Rift is a greenfield monorepo for a League of Legends analytics and coaching platform. The product ingests ranked Solo/Duo match data from Riot, normalizes it into clean tables, computes deterministic analytics, and then sends a narrower report contract to OpenAI to produce structured coaching reports.
 
-The repository now includes the full T001-T007 backend/product foundation, a premium T008 overview surface, and a first live T009 pillar pass. The current focus is disciplined stabilization and refinement rather than broad scope expansion.
+The repository now includes the full T001-T007 backend/product foundation, a premium T008 overview surface, frozen T009 pillar surfaces at the current product-logic level, and a frozen narrow T010 grounded contextual chat MVP. The current focus is disciplined stabilization, hardening, and truthful continuation notes rather than routine T009/T010 refinement or broad scope expansion.
 
 ## Repository layout
 
@@ -96,7 +96,7 @@ python -m worker_service.cli --job placeholder
 
 ## Current deferred scope
 
-- Final pillar polish and richer chart treatment
+- Any later pillar polish or richer chart treatment, only if T009 is deliberately reopened after freeze
 - Broader chat persistence, richer interaction design, and any generic thread or assistant architecture beyond the current grounded T010 MVP
 - Production-grade PostgreSQL, migrations discipline, queue infra, and broader test coverage
 
